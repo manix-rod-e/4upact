@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Roboto+Condensed:wght@400;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #5E3B6F;   /* Pact Purple — brand kit exact */
+  --secondary: #3C2A4D; /* Deep Violet */
+  --teal: #4ECDC4;      /* Impact Teal — brand kit exact */
+  --orange: #F7941D;    /* Growth Orange — brand kit exact */
+  --text-grey: #333333;
+  --dark-bg: #0A0118;
+}
+
+html {
+  @apply bg-slate-950;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  @apply bg-white text-slate-900 antialiased overflow-x-hidden;
+  color: var(--text-grey);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Roboto Condensed', sans-serif;
+  @apply font-black tracking-tighter uppercase;
+}
+
+/* Premium Button Utilities */
+.btn-cta {
+  @apply px-10 py-5 rounded-2xl bg-orange text-slate-950 font-black uppercase tracking-widest text-xs hover:bg-orange/90 transition-all duration-300 shadow-xl shadow-orange/20 active:scale-95 flex items-center justify-center gap-3;
+}
+
+.btn-secondary {
+  @apply px-10 py-5 rounded-2xl bg-slate-100 text-slate-600 font-black uppercase tracking-widest text-xs hover:bg-slate-200 transition-all duration-300 active:scale-95 flex items-center justify-center gap-3;
+}
+
+/* Navbar Link Logic */
+.nav-link {
+  @apply transition-all duration-300 text-slate-400 font-black uppercase tracking-[0.2em] text-[10px] relative py-2;
+}
+
+.nav-link:hover {
+  @apply text-teal;
+}
+
+.nav-link.active {
+  @apply text-orange;
+}
+
+/* Flag Transitions - FASTER */
+.flag-icon {
+  @apply w-5 h-4 rounded-sm opacity-40 grayscale transition-all duration-200 cursor-pointer;
+}
+
+.flag-icon:hover {
+  @apply opacity-100 grayscale-0 scale-110;
+}
+
+.flag-active {
+  @apply opacity-100 grayscale-0;
+}
+
+/* Brand Grid Architecture background */
+.section-violet {
+  @apply bg-[#3C2A4D] relative overflow-hidden;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+.navbar-scroll {
+  @apply bg-slate-950/90 backdrop-blur-md shadow-2xl border-b border-white/5 h-20;
+}
+
+/* Logo "Bars" Animation */
+@keyframes barGrow {
+  0% {
+    transform: scaleY(0.8);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: scaleY(1.1);
+    opacity: 1;
+  }
+}
+
+.bar-animate {
+  animation: barGrow 2s ease-in-out infinite alternate;
+  transform-origin: bottom;
+}
+
+/* Materiality/Liquid Effect */
+.glass-card {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-[3rem] transition-all duration-500 overflow-hidden;
+}
+
+.glass-card:hover {
+  @apply bg-white/10 border-teal/30 shadow-2xl shadow-teal/5;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-950;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-[#503A5F] rounded-full hover:bg-[#4AB8B0];
+}
+
+/* ─── Brand Carousel Scroll Animations ─────────────────────────────────── */
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes scroll-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+.animate-scroll-left {
+  animation: scroll-left 60s linear infinite;
+  width: max-content;
+}
+.animate-scroll-right {
+  animation: scroll-right 50s linear infinite;
+  width: max-content;
+}
+/* Client row — fewer logos repeated 8x, scrolls RIGHT (opposite direction from tools) */
+@keyframes scroll-right-clients {
+  0% { transform: translateX(-12.5%); }
+  100% { transform: translateX(0); }
+}
+.animate-scroll-right-clients {
+  animation: scroll-right-clients 20s linear infinite;
+  width: max-content;
+}
+.animate-scroll-left:hover,
+.animate-scroll-right:hover,
+.animate-scroll-right-clients:hover {
+  animation-play-state: paused;
+}
+
+/* ─── Multi-Step Form Progress ─────────────────────────────────────────── */
+.form-step-active {
+  @apply bg-orange text-slate-950;
+}
+.form-step-completed {
+  @apply bg-teal text-white;
+}
+.form-step-pending {
+  @apply bg-slate-800 text-slate-500;
+}
+
+/* ─── Glass panel (dark mode sections) ─────────────────────────────────── */
+.glass-panel-dark {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl;
+}
+.glass-panel-dark:hover {
+  @apply bg-white/10 border-white/20;
+}

@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4UPact · Content Command Center v4</title>
+<style>
+  :root {
+    --bg: #0a0a0f; --bg2: #111118; --bg3: #1a1a24; --border: #2a2a3a;
+    --purple: #9B51E0; --purple2: #b97ef0; --purple3: #d4a8f8;
+    --teal: #00A6A6; --teal2: #14c8c8; --teal3: #5ddede;
+    --orange: #FF8C00; --orange2: #ffaa33; --orange3: #ffc266;
+    --green: #10b981; --red: #ef4444; --blue: #3b82f6;
+    --text: #e2e8f0; --text2: #94a3b8; --text3: #64748b;
+    --card: #16161f; --card2: #1e1e2d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+  .header {
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a0828 50%, #0d0d1a 100%);
+    border-bottom: 1px solid var(--border); padding: 18px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo { display: flex; align-items: center; gap: 14px; }
+  .logo-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--purple), var(--teal));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; font-weight: 900; color: white; letter-spacing: -1px;
+  }
+  .logo-text h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+  .logo-text h1 span { color: var(--teal2); }
+  .logo-text p { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .header-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .badge {
+    padding: 4px 11px; border-radius: 20px; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .badge-purple { background: rgba(155,81,224,0.18); color: var(--purple3); border: 1px solid rgba(155,81,224,0.35); }
+  .badge-teal { background: rgba(0,166,166,0.15); color: var(--teal3); border: 1px solid rgba(0,166,166,0.3); }
+  .badge-orange { background: rgba(255,140,0,0.15); color: var(--orange3); border: 1px solid rgba(255,140,0,0.3); }
+  .badge-green { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+  .badge-flag { background: rgba(255,255,255,0.07); color: var(--text2); border: 1px solid rgba(255,255,255,0.12); font-size: 12px; letter-spacing: 2px; }
+  .nav-tabs {
+    display: flex; gap: 0; border-bottom: 1px solid var(--border);
+    padding: 0 32px; background: var(--bg2); overflow-x: auto;
+  }
+  .tab {
+    padding: 13px 18px; font-size: 12px; font-weight: 500; color: var(--text2);
+    cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap;
+    transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--purple3); border-bottom-color: var(--purple); }
+  .main { padding: 28px 32px; max-width: 1440px; margin: 0 auto; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .section-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text3); margin-bottom: 16px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px; transition: border-color 0.2s;
+  }
+  .card:hover { border-color: #3a3a50; }
+  .card-sm { padding: 14px 16px; }
+  h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  h4 { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  p { font-size: 13px; line-height: 1.6; color: var(--text2); }
+  .mb4 { margin-bottom: 4px; } .mb8 { margin-bottom: 8px; } .mb12 { margin-bottom: 12px; }
+  .mb16 { margin-bottom: 16px; } .mb24 { margin-bottom: 24px; } .mb32 { margin-bottom: 32px; }
+  .mt8 { margin-top: 8px; } .mt16 { margin-top: 16px; } .mt24 { margin-top: 24px; }
+  .tag {
+    display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px;
+    font-weight: 600; letter-spacing: 0.3px; margin: 2px 2px 2px 0;
+  }
+  .tag-purple { background: rgba(155,81,224,0.18); color: var(--purple3); }
+  .tag-teal { background: rgba(0,166,166,0.15); color: var(--teal3); }
+  .tag-orange { background: rgba(255,140,0,0.18); color: var(--orange3); }
+  .tag-green { background: rgba(16,185,129,0.15); color: #34d399; }
+  .tag-blue { background: rgba(59,130,246,0.15); color: #93c5fd; }
+  .tag-red { background: rgba(239,68,68,0.15); color: #fca5a5; }
+  .tag-gray { background: rgba(255,255,255,0.07); color: var(--text2); }
+  .stat-block {
+    text-align: center; padding: 20px 14px; background: var(--card);
+    border: 1px solid var(--border); border-radius: 12px;
+  }
+  .stat-num { font-size: 36px; font-weight: 900; letter-spacing: -1px; line-height: 1; }
+  .stat-label { font-size: 11px; color: var(--text2); margin-top: 6px; line-height: 1.4; }
+  .flex-row { display: flex; align-items: center; gap: 10px; }
+  .flex-between { display: flex; align-items: center; justify-content: space-between; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .lang-pill {
+    font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px;
+    background: rgba(255,255,255,0.07); color: var(--text2);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .lang-pill.en { background: rgba(59,130,246,0.15); color: #93c5fd; border-color: rgba(59,130,246,0.25); }
+  .lang-pill.es { background: rgba(255,140,0,0.15); color: var(--orange3); border-color: rgba(255,140,0,0.25); }
+  .lang-pill.pt { background: rgba(0,166,166,0.15); color: var(--teal3); border-color: rgba(0,166,166,0.25); }
+  .post-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px; transition: border-color 0.2s;
+  }
+  .post-card:hover { border-color: #3a3a50; }
+  .post-card.phase1 { border-left: 3px solid var(--purple); }
+  .post-card.phase2 { border-left: 3px solid var(--teal); }
+  .post-card.phase3 { border-left: 3px solid var(--orange); }
+  .post-num {
+    font-size: 10px; font-weight: 800; letter-spacing: 1px; color: var(--text3);
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .post-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
+  .post-hook { font-size: 12px; color: var(--text2); font-style: italic; margin-bottom: 10px; line-height: 1.5; }
+  .post-meta { font-size: 11px; color: var(--text3); margin-bottom: 4px; }
+  .post-meta span { color: var(--text2); }
+  .seo-row {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; padding-top: 8px;
+    border-top: 1px dashed rgba(255,255,255,0.06);
+  }
+  .seo-chip {
+    font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 6px;
+    letter-spacing: 0.3px; text-transform: uppercase;
+  }
+  .seo-vol { background: rgba(0,166,166,0.15); color: var(--teal3); border: 1px solid rgba(0,166,166,0.2); }
+  .seo-kd { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+  .seo-kd.hard { background: rgba(239,68,68,0.12); color: #fca5a5; border-color: rgba(239,68,68,0.2); }
+  .seo-kd.mid { background: rgba(255,140,0,0.12); color: var(--orange3); border-color: rgba(255,140,0,0.2); }
+  .seo-slug { background: rgba(155,81,224,0.12); color: var(--purple3); border: 1px solid rgba(155,81,224,0.2); font-family: monospace; text-transform: none; }
+  .eq-bar {
+    background: var(--card2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 24px; display: flex; align-items: center; justify-content: center;
+    gap: 12px; flex-wrap: wrap; margin-bottom: 24px;
+  }
+  .eq-part { text-align: center; }
+  .eq-part .label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; }
+  .eq-part .value { font-size: 15px; font-weight: 800; margin-top: 3px; }
+  .eq-op { font-size: 20px; color: var(--text3); font-weight: 300; }
+  .eq-result .value { color: var(--teal2); font-size: 17px; }
+  .agent-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .agent-avatar {
+    width: 42px; height: 42px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .channel-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+  .channel-icon { font-size: 24px; margin-bottom: 10px; }
+  .tool-chip {
+    display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 10px;
+    font-weight: 600; background: rgba(255,255,255,0.07); color: var(--text2);
+    border: 1px solid rgba(255,255,255,0.1); margin: 2px;
+  }
+  .kw-row {
+    display: grid; grid-template-columns: 2.5fr 0.8fr 0.6fr 0.6fr 1fr; gap: 0;
+    font-size: 12px; padding: 8px 12px; border-bottom: 1px solid var(--border);
+  }
+  .kw-row.header { color: var(--text3); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; background: var(--card2); border-radius: 8px 8px 0 0; }
+  .kw-cell { padding: 2px 4px; }
+  .kw-cell.right { text-align: right; }
+  .kw-cell.center { text-align: center; }
+  .diff-bar { display: inline-block; height: 6px; border-radius: 3px; vertical-align: middle; }
+  .notebooklm-flow {
+    background: linear-gradient(135deg, rgba(155,81,224,0.05) 0%, rgba(0,166,166,0.05) 100%);
+    border: 1px solid var(--border); border-radius: 16px; padding: 24px;
+  }
+  .flow-node {
+    background: var(--card2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px; flex: 1; min-width: 180px;
+  }
+  .flow-arrow { font-size: 22px; color: var(--purple2); flex-shrink: 0; }
+  .flow-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .pipe-num {
+    width: 28px; height: 28px; border-radius: 50%; background: var(--purple);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: white; flex-shrink: 0;
+  }
+  .pricing-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 24px; text-align: center; position: relative;
+  }
+  .pricing-card.popular {
+    border-color: var(--purple); background: linear-gradient(180deg, rgba(155,81,224,0.08) 0%, var(--card) 100%);
+  }
+  .popular-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--purple); color: white; font-size: 10px; font-weight: 700;
+    padding: 3px 12px; border-radius: 20px; letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .price-tier { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
+  .price-val { font-size: 28px; font-weight: 900; letter-spacing: -1px; margin-bottom: 4px; }
+  .price-val small { font-size: 13px; color: var(--text3); font-weight: 400; }
+  .price-desc { font-size: 12px; color: var(--text2); margin-bottom: 14px; }
+  .price-feature { font-size: 12px; color: var(--text2); padding: 5px 0; border-top: 1px solid var(--border); }
+  .weekly-row { display: grid; grid-template-columns: repeat(7,1fr); gap: 8px; text-align: center; }
+  .day-block { background: var(--card2); border-radius: 8px; padding: 10px 6px; }
+  .day-name { font-size: 9px; color: var(--text3); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .day-task { font-size: 10px; color: var(--text2); line-height: 1.4; }
+  .faq-list { margin-top: 8px; padding: 8px 10px; background: rgba(155,81,224,0.05); border-radius: 8px; border: 1px solid rgba(155,81,224,0.1); }
+  .faq-q { font-size: 11px; color: var(--text2); padding: 3px 0; }
+  .faq-q::before { content: 'Q: '; font-weight: 700; color: var(--purple3); }
+  @media (max-width: 900px) {
+    .grid-4, .grid-5 { grid-template-columns: repeat(2,1fr); }
+    .grid-3 { grid-template-columns: repeat(2,1fr); }
+    .main { padding: 18px 16px; }
+    .header { padding: 14px 16px; }
+    .nav-tabs { padding: 0 16px; }
+    .kw-row { font-size: 10px; grid-template-columns: 2fr 1fr 0.8fr 0.8fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .grid-2, .grid-3, .grid-4, .grid-5 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">4U</div>
+    <div class="logo-text">
+      <h1>4U<span>Pact</span> · Content Command Center</h1>
+      <p>SEO-Driven Revenue Systems · 756 Keywords · 90-Day Engine · v4.0</p>
+    </div>
+  </div>
+  <div class="header-meta">
+    <span class="badge badge-flag">🇺🇸 🇦🇷 🇧🇷</span>
+    <span class="badge badge-purple">756 KWs</span>
+    <span class="badge badge-teal">24 Posts</span>
+    <span class="badge badge-orange">4 Podcasts</span>
+    <span class="badge badge-green">v4.0</span>
+  </div>
+</div>
+<div class="nav-tabs">
+  <button class="tab active" onclick="showTab('overview')">📊 Overview</button>
+  <button class="tab" onclick="showTab('seo')">🔍 SEO Intel</button>
+  <button class="tab" onclick="showTab('agents')">🤖 Agents</button>
+  <button class="tab" onclick="showTab('calendar')">📅 Calendar</button>
+  <button class="tab" onclick="showTab('podcast')">🎙️ Podcast</button>
+  <button class="tab" onclick="showTab('channels')">📡 Channels</button>
+  <button class="tab" onclick="showTab('pipeline')">⚙️ Pipeline</button>
+  <button class="tab" onclick="showTab('strategy')">📋 Strategy</button>
+</div>
+<div class="main">
+<!-- ═══════════ OVERVIEW ═══════════ -->
+<div id="panel-overview" class="panel active">
+  <div class="eq-bar">
+    <div class="eq-part"><div class="label">Pillar 1</div><div class="value" style="color:var(--purple2)">Results</div></div>
+    <div class="eq-op">+</div>
+    <div class="eq-part"><div class="label">Pillar 2</div><div class="value" style="color:var(--orange2)">Strategy</div></div>
+    <div class="eq-op">+</div>
+    <div class="eq-part"><div class="label">Pillar 3</div><div class="value" style="color:var(--teal2)">Systems</div></div>
+    <div class="eq-op">=</div>
+    <div class="eq-part eq-result"><div class="label">North Star</div><div class="value">Scalable Growth</div></div>
+  </div>
+  <div class="grid-5 mb32">
+    <div class="stat-block"><div class="stat-num" style="color:var(--orange2)">21×</div><div class="stat-label">Conversion lift<br>5-min CRM response</div></div>
+    <div class="stat-block"><div class="stat-num" style="color:var(--purple2)">9×</div><div class="stat-label">Conversion increase<br>&lt;2-min Speed-to-Lead</div></div>
+    <div class="stat-block"><div class="stat-num" style="color:var(--teal2)">98%</div><div class="stat-label">WhatsApp open rate<br>vs 20% email</div></div>
+    <div class="stat-block"><div class="stat-num" style="color:var(--orange3)">756</div><div class="stat-label">SEO keywords<br>3 languages mapped</div></div>
+    <div class="stat-block"><div class="stat-num" style="color:var(--green)">14d</div><div class="stat-label">Comet Framework<br>client launch time</div></div>
+  </div>
+  <div class="grid-2 mb32">
+    <div>
+      <div class="section-title">The 4UPact Growth Engine</div>
+      <div class="card mb8" style="border-left:3px solid var(--purple)">
+        <div class="flex-row"><span style="font-size:20px">⚙️</span><div><h4 style="color:var(--purple2)">Núcleo Operacional</h4><p>CRM &amp; Automation — GHL, Kommo, WhatsApp API. Always-on lead qualification.</p></div></div>
+      </div>
+      <div class="card mb8" style="border-left:3px solid var(--teal)">
+        <div class="flex-row"><span style="font-size:20px">🌐</span><div><h4 style="color:var(--teal2)">Fundação Digital</h4><p>Web &amp; E-Commerce — WordPress + WooCommerce + Elementor + WPML.</p></div></div>
+      </div>
+      <div class="card mb8" style="border-left:3px solid var(--orange)">
+        <div class="flex-row"><span style="font-size:20px">🚀</span><div><h4 style="color:var(--orange2)">Combustível do Sistema</h4><p>Paid Media &amp; Social — Meta Ads, Google, LinkedIn, TikTok, Pinterest.</p></div></div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--green)">
+        <div class="flex-row"><span style="font-size:20px">🔄</span><div><h4 style="color:#34d399">Multiplicador de Receita</h4><p>Loyalty Programs — Loyalty Loop: Buy → Benefit → Return → Repurchase.</p></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="section-title">Proprietary Operating System</div>
+      <div class="card mb16" style="border:1px solid rgba(155,81,224,0.4); background:linear-gradient(135deg, rgba(155,81,224,0.08) 0%, var(--card) 100%)">
+        <div class="flex-row mb8"><span style="font-size:24px">🛸</span><div><h3 style="color:var(--purple2)">AntiGravity</h3><div class="tag tag-purple">Orchestration Layer</div></div></div>
+        <p style="margin-bottom:10px">Command center connecting GHL, Meta Ads and reporting in real time.</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px">
+          <div class="card card-sm" style="padding:8px 10px"><div style="font-size:10px; color:var(--text3)">Node 1</div><div style="font-size:11px; font-weight:600">Onboarding Orchestra</div></div>
+          <div class="card card-sm" style="padding:8px 10px"><div style="font-size:10px; color:var(--text3)">Node 2</div><div style="font-size:11px; font-weight:600">Performance Monitor</div></div>
+          <div class="card card-sm" style="padding:8px 10px"><div style="font-size:10px; color:var(--text3)">Node 3</div><div style="font-size:11px; font-weight:600">Attribution Enrichment</div></div>
+          <div class="card card-sm" style="padding:8px 10px"><div style="font-size:10px; color:var(--text3)">Node 4</div><div style="font-size:11px; font-weight:600">Retention Risk Scanner</div></div>
+        </div>
+      </div>
+      <div class="card" style="border:1px solid rgba(0,166,166,0.4); background:linear-gradient(135deg, rgba(0,166,166,0.07) 0%, var(--card) 100%)">
+        <div class="flex-row mb8"><span style="font-size:24px">☄️</span><div><h3 style="color:var(--teal2)">Comet Framework</h3><div class="tag tag-teal">AI-Assisted Execution</div></div></div>
+        <p style="margin-bottom:10px">Two playbooks for rapid client launches with zero guesswork.</p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px">
+          <div class="card card-sm" style="padding:8px 10px"><div style="font-size:10px; color:var(--teal3)">Playbook 1</div><div style="font-size:11px; font-weight:600">New Client: 14 Days</div></div>
+          <div class="card card-sm" style="padding:8px 10px"><div style="font-size:10px; color:var(--teal3)">Playbook 2</div><div style="font-size:11px; font-weight:600">48h Campaign Sprint</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section-title">Productized Service Tiers</div>
+  <div class="grid-3 mb32">
+    <div class="pricing-card">
+      <div class="price-tier">Essential · The Foundation</div>
+      <div class="price-val">R$2,997<small>/mo</small></div>
+      <div class="price-desc">Solo Agents &amp; Small Clinics</div>
+      <div class="price-feature">GHL Setup &amp; Pipelines</div>
+      <div class="price-feature">WhatsApp Auto-Response</div>
+      <div class="price-feature">6 MVAs Configured</div>
+    </div>
+    <div class="pricing-card popular">
+      <div class="popular-badge">Most Popular</div>
+      <div class="price-tier">Growth · The Accelerator</div>
+      <div class="price-val" style="color:var(--purple2)">R$5,997<small>/mo</small></div>
+      <div class="price-desc">Growing Clinics &amp; Agencies</div>
+      <div class="price-feature">Paid Ads (up to R$15K spend)</div>
+      <div class="price-feature">3 Niche Landing Pages</div>
+      <div class="price-feature">AntiGravity Dashboard</div>
+    </div>
+    <div class="pricing-card">
+      <div class="price-tier">Scale · The Empire</div>
+      <div class="price-val" style="color:var(--orange2)">R$9,997<small>+/mo</small></div>
+      <div class="price-desc">Franchises &amp; Multi-Location</div>
+      <div class="price-feature">Multi-Location Orchestration</div>
+      <div class="price-feature">Custom API Integrations</div>
+      <div class="price-feature">Full Comet Framework</div>
+    </div>
+  </div>
+  <div class="section-title">Geographic Expansion Roadmap</div>
+  <div class="grid-3 mb32">
+    <div class="card" style="border-color:rgba(155,81,224,0.4)"><div class="tag tag-purple mb8">Phase 1 · Month 1–2</div><h4 style="color:var(--purple2)">🇧🇷 Brazil Launch</h4><p style="font-size:12px">Brasília → São Paulo → Curitiba</p><div class="mt8" style="font-size:11px; color:var(--text3)">Target: R$10K–R$20K MRR</div></div>
+    <div class="card" style="border-color:rgba(0,166,166,0.4)"><div class="tag tag-teal mb8">Phase 2 · Month 3</div><h4 style="color:var(--teal2)">🇧🇷 Brazil Scale</h4><p style="font-size:12px">Recife · Salvador · BH · Rio</p><div class="mt8" style="font-size:11px; color:var(--text3)">Target: R$30K+ MRR</div></div>
+    <div class="card" style="border-color:rgba(255,140,0,0.4)"><div class="tag tag-orange mb8">Phase 3 · International</div><h4 style="color:var(--orange2)">🌎 Global Nodes</h4><p style="font-size:12px">🇺🇸 Miami · 🇦🇷 Buenos Aires · 🇵🇹 Lisbon</p><div class="mt8" style="font-size:11px; color:var(--text3)">Trilingual amplification</div></div>
+  </div>
+  <div class="section-title">Weekly Content Rhythm</div>
+  <div class="weekly-row mb32">
+    <div class="day-block"><div class="day-name">Mon</div><div class="day-task">📝 Blog Draft<br><span style="color:var(--purple3)">EN</span></div></div>
+    <div class="day-block"><div class="day-name">Tue</div><div class="day-task">🔁 Translate<br><span style="color:var(--orange3)">ES🇦🇷</span></div></div>
+    <div class="day-block"><div class="day-name">Wed</div><div class="day-task">🔁 Translate<br><span style="color:var(--teal3)">PT🇧🇷</span></div></div>
+    <div class="day-block"><div class="day-name">Thu</div><div class="day-task">🎙️ NotebookLM<br>Podcast Gen</div></div>
+    <div class="day-block"><div class="day-name">Fri</div><div class="day-task">📡 Distribute<br>All Channels</div></div>
+    <div class="day-block"><div class="day-name">Sat</div><div class="day-task">📊 Analytics<br>Review</div></div>
+    <div class="day-block"><div class="day-name">Sun</div><div class="day-task">🧠 Plan Next<br>Week</div></div>
+  </div>
+  <div class="section-title">Content Strategy Mix</div>
+  <div class="grid-4 mb8">
+    <div class="card" style="text-align:center; border-color:rgba(0,166,166,0.4)"><div class="stat-num" style="font-size:28px; color:var(--teal2)">40%</div><div class="stat-label">Educational<br>How-to / Systems</div></div>
+    <div class="card" style="text-align:center; border-color:rgba(155,81,224,0.4)"><div class="stat-num" style="font-size:28px; color:var(--purple2)">30%</div><div class="stat-label">Case Studies<br>Proof / Results</div></div>
+    <div class="card" style="text-align:center; border-color:rgba(255,140,0,0.4)"><div class="stat-num" style="font-size:28px; color:var(--orange2)">20%</div><div class="stat-label">Thought Leadership<br>Rodrigo's POV</div></div>
+    <div class="card" style="text-align:center; border-color:rgba(16,185,129,0.4)"><div class="stat-num" style="font-size:28px; color:var(--green)">10%</div><div class="stat-label">Promotional<br>Offers / Audits</div></div>
+  </div>
+</div>
+<!-- ═══════════ SEO INTELLIGENCE ═══════════ -->
+<div id="panel-seo" class="panel">
+  <div class="flex-between mb24">
+    <div><h2>SEO Intelligence Center</h2><p>756 keywords · 3 markets · funnel-mapped · competitor gaps identified</p></div>
+    <div class="flex-row"><span class="badge badge-purple">251 EN-US</span><span class="badge badge-teal">250 PT-BR</span><span class="badge badge-orange">255 ES-LA</span></div>
+  </div>
+
+  <!-- Keyword Universe -->
+  <div class="section-title">Keyword Universe by Funnel Stage</div>
+  <div class="grid-4 mb32">
+    <div class="stat-block" style="border-color:rgba(155,81,224,0.4)">
+      <div class="stat-num" style="font-size:30px; color:var(--purple2)">139</div>
+      <div class="stat-label">TOFU · Awareness<br>What is CRM? How does automation work?</div>
+    </div>
+    <div class="stat-block" style="border-color:rgba(0,166,166,0.4)">
+      <div class="stat-num" style="font-size:30px; color:var(--teal2)">264</div>
+      <div class="stat-label">MOFU · Consideration<br>CRM comparisons, tool reviews, guides</div>
+    </div>
+    <div class="stat-block" style="border-color:rgba(255,140,0,0.4)">
+      <div class="stat-num" style="font-size:30px; color:var(--orange2)">136</div>
+      <div class="stat-label">BOFU · Decision<br>Pricing, agency services, white-label</div>
+    </div>
+    <div class="stat-block" style="border-color:rgba(16,185,129,0.4)">
+      <div class="stat-num" style="font-size:30px; color:var(--green)">217</div>
+      <div class="stat-label">Community/Brand<br>Hashtags, social search, brand terms</div>
+    </div>
+  </div>
+
+  <!-- Top Priority Keywords EN-US -->
+  <div class="section-title">🇺🇸 Top Priority Keywords — EN-US</div>
+  <div class="card mb24" style="padding:0; overflow:hidden">
+    <div class="kw-row header"><div class="kw-cell">Keyword</div><div class="kw-cell right">Volume</div><div class="kw-cell center">KD</div><div class="kw-cell right">CPC</div><div class="kw-cell center">Funnel</div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">what is CRM</div><div class="kw-cell right" style="color:var(--teal2)">14,800</div><div class="kw-cell center"><span class="diff-bar" style="width:55px; background:var(--orange)"></span> 55</div><div class="kw-cell right">$12.50</div><div class="kw-cell center"><span class="tag tag-purple">TOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">email marketing automation</div><div class="kw-cell right" style="color:var(--teal2)">8,100</div><div class="kw-cell center"><span class="diff-bar" style="width:48px; background:var(--orange)"></span> 48</div><div class="kw-cell right">$8.20</div><div class="kw-cell center"><span class="tag tag-teal">MOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">CRM for small business</div><div class="kw-cell right" style="color:var(--teal2)">6,600</div><div class="kw-cell center"><span class="diff-bar" style="width:52px; background:var(--orange)"></span> 52</div><div class="kw-cell right">$14.30</div><div class="kw-cell center"><span class="tag tag-teal">MOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">marketing automation tools</div><div class="kw-cell right" style="color:var(--teal2)">4,400</div><div class="kw-cell center"><span class="diff-bar" style="width:45px; background:var(--orange)"></span> 45</div><div class="kw-cell right">$9.80</div><div class="kw-cell center"><span class="tag tag-teal">MOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">GoHighLevel vs HubSpot</div><div class="kw-cell right" style="color:var(--teal2)">2,400</div><div class="kw-cell center"><span class="diff-bar" style="width:32px; background:var(--green)"></span> 32</div><div class="kw-cell right">$11.50</div><div class="kw-cell center"><span class="tag tag-teal">MOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">RevOps agency</div><div class="kw-cell right" style="color:var(--teal2)">1,600</div><div class="kw-cell center"><span class="diff-bar" style="width:18px; background:var(--green)"></span> 18</div><div class="kw-cell right">$15.00</div><div class="kw-cell center"><span class="tag tag-orange">BOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">white label CRM solutions</div><div class="kw-cell right" style="color:var(--teal2)">1,300</div><div class="kw-cell center"><span class="diff-bar" style="width:22px; background:var(--green)"></span> 22</div><div class="kw-cell right">$13.80</div><div class="kw-cell center"><span class="tag tag-orange">BOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">CRM consulting for startups</div><div class="kw-cell right" style="color:var(--teal2)">880</div><div class="kw-cell center"><span class="diff-bar" style="width:24px; background:var(--green)"></span> 24</div><div class="kw-cell right">$16.50</div><div class="kw-cell center"><span class="tag tag-orange">BOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">CRM for luxury hotels</div><div class="kw-cell right" style="color:var(--teal2)">210</div><div class="kw-cell center"><span class="diff-bar" style="width:20px; background:var(--green)"></span> 20</div><div class="kw-cell right">$18.00</div><div class="kw-cell center"><span class="tag tag-orange">BOFU</span></div></div>
+    <div class="kw-row" style="border:none"><div class="kw-cell" style="font-weight:600">CRM for plastic surgery clinics</div><div class="kw-cell right" style="color:var(--teal2)">260</div><div class="kw-cell center"><span class="diff-bar" style="width:15px; background:var(--green)"></span> 15</div><div class="kw-cell right">$19.20</div><div class="kw-cell center"><span class="tag tag-orange">BOFU</span></div></div>
+  </div>
+
+  <!-- Top Priority Keywords PT-BR -->
+  <div class="section-title">🇧🇷 Top Priority Keywords — PT-BR</div>
+  <div class="card mb24" style="padding:0; overflow:hidden">
+    <div class="kw-row header"><div class="kw-cell">Keyword</div><div class="kw-cell right">Volume</div><div class="kw-cell center">KD</div><div class="kw-cell right">CPC</div><div class="kw-cell center">Funnel</div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">o que é CRM</div><div class="kw-cell right" style="color:var(--teal2)">22,200</div><div class="kw-cell center"><span class="diff-bar" style="width:60px; background:var(--red)"></span> 60</div><div class="kw-cell right">R$4.50</div><div class="kw-cell center"><span class="tag tag-purple">TOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">automação de marketing</div><div class="kw-cell right" style="color:var(--teal2)">5,400</div><div class="kw-cell center"><span class="diff-bar" style="width:42px; background:var(--orange)"></span> 42</div><div class="kw-cell right">R$6.80</div><div class="kw-cell center"><span class="tag tag-teal">MOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">automação WhatsApp Business</div><div class="kw-cell right" style="color:var(--teal2)">2,900</div><div class="kw-cell center"><span class="diff-bar" style="width:30px; background:var(--green)"></span> 30</div><div class="kw-cell right">R$5.20</div><div class="kw-cell center"><span class="tag tag-teal">MOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">GoHighLevel tutorial português</div><div class="kw-cell right" style="color:var(--teal2)">480</div><div class="kw-cell center"><span class="diff-bar" style="width:15px; background:var(--green)"></span> 15</div><div class="kw-cell right">R$3.80</div><div class="kw-cell center"><span class="tag tag-teal">MOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">CRM com chatbot IA</div><div class="kw-cell right" style="color:var(--teal2)">480</div><div class="kw-cell center"><span class="diff-bar" style="width:22px; background:var(--green)"></span> 22</div><div class="kw-cell right">R$5.00</div><div class="kw-cell center"><span class="tag tag-teal">MOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">CRM para clínicas de estética</div><div class="kw-cell right" style="color:var(--teal2)">390</div><div class="kw-cell center"><span class="diff-bar" style="width:18px; background:var(--green)"></span> 18</div><div class="kw-cell right">R$7.20</div><div class="kw-cell center"><span class="tag tag-orange">BOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">agência growth marketing</div><div class="kw-cell right" style="color:var(--teal2)">720</div><div class="kw-cell center"><span class="diff-bar" style="width:25px; background:var(--green)"></span> 25</div><div class="kw-cell right">R$8.50</div><div class="kw-cell center"><span class="tag tag-orange">BOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">como automatizar WhatsApp para vendas</div><div class="kw-cell right" style="color:var(--teal2)">720</div><div class="kw-cell center"><span class="diff-bar" style="width:25px; background:var(--green)"></span> 25</div><div class="kw-cell right">R$4.80</div><div class="kw-cell center"><span class="tag tag-teal">MOFU</span></div></div>
+    <div class="kw-row" style="border:none"><div class="kw-cell" style="font-weight:600">white label CRM Brasil</div><div class="kw-cell right" style="color:var(--teal2)">170</div><div class="kw-cell center"><span class="diff-bar" style="width:10px; background:var(--green)"></span> 10</div><div class="kw-cell right">R$9.00</div><div class="kw-cell center"><span class="tag tag-orange">BOFU</span></div></div>
+  </div>
+
+  <!-- Top Priority Keywords ES-LA -->
+  <div class="section-title">🇦🇷 Top Priority Keywords — ES-LA</div>
+  <div class="card mb32" style="padding:0; overflow:hidden">
+    <div class="kw-row header"><div class="kw-cell">Keyword</div><div class="kw-cell right">Volume</div><div class="kw-cell center">KD</div><div class="kw-cell right">CPC</div><div class="kw-cell center">Funnel</div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">qué es un CRM</div><div class="kw-cell right" style="color:var(--teal2)">18,100</div><div class="kw-cell center"><span class="diff-bar" style="width:58px; background:var(--orange)"></span> 58</div><div class="kw-cell right">$3.80</div><div class="kw-cell center"><span class="tag tag-purple">TOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">automatización de marketing</div><div class="kw-cell right" style="color:var(--teal2)">3,600</div><div class="kw-cell center"><span class="diff-bar" style="width:40px; background:var(--orange)"></span> 40</div><div class="kw-cell right">$4.50</div><div class="kw-cell center"><span class="tag tag-teal">MOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">marketing digital para pymes Argentina</div><div class="kw-cell right" style="color:var(--teal2)">720</div><div class="kw-cell center"><span class="diff-bar" style="width:28px; background:var(--green)"></span> 28</div><div class="kw-cell right">$3.20</div><div class="kw-cell center"><span class="tag tag-teal">MOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">automatización WhatsApp Business</div><div class="kw-cell right" style="color:var(--teal2)">590</div><div class="kw-cell center"><span class="diff-bar" style="width:22px; background:var(--green)"></span> 22</div><div class="kw-cell right">$3.50</div><div class="kw-cell center"><span class="tag tag-teal">MOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">CRM con WhatsApp integrado</div><div class="kw-cell right" style="color:var(--teal2)">480</div><div class="kw-cell center"><span class="diff-bar" style="width:25px; background:var(--green)"></span> 25</div><div class="kw-cell right">$5.00</div><div class="kw-cell center"><span class="tag tag-teal">MOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">CRM para wellness y bienestar</div><div class="kw-cell right" style="color:var(--teal2)">120</div><div class="kw-cell center"><span class="diff-bar" style="width:10px; background:var(--green)"></span> 10</div><div class="kw-cell right">$6.80</div><div class="kw-cell center"><span class="tag tag-orange">BOFU</span></div></div>
+    <div class="kw-row"><div class="kw-cell" style="font-weight:600">CRM para Bariloche turismo</div><div class="kw-cell right" style="color:var(--teal2)">90</div><div class="kw-cell center"><span class="diff-bar" style="width:5px; background:var(--green)"></span> 5</div><div class="kw-cell right">$7.50</div><div class="kw-cell center"><span class="tag tag-orange">BOFU</span></div></div>
+    <div class="kw-row" style="border:none"><div class="kw-cell" style="font-weight:600">white label CRM Latinoamérica</div><div class="kw-cell right" style="color:var(--teal2)">140</div><div class="kw-cell center"><span class="diff-bar" style="width:8px; background:var(--green)"></span> 8</div><div class="kw-cell right">$8.20</div><div class="kw-cell center"><span class="tag tag-orange">BOFU</span></div></div>
+  </div>
+
+  <!-- Quick Wins -->
+  <div class="section-title">Quick Wins — Low KD, High Intent (Can Rank in 2–4 Weeks)</div>
+  <div class="grid-3 mb32">
+    <div class="card" style="border-color:rgba(59,130,246,0.3)">
+      <h4 style="color:#93c5fd; margin-bottom:12px">🇺🇸 EN-US Quick Wins</h4>
+      <div style="font-size:12px; color:var(--text2); line-height:2">
+        <div class="flex-between">CRM for plastic surgery clinics<span class="tag tag-green">KD 15</span></div>
+        <div class="flex-between">RevOps for startups<span class="tag tag-green">KD 25</span></div>
+        <div class="flex-between">CRM for luxury hotels<span class="tag tag-green">KD 20</span></div>
+        <div class="flex-between">marketing automation for consultants<span class="tag tag-green">KD 18</span></div>
+        <div class="flex-between">loyalty program CRM integration<span class="tag tag-green">KD 20</span></div>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(0,166,166,0.3)">
+      <h4 style="color:var(--teal2); margin-bottom:12px">🇧🇷 PT-BR Quick Wins</h4>
+      <div style="font-size:12px; color:var(--text2); line-height:2">
+        <div class="flex-between">white label CRM Brasil<span class="tag tag-green">KD 10</span></div>
+        <div class="flex-between">GoHighLevel tutorial português<span class="tag tag-green">KD 15</span></div>
+        <div class="flex-between">CRM para clínicas de estética<span class="tag tag-green">KD 18</span></div>
+        <div class="flex-between">CRM com chatbot IA<span class="tag tag-green">KD 22</span></div>
+        <div class="flex-between">como automatizar WhatsApp vendas<span class="tag tag-green">KD 25</span></div>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(255,140,0,0.3)">
+      <h4 style="color:var(--orange2); margin-bottom:12px">🇦🇷 ES-LA Quick Wins</h4>
+      <div style="font-size:12px; color:var(--text2); line-height:2">
+        <div class="flex-between">CRM para Bariloche turismo<span class="tag tag-green">KD 5</span></div>
+        <div class="flex-between">white label CRM Latinoamérica<span class="tag tag-green">KD 8</span></div>
+        <div class="flex-between">CRM para wellness y bienestar<span class="tag tag-green">KD 10</span></div>
+        <div class="flex-between">automatización WhatsApp Business<span class="tag tag-green">KD 22</span></div>
+        <div class="flex-between">marketing digital pymes Argentina<span class="tag tag-green">KD 28</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Competitor Gap -->
+  <div class="section-title">Competitor Gap Analysis</div>
+  <div class="grid-3 mb8">
+    <div>
+      <h4 style="color:#93c5fd; margin-bottom:12px">🇺🇸 US Market Gaps</h4>
+      <div class="card mb8"><div class="flex-between mb4"><span style="font-size:12px; font-weight:700; color:var(--text)">HubSpot</span><span class="tag tag-green">Win: Niche Verticals</span></div><p style="font-size:11px">Dominates generic CRM content. Win with luxury, wellness, aesthetics — barely covered.</p></div>
+      <div class="card mb8"><div class="flex-between mb4"><span style="font-size:12px; font-weight:700; color:var(--text)">GoHighLevel</span><span class="tag tag-green">Win: Thought Leadership</span></div><p style="font-size:11px">Dominates agency white-label. Official educational content is thin — own the teaching space.</p></div>
+      <div class="card"><div class="flex-between mb4"><span style="font-size:12px; font-weight:700; color:var(--text)">ActiveCampaign</span><span class="tag tag-green">Win: Full-Stack</span></div><p style="font-size:11px">Email-centric only. Position CRM + automation + loyalty + RevOps as the complete system.</p></div>
+    </div>
+    <div>
+      <h4 style="color:var(--teal2); margin-bottom:12px">🇧🇷 Brazil Market Gaps</h4>
+      <div class="card mb8"><div class="flex-between mb4"><span style="font-size:12px; font-weight:700; color:var(--text)">RD Station</span><span class="tag tag-green">Win: Beyond Inbound</span></div><p style="font-size:11px">Synonymous with inbound in BR. Position as "beyond inbound" with RevOps + loyalty + full automation.</p></div>
+      <div class="card mb8"><div class="flex-between mb4"><span style="font-size:12px; font-weight:700; color:var(--text)">Kommo</span><span class="tag tag-green">Win: Complete Stack</span></div><p style="font-size:11px">WhatsApp CRM only. Differentiate with the full Growth Engine beyond single-channel.</p></div>
+      <div class="card"><div class="flex-between mb4"><span style="font-size:12px; font-weight:700; color:var(--text)">Rock Content</span><span class="tag tag-green">Win: Technical CRM</span></div><p style="font-size:11px">General content marketing. Own the technical CRM + automation educational space.</p></div>
+    </div>
+    <div>
+      <h4 style="color:var(--orange2); margin-bottom:12px">🇦🇷 LatAm Market Gaps</h4>
+      <div class="card mb8"><div class="flex-between mb4"><span style="font-size:12px; font-weight:700; color:var(--text)">HubSpot LATAM</span><span class="tag tag-green">Win: Native Content</span></div><p style="font-size:11px">Translated, not localized. Create native LatAm content with local phrasing + WhatsApp-first.</p></div>
+      <div class="card mb8"><div class="flex-between mb4"><span style="font-size:12px; font-weight:700; color:var(--text)">Clientify</span><span class="tag tag-green">Win: Education</span></div><p style="font-size:11px">Growing but little educational content. Lead with MOFU teaching to capture searchers.</p></div>
+      <div class="card"><div class="flex-between mb4"><span style="font-size:12px; font-weight:700; color:var(--text)">DataCRM</span><span class="tag tag-green">Win: AR/MX/CL</span></div><p style="font-size:11px">Strong in Colombia only. Cover Argentina, Mexico, Chile with localized content.</p></div>
+    </div>
+  </div>
+</div>
+<!-- ═══════════ AGENTS ═══════════ -->
+<div id="panel-agents" class="panel">
+  <div class="section-title">Virtual Agent Team — The Brand Strategy Crew</div>
+  <div class="grid-4 mb24">
+    <div class="agent-card">
+      <div class="agent-avatar" style="background:linear-gradient(135deg,#9B51E0,#6d28d9)">🎯</div>
+      <div><div class="agent-name">Brand Director</div><div class="agent-role">Strategy &amp; Sales</div></div>
+      <p>Owns narrative arc. Aligns every post to the 90-day revenue north star and imPACT pillars.</p>
+      <div><span class="tag tag-purple">Strategy</span><span class="tag tag-purple">Sales</span></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar" style="background:linear-gradient(135deg,#0ea5e9,#0284c7)">🔍</div>
+      <div><div class="agent-name">Lead Investigator</div><div class="agent-role">Research &amp; SEO</div></div>
+      <p>Mines pain points, keyword gaps, and competitor data for counterintuitive hooks.</p>
+      <div><span class="tag tag-blue">Research</span><span class="tag tag-blue">SEO</span></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar" style="background:linear-gradient(135deg,#00A6A6,#0d9488)">⚙️</div>
+      <div><div class="agent-name">GHL Architect</div><div class="agent-role">CRM &amp; Systems</div></div>
+      <p>Translates GHL/Kommo automation logic into compelling editorial content.</p>
+      <div><span class="tag tag-teal">GoHighLevel</span><span class="tag tag-teal">Automação</span></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar" style="background:linear-gradient(135deg,#FF8C00,#ea580c)">📣</div>
+      <div><div class="agent-name">Meta Strategist</div><div class="agent-role">Paid &amp; WhatsApp</div></div>
+      <p>Designs funnel-aware ad content and WhatsApp broadcast sequences that drive SQLs.</p>
+      <div><span class="tag tag-orange">Meta Ads</span><span class="tag tag-orange">WhatsApp</span></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar" style="background:linear-gradient(135deg,#16a34a,#15803d)">🔎</div>
+      <div><div class="agent-name">Google Expert</div><div class="agent-role">SEO &amp; SEM</div></div>
+      <p>Captures high-intent CRM keywords across EN, ES and PT-BR search markets.</p>
+      <div><span class="tag tag-green">Google Ads</span><span class="tag tag-green">SEO</span></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar" style="background:linear-gradient(135deg,#7c3aed,#5b21b6)">🛒</div>
+      <div><div class="agent-name">WooCommerce Expert</div><div class="agent-role">E-Com &amp; Loyalty</div></div>
+      <p>Loyalty Loop mechanics, LTV maximization and WooCommerce + CRM integration.</p>
+      <div><span class="tag tag-purple">WooCommerce</span><span class="tag tag-purple">LTV</span></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar" style="background:linear-gradient(135deg,#2563eb,#1d4ed8)">💼</div>
+      <div><div class="agent-name">LinkedIn Specialist</div><div class="agent-role">B2B &amp; C-Level</div></div>
+      <p>Executive-grade thought leadership for C-Suite audiences. 10–20 DMs/day outbound.</p>
+      <div><span class="tag tag-blue">LinkedIn</span><span class="tag tag-blue">B2B</span></div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-avatar" style="background:linear-gradient(135deg,#db2777,#be185d)">🎙️</div>
+      <div><div class="agent-name">Podcast Producer</div><div class="agent-role">Audio &amp; Distribution</div></div>
+      <p>NotebookLM-ready briefs, 3-language episode production &amp; auto-distribution pipeline.</p>
+      <div><span class="tag tag-red">NotebookLM</span><span class="tag tag-red">3 Languages</span></div>
+    </div>
+  </div>
+  <div class="section-title">Daily Non-Negotiables (Founder Outbound)</div>
+  <div class="grid-4">
+    <div class="card" style="text-align:center; border-color:rgba(59,130,246,0.3)"><div style="font-size:28px; margin-bottom:6px">💼</div><div class="stat-num" style="font-size:24px; color:var(--blue)">10–20</div><div class="stat-label">LinkedIn DMs/day</div></div>
+    <div class="card" style="text-align:center; border-color:rgba(0,166,166,0.3)"><div style="font-size:28px; margin-bottom:6px">💬</div><div class="stat-num" style="font-size:24px; color:var(--teal2)">10</div><div class="stat-label">WhatsApp outreach/day</div></div>
+    <div class="card" style="text-align:center; border-color:rgba(155,81,224,0.3)"><div style="font-size:28px; margin-bottom:6px">🎥</div><div class="stat-num" style="font-size:24px; color:var(--purple2)">1×</div><div class="stat-label">Loom/webinar per week</div></div>
+    <div class="card" style="text-align:center; border-color:rgba(255,140,0,0.3)"><div style="font-size:28px; margin-bottom:6px">✍️</div><div class="stat-num" style="font-size:24px; color:var(--orange2)">2×</div><div class="stat-label">LinkedIn posts/week</div></div>
+  </div>
+</div>
+<!-- ═══════════ CALENDAR ═══════════ -->
+<div id="panel-calendar" class="panel">
+  <div class="flex-between mb16">
+    <div><h2>90-Day Content Calendar</h2><p>12 pillar posts × 2 language cards each = 24 SEO-optimized content cards</p></div>
+    <div class="flex-row"><span class="lang-pill en">🇺🇸 EN</span><span class="lang-pill es">🇦🇷 ES</span><span class="lang-pill pt">🇧🇷 PT</span></div>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="card mb8" style="background:rgba(155,81,224,0.07); border-color:rgba(155,81,224,0.3)">
+    <div class="flex-row"><div class="dot" style="background:var(--purple)"></div><h3 style="color:var(--purple2)">Phase 1 — Foundation &amp; Pain</h3><span class="badge badge-purple" style="margin-left:auto">Weeks 1–4 · TOFU Anchors</span></div>
+  </div>
+
+  <!-- Post 01 -->
+  <div class="grid-2 mb16">
+    <div class="post-card phase1">
+      <div class="flex-between mb8"><div class="post-num">Post 01 · Week 1 · 🇺🇸 EN</div><span class="lang-pill en">EN Primary</span></div>
+      <div class="post-title">What Is CRM? The Complete Guide for Business Owners in 2026</div>
+      <div class="post-hook">"You've heard the acronym. You might even have one. But is your CRM actually making you money — or just organizing your chaos?"</div>
+      <div class="post-meta">🎯 <span>Business owners new to CRM · TOFU anchor</span></div>
+      <div class="post-meta">📣 CTA: <span>Free Speed-to-Lead Audit</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/what-is-crm-guide-2026</span>
+        <span class="seo-chip seo-vol">14,800 vol</span>
+        <span class="seo-chip seo-kd hard">KD 55</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">What does CRM stand for and why do businesses need it?</div><div class="faq-q">How does a CRM increase sales conversions?</div><div class="faq-q">What is the difference between CRM and marketing automation?</div></div>
+    </div>
+    <div class="post-card phase1">
+      <div class="flex-between mb8"><div class="post-num">Post 01 · Week 1 · 🇧🇷 PT</div><span class="lang-pill pt">PT Primary</span></div>
+      <div class="post-title">O Que É CRM? Guia Completo Para Donos de Negócios em 2026</div>
+      <div class="post-hook">"Você já ouviu a sigla. Talvez até tenha um. Mas o seu CRM está gerando receita — ou apenas organizando a bagunça?"</div>
+      <div class="post-meta">🎯 <span>Empresários brasileiros · TOFU ancora</span></div>
+      <div class="post-meta">📣 CTA: <span>Auditoria Speed-to-Lead Gratuita</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/o-que-e-crm-guia-2026</span>
+        <span class="seo-chip seo-vol">22,200 vol</span>
+        <span class="seo-chip seo-kd hard">KD 60</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">O que significa CRM e por que minha empresa precisa?</div><div class="faq-q">Como o CRM aumenta as conversões de vendas?</div><div class="faq-q">Qual a diferença entre CRM e automação de marketing?</div></div>
+    </div>
+  </div>
+
+  <!-- Post 02 -->
+  <div class="grid-2 mb16">
+    <div class="post-card phase1">
+      <div class="flex-between mb8"><div class="post-num">Post 02 · Week 2 · 🇺🇸 EN</div><span class="lang-pill en">EN Primary</span></div>
+      <div class="post-title">The &lt;2-Minute Rule: Why Speed-to-Lead Creates 9× More Conversions</div>
+      <div class="post-hook">"You spent R$5,000 on ads. Your lead came in at 11pm. You replied at 9am. They hired someone else."</div>
+      <div class="post-meta">🎯 <span>Clinic owners, real estate agents running paid ads</span></div>
+      <div class="post-meta">📣 CTA: <span>Book a Speed-to-Lead Mystery Shopper Test</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/speed-to-lead-crm-automation</span>
+        <span class="seo-chip seo-vol">1,900 vol</span>
+        <span class="seo-chip seo-kd">KD 28</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">What is speed-to-lead and why does it matter?</div><div class="faq-q">How fast should a business respond to a new lead?</div><div class="faq-q">Can CRM automation respond to leads in under 2 minutes?</div></div>
+    </div>
+    <div class="post-card phase1">
+      <div class="flex-between mb8"><div class="post-num">Post 02 · Week 2 · 🇦🇷 ES</div><span class="lang-pill es">ES Primary</span></div>
+      <div class="post-title">¿Qué Es un CRM? Guía Completa Para Dueños de Negocios en 2026</div>
+      <div class="post-hook">"El 98% de los mensajes de WhatsApp se abren. El 20% de los emails. ¿Adónde debería ir tu energía?"</div>
+      <div class="post-meta">🎯 <span>PYMEs Argentina y LatAm · TOFU anchor</span></div>
+      <div class="post-meta">📣 CTA: <span>Auditoría Speed-to-Lead gratuita para tu negocio</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/que-es-un-crm-guia-2026</span>
+        <span class="seo-chip seo-vol">18,100 vol</span>
+        <span class="seo-chip seo-kd mid">KD 58</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">¿Qué es un CRM y para qué sirve en mi negocio?</div><div class="faq-q">¿Cómo un CRM con WhatsApp aumenta las ventas?</div><div class="faq-q">¿Cuál es el mejor CRM para pymes en Argentina?</div></div>
+    </div>
+  </div>
+
+  <!-- Post 03 -->
+  <div class="grid-2 mb16">
+    <div class="post-card phase1">
+      <div class="flex-between mb8"><div class="post-num">Post 03 · Week 3 · 🇺🇸 EN</div><span class="lang-pill en">EN Primary</span></div>
+      <div class="post-title">The Invisible Engine: The Automated Backend Most Premium Brands Are Missing</div>
+      <div class="post-hook">"Your brand looks polished on the outside. Behind the scenes, leads are falling through cracks your team doesn't even know exist."</div>
+      <div class="post-meta">🎯 <span>Premium brands with high CAC, low close rates</span></div>
+      <div class="post-meta">📣 CTA: <span>Request a Lead Leakage Calculation</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/invisible-engine-crm-automation</span>
+        <span class="seo-chip seo-vol">2,400 vol</span>
+        <span class="seo-chip seo-kd">KD 30</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">What is marketing automation for premium brands?</div><div class="faq-q">How do CRM workflows prevent lead leakage?</div><div class="faq-q">What does an automated lead qualification system look like?</div></div>
+    </div>
+    <div class="post-card phase1">
+      <div class="flex-between mb8"><div class="post-num">Post 03 · Week 3 · 🇧🇷 PT</div><span class="lang-pill pt">PT Primary</span></div>
+      <div class="post-title">Automação de Marketing: Guia Completo Para Escalar Vendas em 2026</div>
+      <div class="post-hook">"Sua marca parece profissional por fora. Mas por dentro, leads estão se perdendo em buracos que sua equipe nem sabe que existem."</div>
+      <div class="post-meta">🎯 <span>Marcas premium BR com alto CAC</span></div>
+      <div class="post-meta">📣 CTA: <span>Cálculo de Vazamento de Leads — grátis</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/automacao-marketing-guia-2026</span>
+        <span class="seo-chip seo-vol">5,400 vol</span>
+        <span class="seo-chip seo-kd mid">KD 42</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">O que é automação de marketing e como funciona?</div><div class="faq-q">Como a automação de CRM evita perda de leads?</div><div class="faq-q">Qual a melhor ferramenta de automação de marketing no Brasil?</div></div>
+    </div>
+  </div>
+
+  <!-- Post 04 -->
+  <div class="grid-2 mb16">
+    <div class="post-card phase1">
+      <div class="flex-between mb8"><div class="post-num">Post 04 · Week 4 · 🇺🇸 EN</div><span class="lang-pill en">EN Primary</span></div>
+      <div class="post-title">GoHighLevel vs HubSpot: Which CRM Is Right for Your Business?</div>
+      <div class="post-hook">"One is free to start. The other is built to scale agencies. Here's what nobody tells you about both."</div>
+      <div class="post-meta">🎯 <span>Agencies &amp; businesses comparing CRM platforms</span></div>
+      <div class="post-meta">📣 CTA: <span>Free CRM Stack Assessment call</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/gohighlevel-vs-hubspot-2026</span>
+        <span class="seo-chip seo-vol">2,400 vol</span>
+        <span class="seo-chip seo-kd">KD 32</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">Is GoHighLevel better than HubSpot for small businesses?</div><div class="faq-q">What are the main differences between GHL and HubSpot?</div><div class="faq-q">Which CRM is best for marketing agencies in 2026?</div></div>
+    </div>
+    <div class="post-card phase1">
+      <div class="flex-between mb8"><div class="post-num">Post 04 · Week 4 · 🇦🇷 ES</div><span class="lang-pill es">ES Primary</span></div>
+      <div class="post-title">CRM con WhatsApp: La Solución Que Tu Equipo de Ventas Necesita</div>
+      <div class="post-hook">"El 98% de los mensajes de WhatsApp se abren. Solo el 20% de los emails. ¿Por qué tu CRM sigue dependiendo del email?"</div>
+      <div class="post-meta">🎯 <span>PYMEs Argentina — WhatsApp-first market</span></div>
+      <div class="post-meta">📣 CTA: <span>Demo gratuita de CRM + WhatsApp integrado</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/crm-con-whatsapp-integrado</span>
+        <span class="seo-chip seo-vol">480 vol</span>
+        <span class="seo-chip seo-kd">KD 25</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">¿Cómo integrar WhatsApp Business con un CRM?</div><div class="faq-q">¿Cuál es el mejor CRM con WhatsApp para ventas?</div><div class="faq-q">¿Cómo automatizar respuestas en WhatsApp Business?</div></div>
+    </div>
+  </div>
+  <!-- PHASE 2 -->
+  <div class="card mb8 mt24" style="background:rgba(0,166,166,0.07); border-color:rgba(0,166,166,0.3)">
+    <div class="flex-row"><div class="dot" style="background:var(--teal)"></div><h3 style="color:var(--teal2)">Phase 2 — Architecture Revealed</h3><span class="badge badge-teal" style="margin-left:auto">Weeks 5–9 · MOFU Education</span></div>
+  </div>
+
+  <!-- Post 05 -->
+  <div class="grid-2 mb16">
+    <div class="post-card phase2">
+      <div class="flex-between mb8"><div class="post-num">Post 05 · Week 5 · 🇺🇸 EN</div><span class="lang-pill en">EN Primary</span></div>
+      <div class="post-title">The 4-Part Growth Engine: How CRM, Web, Paid Media &amp; Loyalty Work as One System</div>
+      <div class="post-hook">"Most businesses run 4 disconnected tools. 4UPact builds 1 machine where every element feeds the next."</div>
+      <div class="post-meta">🎯 <span>Business owners ready to move from tactics to systems</span></div>
+      <div class="post-meta">📣 CTA: <span>Book a Growth Engine Assessment — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/growth-engine-crm-web-ads-loyalty</span>
+        <span class="seo-chip seo-vol">4,400 vol</span>
+        <span class="seo-chip seo-kd mid">KD 45</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">What is a growth engine in marketing?</div><div class="faq-q">How do CRM and paid media work together?</div><div class="faq-q">What marketing automation tools integrate with e-commerce?</div></div>
+    </div>
+    <div class="post-card phase2">
+      <div class="flex-between mb8"><div class="post-num">Post 05 · Week 5 · 🇧🇷 PT</div><span class="lang-pill pt">PT Primary</span></div>
+      <div class="post-title">GoHighLevel no Brasil: Vale a Pena? Análise Completa 2026</div>
+      <div class="post-hook">"O GHL está conquistando agências no mundo todo. Mas funciona para o mercado brasileiro com WhatsApp como canal principal?"</div>
+      <div class="post-meta">🎯 <span>Agências e consultores digitais BR</span></div>
+      <div class="post-meta">📣 CTA: <span>Avaliação gratuita GHL — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/gohighlevel-brasil-vale-a-pena</span>
+        <span class="seo-chip seo-vol">480 vol</span>
+        <span class="seo-chip seo-kd">KD 15</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">O GoHighLevel funciona bem no Brasil?</div><div class="faq-q">Como configurar o GoHighLevel em português?</div><div class="faq-q">GoHighLevel ou RD Station: qual é melhor?</div></div>
+    </div>
+  </div>
+
+  <!-- Post 06 -->
+  <div class="grid-2 mb16">
+    <div class="post-card phase2">
+      <div class="flex-between mb8"><div class="post-num">Post 06 · Week 6 · 🇺🇸 EN</div><span class="lang-pill en">EN Primary</span></div>
+      <div class="post-title">CRM for Luxury Hotels: How to Stop Leaking LTV and Automate Guest Loyalty</div>
+      <div class="post-hook">"A 5-star resort has a guest spend R$12,000 for a weekend. Then never contacts them again. That's not hospitality."</div>
+      <div class="post-meta">🎯 <span>Luxury tourism · Azulik-type brands</span></div>
+      <div class="post-meta">📣 CTA: <span>LTV Leakage Assessment — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/crm-luxury-hotels-guest-loyalty</span>
+        <span class="seo-chip seo-vol">210 vol</span>
+        <span class="seo-chip seo-kd">KD 20</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">What CRM is best for luxury hotels and resorts?</div><div class="faq-q">How do hotels automate guest follow-up and loyalty?</div><div class="faq-q">What is LTV leakage in hospitality marketing?</div></div>
+    </div>
+    <div class="post-card phase2">
+      <div class="flex-between mb8"><div class="post-num">Post 06 · Week 6 · 🇧🇷 PT</div><span class="lang-pill pt">PT Primary</span></div>
+      <div class="post-title">CRM para Clínicas de Estética: Como Fechar Mais com Menos Esforço Manual</div>
+      <div class="post-hook">"Sua clínica investe em Meta Ads, mas demora 4 horas para responder. Veja como automatizar o processo inteiro."</div>
+      <div class="post-meta">🎯 <span>Clínicas de estética e médicas — ICP direto</span></div>
+      <div class="post-meta">📣 CTA: <span>Auditoria Speed-to-Lead Gratuita — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/crm-clinicas-estetica-automacao</span>
+        <span class="seo-chip seo-vol">390 vol</span>
+        <span class="seo-chip seo-kd">KD 18</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">Qual o melhor CRM para clínicas de estética?</div><div class="faq-q">Como automatizar agendamento de pacientes?</div><div class="faq-q">CRM com WhatsApp para clínicas: como funciona?</div></div>
+    </div>
+  </div>
+
+  <!-- Post 07 -->
+  <div class="grid-2 mb16">
+    <div class="post-card phase2">
+      <div class="flex-between mb8"><div class="post-num">Post 07 · Week 7 · 🇺🇸 EN</div><span class="lang-pill en">EN Primary</span></div>
+      <div class="post-title">Paid Media With Purpose: How Your Ad Spend Should Build a Loyalty System</div>
+      <div class="post-hook">"R$10,000 in Meta Ads. 47 leads. 3 conversions. Zero follow-up. The problem isn't the ads — it's what happens after."</div>
+      <div class="post-meta">🎯 <span>Business owners running Meta/Google without CRM</span></div>
+      <div class="post-meta">📣 CTA: <span>Ad-to-Pipeline Gap Analysis — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/paid-media-crm-loyalty-system</span>
+        <span class="seo-chip seo-vol">8,100 vol</span>
+        <span class="seo-chip seo-kd mid">KD 48</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">How to connect Meta Ads to a CRM pipeline?</div><div class="faq-q">Why do leads from paid ads not convert?</div><div class="faq-q">What is the best marketing automation for paid media?</div></div>
+    </div>
+    <div class="post-card phase2">
+      <div class="flex-between mb8"><div class="post-num">Post 07 · Week 7 · 🇦🇷 ES</div><span class="lang-pill es">ES Primary</span></div>
+      <div class="post-title">Automatización WhatsApp Business: Guía Completa Para Escalar Ventas</div>
+      <div class="post-hook">"El 98% de los mensajes de WhatsApp se abren. ¿Cómo podés automatizar respuestas en menos de 2 minutos?"</div>
+      <div class="post-meta">🎯 <span>PYMEs Argentina &amp; LatAm — WhatsApp-first</span></div>
+      <div class="post-meta">📣 CTA: <span>Demo de automatización WhatsApp — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/automatizacion-whatsapp-business-ventas</span>
+        <span class="seo-chip seo-vol">590 vol</span>
+        <span class="seo-chip seo-kd">KD 22</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">¿Cómo automatizar WhatsApp Business para ventas?</div><div class="faq-q">¿Qué herramientas integran WhatsApp con CRM?</div><div class="faq-q">¿WhatsApp Business API vs App: cuál usar para mi empresa?</div></div>
+    </div>
+  </div>
+
+  <!-- Post 08 -->
+  <div class="grid-2 mb16">
+    <div class="post-card phase2">
+      <div class="flex-between mb8"><div class="post-num">Post 08 · Week 8 · 🇺🇸 EN</div><span class="lang-pill en">EN Primary</span></div>
+      <div class="post-title">White Label CRM Solutions: How Agencies Build Recurring Revenue</div>
+      <div class="post-hook">"Stop reselling hours. Start reselling systems. White-label CRM is how agencies go from project-based to R$30K+ MRR."</div>
+      <div class="post-meta">🎯 <span>Marketing agencies looking for recurring revenue</span></div>
+      <div class="post-meta">📣 CTA: <span>Agency Partnership Program — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/white-label-crm-agency-revenue</span>
+        <span class="seo-chip seo-vol">1,300 vol</span>
+        <span class="seo-chip seo-kd">KD 22</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">What is a white label CRM solution?</div><div class="faq-q">How do agencies make recurring revenue with CRM?</div><div class="faq-q">GoHighLevel white label vs building your own CRM?</div></div>
+    </div>
+    <div class="post-card phase2">
+      <div class="flex-between mb8"><div class="post-num">Post 08 · Week 8 · 🇧🇷 PT</div><span class="lang-pill pt">PT Primary</span></div>
+      <div class="post-title">Como Automatizar WhatsApp Para Vendas: Guia Prático 2026</div>
+      <div class="post-hook">"420 milhões de brasileiros usam WhatsApp. Quantos desses estão esperando sua resposta neste momento?"</div>
+      <div class="post-meta">🎯 <span>PMEs e vendedores BR que dependem de WhatsApp</span></div>
+      <div class="post-meta">📣 CTA: <span>Configuração WhatsApp + CRM — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/automatizar-whatsapp-vendas-2026</span>
+        <span class="seo-chip seo-vol">720 vol</span>
+        <span class="seo-chip seo-kd">KD 25</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">Como automatizar mensagens no WhatsApp Business?</div><div class="faq-q">Qual o melhor bot para WhatsApp de vendas?</div><div class="faq-q">WhatsApp Business API: quanto custa no Brasil?</div></div>
+    </div>
+  </div>
+  <!-- PHASE 3 -->
+  <div class="card mb8 mt24" style="background:rgba(255,140,0,0.07); border-color:rgba(255,140,0,0.3)">
+    <div class="flex-row"><div class="dot" style="background:var(--orange)"></div><h3 style="color:var(--orange2)">Phase 3 — Proof &amp; Conversion</h3><span class="badge badge-orange" style="margin-left:auto">Weeks 9–12 · BOFU Conversion</span></div>
+  </div>
+
+  <!-- Post 09 -->
+  <div class="grid-2 mb16">
+    <div class="post-card phase3">
+      <div class="flex-between mb8"><div class="post-num">Post 09 · Week 9 · 🇺🇸 EN</div><span class="lang-pill en">EN Primary</span></div>
+      <div class="post-title">RevOps Agency: How Revenue Operations Turns Marketing Into a Growth Machine</div>
+      <div class="post-hook">"Marketing, sales, and CS in silos? That's not a strategy. RevOps aligns all three into a single revenue system."</div>
+      <div class="post-meta">🎯 <span>C-Level founders wanting systems alignment</span></div>
+      <div class="post-meta">📣 CTA: <span>RevOps Assessment — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/revops-agency-revenue-operations</span>
+        <span class="seo-chip seo-vol">1,600 vol</span>
+        <span class="seo-chip seo-kd">KD 18</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">What is a RevOps agency and what do they do?</div><div class="faq-q">How does revenue operations differ from marketing operations?</div><div class="faq-q">What tools are used for RevOps implementation?</div></div>
+    </div>
+    <div class="post-card phase3">
+      <div class="flex-between mb8"><div class="post-num">Post 09 · Week 9 · 🇦🇷 ES</div><span class="lang-pill es">ES Primary</span></div>
+      <div class="post-title">Marketing Digital Para PYMEs Argentina: La Guía Que Necesitás en 2026</div>
+      <div class="post-hook">"No necesitás un presupuesto de multinacional. Necesitás un sistema que funcione mientras dormís."</div>
+      <div class="post-meta">🎯 <span>PYMEs Argentina — directos, geo-target</span></div>
+      <div class="post-meta">📣 CTA: <span>Consulta gratuita para PYMEs — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/marketing-digital-pymes-argentina-2026</span>
+        <span class="seo-chip seo-vol">720 vol</span>
+        <span class="seo-chip seo-kd">KD 28</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">¿Cuánto cuesta el marketing digital para PYMEs en Argentina?</div><div class="faq-q">¿Qué estrategias de marketing digital funcionan para PYMEs?</div><div class="faq-q">¿Cómo medir el ROI del marketing digital en mi negocio?</div></div>
+    </div>
+  </div>
+
+  <!-- Post 10 -->
+  <div class="grid-2 mb16">
+    <div class="post-card phase3">
+      <div class="flex-between mb8"><div class="post-num">Post 10 · Week 10 · 🇺🇸 EN</div><span class="lang-pill en">EN Primary</span></div>
+      <div class="post-title">What We Find in 90% of Businesses During a Free Speed-to-Lead Audit</div>
+      <div class="post-hook">"We run a mystery shopper test. We submit a lead. We time the response. In 90% of cases, what we find shocks the owner."</div>
+      <div class="post-meta">🎯 <span>Any business running ads or inbound marketing</span></div>
+      <div class="post-meta">📣 CTA: <span>Book your Speed-to-Lead Audit — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/speed-to-lead-audit-results</span>
+        <span class="seo-chip seo-vol">880 vol</span>
+        <span class="seo-chip seo-kd">KD 24</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">What is a speed-to-lead audit?</div><div class="faq-q">How to test if my business is losing leads?</div><div class="faq-q">What is a mystery shopper test for CRM?</div></div>
+    </div>
+    <div class="post-card phase3">
+      <div class="flex-between mb8"><div class="post-num">Post 10 · Week 10 · 🇧🇷 PT</div><span class="lang-pill pt">PT Primary</span></div>
+      <div class="post-title">CRM com Chatbot IA: Como Automatizar Atendimento e Vendas em 2026</div>
+      <div class="post-hook">"IA não é o futuro. É agora. Veja como negócios brasileiros estão usando chatbots + CRM para vender 24/7."</div>
+      <div class="post-meta">🎯 <span>Empresários BR interessados em IA aplicada</span></div>
+      <div class="post-meta">📣 CTA: <span>Demo de CRM + IA — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/crm-chatbot-ia-vendas-2026</span>
+        <span class="seo-chip seo-vol">480 vol</span>
+        <span class="seo-chip seo-kd">KD 22</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">Como integrar chatbot com IA ao CRM?</div><div class="faq-q">Qual o melhor chatbot para vendas no Brasil?</div><div class="faq-q">CRM com inteligência artificial: quanto custa?</div></div>
+    </div>
+  </div>
+
+  <!-- Post 11 -->
+  <div class="grid-2 mb16">
+    <div class="post-card phase3">
+      <div class="flex-between mb8"><div class="post-num">Post 11 · Week 11 · 🇺🇸 EN</div><span class="lang-pill en">EN Primary</span></div>
+      <div class="post-title">From Fortune 500 to Growth Engine Builder: Why Rodrigo Ezquerra Built 4UPact</div>
+      <div class="post-hook">"I had the Intel strategy decks. The IBM playbooks. What I didn't have was a single client who truly owned their growth system."</div>
+      <div class="post-meta">🎯 <span>Founder-to-founder trust story · Decision makers</span></div>
+      <div class="post-meta">📣 CTA: <span>Let's build your system — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/rodrigo-ezquerra-4upact-story</span>
+        <span class="seo-chip seo-vol">Branded</span>
+        <span class="seo-chip seo-kd">KD —</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">Who founded 4UPact and what is their background?</div><div class="faq-q">What makes 4UPact different from other marketing agencies?</div><div class="faq-q">How does Fortune 500 strategy apply to small business CRM?</div></div>
+    </div>
+    <div class="post-card phase3">
+      <div class="flex-between mb8"><div class="post-num">Post 11 · Week 11 · 🇦🇷 ES</div><span class="lang-pill es">ES Primary</span></div>
+      <div class="post-title">CRM Para Wellness y Bienestar: Automatizá Tu Centro y Escalá Ventas</div>
+      <div class="post-hook">"Tu centro de bienestar merece un sistema que funcione tan bien como tus tratamientos. Empezá por el CRM."</div>
+      <div class="post-meta">🎯 <span>Centros de bienestar y estética LatAm</span></div>
+      <div class="post-meta">📣 CTA: <span>Auditoría CRM gratuita — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/crm-wellness-bienestar-automatizacion</span>
+        <span class="seo-chip seo-vol">120 vol</span>
+        <span class="seo-chip seo-kd">KD 10</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">¿Cuál es el mejor CRM para centros de bienestar?</div><div class="faq-q">¿Cómo automatizar turnos para un spa o centro de estética?</div><div class="faq-q">¿CRM para wellness: qué funciones necesito?</div></div>
+    </div>
+  </div>
+
+  <!-- Post 12 -->
+  <div class="grid-2 mb16">
+    <div class="post-card phase3">
+      <div class="flex-between mb8"><div class="post-num">Post 12 · Week 12 · 🇺🇸 EN</div><span class="lang-pill en">EN Primary</span></div>
+      <div class="post-title">The Ultimate Marketing Tech Stack for 2026: CRM, Automation &amp; AI Combined</div>
+      <div class="post-hook">"You don't buy hours from 4UPact. You buy a revenue system that works whether you're in the room or not."</div>
+      <div class="post-meta">🎯 <span>All ICPs — final conversion post · 90-day arc close</span></div>
+      <div class="post-meta">📣 CTA: <span>Start your Comet 14-Day Launch — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/marketing-tech-stack-2026</span>
+        <span class="seo-chip seo-vol">3,200 vol</span>
+        <span class="seo-chip seo-kd mid">KD 38</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">What is the best marketing technology stack for 2026?</div><div class="faq-q">How to combine CRM, automation, and AI for marketing?</div><div class="faq-q">What tools does a modern marketing agency need?</div></div>
+    </div>
+    <div class="post-card phase3">
+      <div class="flex-between mb8"><div class="post-num">Post 12 · Week 12 · 🇧🇷 PT</div><span class="lang-pill pt">PT Primary</span></div>
+      <div class="post-title">Stack de Marketing Digital 2026: As Ferramentas Que Funcionam Juntas</div>
+      <div class="post-hook">"Ter 10 ferramentas não resolve. Ter um sistema integrado — CRM + automação + IA — resolve."</div>
+      <div class="post-meta">🎯 <span>Todos os ICPs BR — post de encerramento dos 90 dias</span></div>
+      <div class="post-meta">📣 CTA: <span>Comece seu Comet 14 Dias — sales@4upact.com</span></div>
+      <div class="seo-row">
+        <span class="seo-chip seo-slug">/stack-marketing-digital-2026</span>
+        <span class="seo-chip seo-vol">1,200 vol</span>
+        <span class="seo-chip seo-kd">KD 30</span>
+      </div>
+      <div class="faq-list"><div class="faq-q">Qual o melhor stack de marketing digital em 2026?</div><div class="faq-q">Como integrar CRM com automação e IA?</div><div class="faq-q">Quais ferramentas uma agência de marketing precisa?</div></div>
+    </div>
+  </div>
+</div>
+<!-- ═══════════ PODCAST ═══════════ -->
+<div id="panel-podcast" class="panel">
+  <div class="flex-between mb24">
+    <div><h2>Podcast Plan — "The Growth Engine Show"</h2><p>Host: Rodrigo Ezquerra · 4 episodes × 3 languages = 12 releases via NotebookLM</p></div>
+    <div class="flex-row"><span class="lang-pill en">🇺🇸 EN</span><span class="lang-pill es">🇦🇷 ES</span><span class="lang-pill pt">🇧🇷 PT</span></div>
+  </div>
+  <div class="grid-2 mb32">
+    <div class="post-card phase1">
+      <div class="flex-between mb8"><div class="post-num">Episode 01 · Phase 1</div><div class="flex-row"><span class="lang-pill en">EN</span><span class="lang-pill es">ES</span><span class="lang-pill pt">PT</span></div></div>
+      <div class="post-title">The Invisible Engine: Why Most Businesses Are Invisible to Their Own Leads</div>
+      <div style="margin:10px 0; font-size:12px; color:var(--text2)">
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 00–05 · Hook: Mystery shopper story</div>
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 05–15 · The 21× and 9× conversion stats</div>
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 15–25 · GHL + WhatsApp invisible backend</div>
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 25–35 · Client case: Brasília clinic</div>
+        <div style="padding:4px 0">⏱ 35–40 · CTA: Speed-to-Lead Audit</div>
+      </div>
+      <div><span class="tag tag-purple">Posts 02+03</span><span class="tag tag-gray">~40 min</span></div>
+    </div>
+    <div class="post-card phase1">
+      <div class="flex-between mb8"><div class="post-num">Episode 02 · Phase 1</div><div class="flex-row"><span class="lang-pill en">EN</span><span class="lang-pill es">ES</span><span class="lang-pill pt">PT</span></div></div>
+      <div class="post-title">The Loyalty Loop: How to Turn One Customer into a Revenue Stream</div>
+      <div style="margin:10px 0; font-size:12px; color:var(--text2)">
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 00–06 · Hook: Why brands stop at acquisition</div>
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 06–18 · Loyalty Loop: Buy→Benefit→Return→Repurchase</div>
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 18–28 · Reactivation 30/60/90-day MVAs</div>
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 28–36 · LTV math for hotels &amp; clinics</div>
+        <div style="padding:4px 0">⏱ 36–40 · CTA: LTV Leakage Assessment</div>
+      </div>
+      <div><span class="tag tag-purple">Posts 04+06</span><span class="tag tag-gray">~40 min</span></div>
+    </div>
+    <div class="post-card phase2">
+      <div class="flex-between mb8"><div class="post-num">Episode 03 · Phase 2</div><div class="flex-row"><span class="lang-pill en">EN</span><span class="lang-pill es">ES</span><span class="lang-pill pt">PT</span></div></div>
+      <div class="post-title">AntiGravity + Comet: The OS Running 4UPact's Fastest Launches</div>
+      <div style="margin:10px 0; font-size:12px; color:var(--text2)">
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 00–07 · Hook: First 14 days of a client launch</div>
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 07–20 · AntiGravity 5 nodes walkthrough</div>
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 20–30 · Comet Playbook 1: day-by-day</div>
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 30–38 · 48h Campaign Sprint in practice</div>
+        <div style="padding:4px 0">⏱ 38–42 · CTA: Start Comet 14-Day Launch</div>
+      </div>
+      <div><span class="tag tag-teal">Posts 03+05</span><span class="tag tag-gray">~42 min</span></div>
+    </div>
+    <div class="post-card phase3">
+      <div class="flex-between mb8"><div class="post-num">Episode 04 · Phase 3</div><div class="flex-row"><span class="lang-pill en">EN</span><span class="lang-pill es">ES</span><span class="lang-pill pt">PT</span></div></div>
+      <div class="post-title">From Fortune 500 to Growth Systems — Rodrigo's Full Story</div>
+      <div style="margin:10px 0; font-size:12px; color:var(--text2)">
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 00–08 · Origin: Intel, IBM and corporate</div>
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 08–20 · Fortune 500 strategy at startup scale</div>
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 20–30 · Why 4UPact was built</div>
+        <div style="padding:4px 0; border-bottom:1px solid var(--border)">⏱ 30–40 · Results+Strategy+Systems equation</div>
+        <div style="padding:4px 0">⏱ 40–45 · Next: Miami, Buenos Aires, Lisbon</div>
+      </div>
+      <div><span class="tag tag-orange">Posts 11+12</span><span class="tag tag-gray">~45 min</span></div>
+    </div>
+  </div>
+  <div class="section-title">Podcast Distribution (×3 Languages = 12 Releases)</div>
+  <div class="grid-4">
+    <div class="channel-card"><div class="channel-icon">🎵</div><h4>Spotify</h4><p>Via Spotify for Podcasters (formerly Anchor). RSS feed auto-publishes all 3 language tracks.</p><div class="mt8"><span class="tool-chip">podcasters.spotify.com</span></div></div>
+    <div class="channel-card"><div class="channel-icon">🍎</div><h4>Apple Podcasts</h4><p>Same RSS feed. Submit via Apple Podcasts Connect. 24h auto-index per new episode.</p><div class="mt8"><span class="tool-chip">podcastsconnect.apple.com</span></div></div>
+    <div class="channel-card"><div class="channel-icon">📺</div><h4>YouTube</h4><p>Audio + waveform or slide visual. Auto-upload via Make.com → YouTube Data API v3.</p><div class="mt8"><span class="tool-chip">Make.com</span><span class="tool-chip">YouTube API</span></div></div>
+    <div class="channel-card"><div class="channel-icon">💬</div><h4>WhatsApp Broadcast</h4><p>90s teaser clip + link to full episode. Segmented by language via GHL broadcast.</p><div class="mt8"><span class="tool-chip">GHL</span><span class="tool-chip">WhatsApp API</span></div></div>
+  </div>
+</div>
+
+<!-- ═══════════ PIPELINE ═══════════ -->
+<div id="panel-pipeline" class="panel">
+  <div class="mb24"><h2>Content Automation Pipeline</h2><p>Write once EN → Translate ×3 → NotebookLM podcast → Auto-distribute everywhere</p></div>
+  <div class="notebooklm-flow mb32">
+    <div class="section-title" style="border-color:rgba(155,81,224,0.3)">The Trilingual Content Machine</div>
+    <div class="flow-row">
+      <div class="flow-node" style="border-color:rgba(155,81,224,0.4)">
+        <div class="flex-row mb8"><div class="pipe-num">1</div><h4 style="color:var(--purple2)">Write Blog (EN)</h4></div>
+        <p style="font-size:12px">Pillar post in English. ~1,500–2,000 words. All stats, hooks, proprietary terms, CTA.</p>
+        <div class="mt8"><span class="tool-chip">Notion / Docs</span><span class="tool-chip">WordPress</span></div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:rgba(255,140,0,0.4)">
+        <div class="flex-row mb8"><div class="pipe-num" style="background:var(--orange)">2</div><h4 style="color:var(--orange2)">Translate ES 🇦🇷</h4></div>
+        <p style="font-size:12px">Rioplatense Spanish. "Vos" not "tú". ARS currency. Keep brand terms in English.</p>
+        <div class="mt8"><span class="tool-chip">DeepL Pro</span><span class="tool-chip">Claude</span></div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:rgba(0,166,166,0.4)">
+        <div class="flex-row mb8"><div class="pipe-num" style="background:var(--teal)">3</div><h4 style="color:var(--teal2)">Translate PT 🇧🇷</h4></div>
+        <p style="font-size:12px">Brazilian Portuguese. "Você" not EU "tu". R$ pricing. Warm and direct brand voice.</p>
+        <div class="mt8"><span class="tool-chip">DeepL Pro</span><span class="tool-chip">Claude</span></div>
+      </div>
+    </div>
+    <div style="text-align:center; font-size:24px; color:var(--purple2); margin:12px 0">↓</div>
+    <div class="card mb4" style="border:2px solid var(--purple); background:linear-gradient(135deg, rgba(155,81,224,0.1) 0%, var(--card) 100%)">
+      <div class="flex-row mb12"><div class="pipe-num" style="background:var(--purple); width:34px; height:34px; font-size:14px">4</div><div><h3 style="color:var(--purple2)">🎙️ NotebookLM → Podcast</h3><p style="font-size:12px; color:var(--text3)">Upload each language version as source → Generate AI Deep Dive → Export MP3</p></div></div>
+      <div class="grid-3" style="gap:10px">
+        <div class="card card-sm" style="border-color:rgba(59,130,246,0.3)"><div style="font-size:11px; color:#93c5fd; font-weight:700; margin-bottom:4px">🇺🇸 EN Podcast</div><p style="font-size:11px">Upload EN blog + brand brief → Generate → Export</p></div>
+        <div class="card card-sm" style="border-color:rgba(255,140,0,0.3)"><div style="font-size:11px; color:var(--orange3); font-weight:700; margin-bottom:4px">🇦🇷 ES Podcast</div><p style="font-size:11px">Upload ES blog + brand brief → Generate → Export</p></div>
+        <div class="card card-sm" style="border-color:rgba(0,166,166,0.3)"><div style="font-size:11px; color:var(--teal3); font-weight:700; margin-bottom:4px">🇧🇷 PT Podcast</div><p style="font-size:11px">Upload PT blog + brand brief → Generate → Export</p></div>
+      </div>
+    </div>
+    <div style="text-align:center; font-size:24px; color:var(--teal2); margin:12px 0">↓</div>
+    <div class="card mb4" style="border:1px solid var(--teal)">
+      <div class="flex-row mb12"><div class="pipe-num" style="background:var(--teal); width:34px; height:34px; font-size:14px">5</div><div><h3 style="color:var(--teal2)">⚡ Auto-Distribute (Make.com)</h3><p style="font-size:12px; color:var(--text3)">Trigger: MP3 in Google Drive → auto-publish to all platforms</p></div></div>
+      <div class="grid-5" style="gap:8px">
+        <div class="card card-sm" style="text-align:center"><div style="font-size:18px">🎵</div><div style="font-size:11px; font-weight:700; color:var(--teal2)">Spotify</div><div style="font-size:10px; color:var(--text3)">RSS auto</div></div>
+        <div class="card card-sm" style="text-align:center"><div style="font-size:18px">🍎</div><div style="font-size:11px; font-weight:700; color:var(--teal2)">Apple</div><div style="font-size:10px; color:var(--text3)">RSS auto</div></div>
+        <div class="card card-sm" style="text-align:center"><div style="font-size:18px">📺</div><div style="font-size:11px; font-weight:700; color:var(--teal2)">YouTube</div><div style="font-size:10px; color:var(--text3)">API upload</div></div>
+        <div class="card card-sm" style="text-align:center"><div style="font-size:18px">💬</div><div style="font-size:11px; font-weight:700; color:var(--teal2)">WhatsApp</div><div style="font-size:10px; color:var(--text3)">GHL blast</div></div>
+        <div class="card card-sm" style="text-align:center"><div style="font-size:18px">📧</div><div style="font-size:11px; font-weight:700; color:var(--teal2)">Email</div><div style="font-size:10px; color:var(--text3)">GHL auto</div></div>
+      </div>
+    </div>
+    <div style="text-align:center; font-size:24px; color:var(--orange2); margin:12px 0">↓</div>
+    <div class="card" style="border:1px solid var(--orange)">
+      <div class="flex-row mb12"><div class="pipe-num" style="background:var(--orange); width:34px; height:34px; font-size:14px">6</div><div><h3 style="color:var(--orange2)">📡 Blog + Social Repurpose</h3><p style="font-size:12px; color:var(--text3)">WordPress/WPML publish + social clips + LinkedIn articles</p></div></div>
+      <div class="grid-3" style="gap:10px">
+        <div class="card card-sm"><div style="font-size:11px; font-weight:700; color:var(--orange2)">WordPress + WPML</div><p style="font-size:11px">EN /en/blog/, ES /es/blog/, PT /pt/blog/ with hreflang</p></div>
+        <div class="card card-sm"><div style="font-size:11px; font-weight:700; color:var(--orange2)">LinkedIn + Social</div><p style="font-size:11px">Key stat→carousel. Hook→quote. Clip→Reel. Via Publer.</p></div>
+        <div class="card card-sm"><div style="font-size:11px; font-weight:700; color:var(--orange2)">GHL Email/SMS</div><p style="font-size:11px">Blog excerpt + podcast link + audit CTA. info@4upact.com sender.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-title">Content Multiplication: Write 1 → Publish 36+</div>
+  <div class="grid-4 mb32">
+    <div class="stat-block" style="border-color:rgba(155,81,224,0.4)"><div class="stat-num" style="color:var(--purple2)">1</div><div class="stat-label">Blog written (EN)</div></div>
+    <div class="stat-block" style="border-color:rgba(255,140,0,0.4)"><div class="stat-num" style="color:var(--orange2)">3</div><div class="stat-label">Languages</div></div>
+    <div class="stat-block" style="border-color:rgba(0,166,166,0.4)"><div class="stat-num" style="color:var(--teal2)">9</div><div class="stat-label">Channels each</div></div>
+    <div class="stat-block" style="border-color:rgba(16,185,129,0.4)"><div class="stat-num" style="color:var(--green)">36+</div><div class="stat-label">Total touchpoints</div></div>
+  </div>
+
+  <!-- Connection Setup Guide -->
+  <div class="section-title">🔌 Platform Connection Setup Guide</div>
+  <div class="grid-2 mb16">
+    <div class="card" style="border:1px solid rgba(155,81,224,0.4)">
+      <div class="flex-row mb8"><span style="font-size:20px">🎵</span><h4 style="color:var(--purple2)">Spotify for Podcasters — Setup</h4></div>
+      <div style="font-size:12px; color:var(--text2); line-height:1.8">
+        1. Go to <strong>podcasters.spotify.com</strong> and sign up with 4UPact Google account<br>
+        2. Create show: "The Growth Engine Show" — add cover art (1400×1400px min)<br>
+        3. Set language to English (create separate shows for ES/PT or use multilingual episodes)<br>
+        4. Upload first episode MP3 + title + description + show notes<br>
+        5. Copy the <strong>RSS feed URL</strong> — this is your universal distribution key<br>
+        6. Connect RSS to Make.com: New File in Google Drive → HTTP POST to RSS endpoint
+      </div>
+      <div class="mt8"><span class="tool-chip">FREE</span><span class="tool-chip">RSS = Universal Key</span><span class="tool-chip">Auto-index 2–4h</span></div>
+    </div>
+    <div class="card" style="border:1px solid rgba(0,166,166,0.4)">
+      <div class="flex-row mb8"><span style="font-size:20px">🍎</span><h4 style="color:var(--teal2)">Apple Podcasts Connect — Setup</h4></div>
+      <div style="font-size:12px; color:var(--text2); line-height:1.8">
+        1. Go to <strong>podcastsconnect.apple.com</strong> — requires Apple ID<br>
+        2. Click "+" → Paste the <strong>same RSS feed URL</strong> from Spotify for Podcasters<br>
+        3. Apple validates and indexes the feed (takes 24–48h first time)<br>
+        4. Once approved, every new episode auto-appears on Apple Podcasts<br>
+        5. No manual uploads needed — RSS handles everything<br>
+        6. Add show to Apple categories: Business → Marketing / Entrepreneurship
+      </div>
+      <div class="mt8"><span class="tool-chip">FREE</span><span class="tool-chip">Same RSS Feed</span><span class="tool-chip">24–48h first index</span></div>
+    </div>
+  </div>
+  <div class="grid-2 mb8">
+    <div class="card" style="border:1px solid rgba(255,140,0,0.4)">
+      <div class="flex-row mb8"><span style="font-size:20px">📺</span><h4 style="color:var(--orange2)">YouTube Podcasts — Setup</h4></div>
+      <div style="font-size:12px; color:var(--text2); line-height:1.8">
+        1. YouTube Studio → Settings → Channel → Enable Podcasts feature<br>
+        2. Option A: Submit RSS feed (YouTube auto-imports episodes)<br>
+        3. Option B: Make.com automation → YouTube Data API v3 → auto-upload MP3 + thumbnail<br>
+        4. Add video description template with timestamps + links + CTA (sales@4upact.com)<br>
+        5. Create 3 playlists: EN Episodes, ES Episodes, PT Episodes
+      </div>
+      <div class="mt8"><span class="tool-chip">FREE</span><span class="tool-chip">RSS or API</span><span class="tool-chip">SEO via YouTube search</span></div>
+    </div>
+    <div class="card" style="border:1px solid rgba(16,185,129,0.4)">
+      <div class="flex-row mb8"><span style="font-size:20px">⚡</span><h4 style="color:var(--green)">Make.com Orchestration — Setup</h4></div>
+      <div style="font-size:12px; color:var(--text2); line-height:1.8">
+        1. Create Make.com account → Connect Google Drive module<br>
+        2. Scenario 1: Watch folder "Podcast_Ready" → Upload to YouTube via API<br>
+        3. Scenario 2: Watch folder → Send WhatsApp broadcast via GHL webhook<br>
+        4. Scenario 3: Watch folder → Create GHL email campaign with podcast link<br>
+        5. Scenario 4: Watch folder → Post to LinkedIn via LinkedIn API<br>
+        6. All scenarios trigger from the same folder — one upload = all platforms
+      </div>
+      <div class="mt8"><span class="tool-chip">$9/mo starter</span><span class="tool-chip">1 Folder = All Platforms</span></div>
+    </div>
+  </div>
+</div>
+<!-- ═══════════ CHANNELS ═══════════ -->
+<div id="panel-channels" class="panel">
+  <div class="mb24"><h2>Channel Distribution Mix + Hashtag Clusters</h2><p>All channels feed the Núcleo Operacional — CRM is always the destination</p></div>
+
+  <div class="grid-3 mb32">
+    <div class="channel-card" style="border-color:rgba(155,81,224,0.3)">
+      <div class="channel-icon">📝</div>
+      <h4 style="color:var(--purple2)">Blog (WordPress/Elementor)</h4>
+      <p>24 posts × 3 languages = 72 URLs. WPML multilingual. Each post → Speed-to-Lead Audit CTA → sales@4upact.com</p>
+      <div class="mt8"><span class="tool-chip">WordPress</span><span class="tool-chip">Elementor</span><span class="tool-chip">WPML</span><span class="tool-chip">Yoast SEO</span></div>
+      <div class="mt8" style="font-size:10px; color:var(--text3)">Connection: GHL form embeds on every blog CTA → leads enter pipeline automatically</div>
+    </div>
+    <div class="channel-card" style="border-color:rgba(59,130,246,0.3)">
+      <div class="channel-icon">💼</div>
+      <h4 style="color:#93c5fd">LinkedIn (Rodrigo + 4UPact Page)</h4>
+      <p>2× posts/week. Blog excerpt → LinkedIn article. Key stat → carousel. Founder story → personal post. 10–20 DMs/day outbound.</p>
+      <div class="mt8"><span class="tool-chip">LinkedIn API</span><span class="tool-chip">Publer</span><span class="tool-chip">Make.com</span></div>
+      <div class="mt8" style="font-size:10px; color:var(--text3)">Connection: LinkedIn lead forms → GHL webhook → auto-assign to pipeline</div>
+    </div>
+    <div class="channel-card" style="border-color:rgba(255,140,0,0.3)">
+      <div class="channel-icon">📸</div>
+      <h4 style="color:var(--orange2)">Instagram (GHL Social Planner)</h4>
+      <p>3× posts/week. Carousels, Reels (60s), Stories. Managed through GHL Social Media Planner for scheduling.</p>
+      <div class="mt8"><span class="tool-chip">GHL Social</span><span class="tool-chip">Canva</span><span class="tool-chip">Meta Business</span></div>
+      <div class="mt8" style="font-size:10px; color:var(--text3)">Connection: IG DMs → GHL Conversations → auto-tag + pipeline</div>
+    </div>
+    <div class="channel-card" style="border-color:rgba(255,140,0,0.3)">
+      <div class="channel-icon">🎯</div>
+      <h4 style="color:var(--orange2)">Meta Ads</h4>
+      <p>Speed-to-Lead Audit (R$2,400) + WhatsApp CTM (R$1,500). Blog content → ad creatives. R$4,500/mo total.</p>
+      <div class="mt8"><span class="tool-chip">Meta Business</span><span class="tool-chip">GHL Tracking</span></div>
+      <div class="mt8" style="font-size:10px; color:var(--text3)">Connection: Meta CAPI → GHL → lead enters pipeline with UTM attribution</div>
+    </div>
+    <div class="channel-card" style="border-color:rgba(16,185,129,0.3)">
+      <div class="channel-icon">🔍</div>
+      <h4 style="color:var(--green)">Google Search &amp; Ads</h4>
+      <p>R$600/mo. High-intent CRM keywords in EN, ES, PT. Blog posts = organic SEO backup for paid.</p>
+      <div class="mt8"><span class="tool-chip">Google Ads</span><span class="tool-chip">GA4</span><span class="tool-chip">Search Console</span></div>
+      <div class="mt8" style="font-size:10px; color:var(--text3)">Connection: Google Ads → GHL tracking number/form → pipeline with source attribution</div>
+    </div>
+    <div class="channel-card" style="border-color:rgba(0,166,166,0.3)">
+      <div class="channel-icon">💬</div>
+      <h4 style="color:var(--teal2)">WhatsApp Broadcast (GHL)</h4>
+      <p>98% open rate. Segmented: BR (PT), AR (ES), International (EN). Weekly digest + podcast teasers.</p>
+      <div class="mt8"><span class="tool-chip">GHL Broadcast</span><span class="tool-chip">WhatsApp API</span></div>
+      <div class="mt8" style="font-size:10px; color:var(--text3)">Connection: Native GHL — broadcasts, 2-way chat, auto-responder all built in</div>
+    </div>
+    <div class="channel-card" style="border-color:rgba(155,81,224,0.3)">
+      <div class="channel-icon">📧</div>
+      <h4 style="color:var(--purple2)">Email Newsletter (GHL)</h4>
+      <p>Weekly: blog highlight + podcast link. Language-segmented. Sender: info@4upact.com (automations).</p>
+      <div class="mt8"><span class="tool-chip">GHL Email</span><span class="tool-chip">Mailgun</span></div>
+      <div class="mt8" style="font-size:10px; color:var(--text3)">Connection: Native GHL — reactivation 30/60/90d sequences built into pipeline</div>
+    </div>
+    <div class="channel-card" style="border-color:rgba(239,68,68,0.3)">
+      <div class="channel-icon">🎵</div>
+      <h4 style="color:#fca5a5">TikTok</h4>
+      <p>60–90s cuts from podcast + Reels. LatAm SMB owners. PT + ES primary via GHL Social Planner.</p>
+      <div class="mt8"><span class="tool-chip">GHL Social</span><span class="tool-chip">CapCut</span></div>
+      <div class="mt8" style="font-size:10px; color:var(--text3)">Connection: TikTok → link in bio → GHL landing page → pipeline</div>
+    </div>
+    <div class="channel-card" style="border-color:rgba(219,39,119,0.3)">
+      <div class="channel-icon">📌</div>
+      <h4 style="color:#f9a8d4">Pinterest</h4>
+      <p>Infographic pins: stat cards, Growth Engine diagrams, Loyalty Loop visuals. EN primary. SEO long-tail.</p>
+      <div class="mt8"><span class="tool-chip">Canva</span><span class="tool-chip">Pinterest Ads</span></div>
+      <div class="mt8" style="font-size:10px; color:var(--text3)">Connection: Pin → 4upact.com blog → GHL form embed → pipeline</div>
+    </div>
+  </div>
+
+  <!-- Hashtag Clusters -->
+  <div class="section-title">Hashtag Clusters (30 per language — sample)</div>
+  <div class="grid-3 mb32">
+    <div class="card">
+      <h4 style="color:#93c5fd; margin-bottom:10px">🇺🇸 EN-US Clusters</h4>
+      <div style="font-size:11px; color:var(--text2); line-height:2.2">
+        <div><span class="tag tag-purple">Brand</span> #4UPact #MarketingWithImpact #GrowthEngine #ScalableGrowth</div>
+        <div><span class="tag tag-teal">CRM</span> #CRM #CRMSoftware #CRMTips #CRMforBusiness #GoHighLevel</div>
+        <div><span class="tag tag-orange">Automation</span> #MarketingAutomation #AutomatedMarketing #AIMarketing #RevOps</div>
+        <div><span class="tag tag-green">Loyalty</span> #CustomerLoyalty #LTVGrowth #RetentionMarketing #LoyaltyLoop</div>
+        <div><span class="tag tag-blue">Niche</span> #LuxuryHotelMarketing #ClinicMarketing #RealEstateAutomation</div>
+      </div>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--teal2); margin-bottom:10px">🇧🇷 PT-BR Clusters</h4>
+      <div style="font-size:11px; color:var(--text2); line-height:2.2">
+        <div><span class="tag tag-purple">Brand</span> #4UPact #MarketingComImpacto #SistemaDeVendas #CrescimentoEscalável</div>
+        <div><span class="tag tag-teal">CRM</span> #CRM #GestãoDeClientes #CRMParaEmpresas #GoHighLevel</div>
+        <div><span class="tag tag-orange">Automação</span> #AutomaçãoDeMarketing #AutomaçãoWhatsApp #IAMarketing</div>
+        <div><span class="tag tag-green">Fidelidade</span> #FidelizaçãoDeClientes #LTV #MarketingDeRetenção</div>
+        <div><span class="tag tag-blue">Nicho</span> #MarketingParaClínicas #ImóveisDeLuxo #TurismoLuxo</div>
+      </div>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--orange2); margin-bottom:10px">🇦🇷 ES-LA Clusters</h4>
+      <div style="font-size:11px; color:var(--text2); line-height:2.2">
+        <div><span class="tag tag-purple">Brand</span> #4UPact #MarketingConImpacto #SistemaDeVentas #CrecimientoEscalable</div>
+        <div><span class="tag tag-teal">CRM</span> #CRM #GestiónDeClientes #CRMParaPymes #GoHighLevel</div>
+        <div><span class="tag tag-orange">Automatización</span> #AutomatizaciónMarketing #AutomatizaciónWhatsApp #IAMarketing</div>
+        <div><span class="tag tag-green">Lealtad</span> #FidelizaciónDeClientes #LTV #MarketingDeRetención</div>
+        <div><span class="tag tag-blue">Nicho</span> #MarketingParaClínicas #BienesRaícesLujo #TurismoLujo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connection Map -->
+  <div class="section-title">🔌 System Connection Map: Everything → GHL</div>
+  <div class="card">
+    <div style="text-align:center; font-size:13px; color:var(--text2); line-height:2.5; padding:12px">
+      <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-bottom:16px">
+        <span style="background:rgba(255,140,0,0.15); padding:6px 14px; border-radius:8px; color:var(--orange2); font-weight:700">Meta Ads (CAPI)</span>
+        <span style="background:rgba(16,185,129,0.15); padding:6px 14px; border-radius:8px; color:var(--green); font-weight:700">Google Ads</span>
+        <span style="background:rgba(59,130,246,0.15); padding:6px 14px; border-radius:8px; color:#93c5fd; font-weight:700">LinkedIn Forms</span>
+        <span style="background:rgba(155,81,224,0.15); padding:6px 14px; border-radius:8px; color:var(--purple2); font-weight:700">WordPress Forms</span>
+      </div>
+      <div style="font-size:24px; color:var(--purple2); margin:8px 0">↓ ↓ ↓ ↓</div>
+      <div style="background:linear-gradient(135deg, rgba(155,81,224,0.15) 0%, rgba(0,166,166,0.15) 100%); padding:16px; border-radius:12px; border:2px solid var(--purple); margin:12px auto; max-width:400px">
+        <div style="font-size:16px; font-weight:800; color:var(--teal2)">⚙️ GoHighLevel (CRM)</div>
+        <div style="font-size:11px; color:var(--text2); margin-top:4px">Pipeline → Automations → Attribution → AntiGravity Dashboard</div>
+      </div>
+      <div style="font-size:24px; color:var(--teal2); margin:8px 0">↓ ↓ ↓ ↓</div>
+      <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap">
+        <span style="background:rgba(0,166,166,0.15); padding:6px 14px; border-radius:8px; color:var(--teal3); font-weight:700">WhatsApp Auto &lt;2min</span>
+        <span style="background:rgba(155,81,224,0.15); padding:6px 14px; border-radius:8px; color:var(--purple3); font-weight:700">Email Sequences</span>
+        <span style="background:rgba(255,140,0,0.15); padding:6px 14px; border-radius:8px; color:var(--orange3); font-weight:700">SMS/Voicemail</span>
+        <span style="background:rgba(16,185,129,0.15); padding:6px 14px; border-radius:8px; color:#34d399; font-weight:700">Booking Calendar</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Month 1 Budget -->
+  <div class="section-title mt24">Month 1 Paid Media Budget</div>
+  <div class="card">
+    <div style="overflow-x:auto">
+      <table style="width:100%; border-collapse:collapse; font-size:13px">
+        <thead><tr style="border-bottom:1px solid var(--border)"><th style="text-align:left; padding:10px 12px; color:var(--text3); font-size:10px; text-transform:uppercase">Channel</th><th style="text-align:left; padding:10px 12px; color:var(--text3); font-size:10px; text-transform:uppercase">Campaign</th><th style="text-align:right; padding:10px 12px; color:var(--text3); font-size:10px; text-transform:uppercase">Budget</th><th style="text-align:left; padding:10px 12px; color:var(--text3); font-size:10px; text-transform:uppercase">Goal</th></tr></thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px">Meta Lead Gen</td><td style="padding:10px 12px; color:var(--text2)">Speed-to-Lead Audit LP</td><td style="text-align:right; padding:10px 12px; color:var(--teal2); font-weight:700">R$2,400</td><td style="padding:10px 12px; color:var(--text2)">25–30 leads</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px">Meta WhatsApp CTM</td><td style="padding:10px 12px; color:var(--text2)">&lt;2-min response hook</td><td style="text-align:right; padding:10px 12px; color:var(--teal2); font-weight:700">R$1,500</td><td style="padding:10px 12px; color:var(--text2)">15–20 conversations</td></tr>
+          <tr><td style="padding:10px 12px">Google Search</td><td style="padding:10px 12px; color:var(--text2)">CRM automation KWs</td><td style="text-align:right; padding:10px 12px; color:var(--teal2); font-weight:700">R$600</td><td style="padding:10px 12px; color:var(--text2)">High-intent clicks</td></tr>
+        </tbody>
+        <tfoot><tr style="border-top:1px solid var(--border); background:rgba(255,255,255,0.03)"><td colspan="2" style="padding:10px 12px; font-weight:700">Total Month 1</td><td style="text-align:right; padding:10px 12px; color:var(--orange2); font-weight:800; font-size:16px">R$4,500</td><td style="padding:10px 12px; color:var(--text2)">→ 40–50 leads → 4–5 clients</td></tr></tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- ═══════════ STRATEGY ═══════════ -->
+<div id="panel-strategy" class="panel">
+  <div class="mb24"><h2>Strategy Brief</h2><p>Methodology, voice, terms, contacts — the complete 4UPact content playbook</p></div>
+  <div class="grid-2 mb32">
+    <div>
+      <div class="section-title">Mission</div>
+      <div class="card" style="border-color:rgba(155,81,224,0.3)">
+        <p style="font-size:14px; line-height:1.7; font-style:italic">"We believe marketing is most powerful when it's personal, automated, and intentional. We build the invisible engine behind brand momentum."</p>
+        <div class="mt8" style="font-size:12px; color:var(--text3)">Tagline: Turning strategy into sales, sales into loyalty, loyalty into growth.</div>
+      </div>
+    </div>
+    <div>
+      <div class="section-title">imPACT Pillars</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
+        <div class="card card-sm" style="border-color:rgba(155,81,224,0.3)"><span class="tag tag-purple">Speed</span><div style="font-size:12px; margin-top:6px; color:var(--text2)">&lt;2 min response. Always on.</div></div>
+        <div class="card card-sm" style="border-color:rgba(0,166,166,0.3)"><span class="tag tag-teal">Predictability</span><div style="font-size:12px; margin-top:6px; color:var(--text2)">Pipeline attribution. No vanity.</div></div>
+        <div class="card card-sm" style="border-color:rgba(255,140,0,0.3)"><span class="tag tag-orange">Scalability</span><div style="font-size:12px; margin-top:6px; color:var(--text2)">Comet 14d launches. Replicate.</div></div>
+        <div class="card card-sm" style="border-color:rgba(16,185,129,0.3)"><span class="tag tag-green">Loyalty</span><div style="font-size:12px; margin-top:6px; color:var(--text2)">Multiplicador de Receita. LTV.</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-title">Hook Framework (Pain → Agitate → Shift → Show → CTA)</div>
+  <div class="card mb32">
+    <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:10px; text-align:center">
+      <div style="padding:12px; background:rgba(155,81,224,0.1); border-radius:10px"><div style="font-size:20px; margin-bottom:6px">💢</div><div style="font-size:11px; font-weight:800; color:var(--purple2)">PAIN</div><div style="font-size:10px; color:var(--text2); margin-top:4px">Name the ICP's problem</div></div>
+      <div style="padding:12px; background:rgba(239,68,68,0.08); border-radius:10px"><div style="font-size:20px; margin-bottom:6px">🔥</div><div style="font-size:11px; font-weight:800; color:#fca5a5">AGITATE</div><div style="font-size:10px; color:var(--text2); margin-top:4px">Cost of inaction (stat)</div></div>
+      <div style="padding:12px; background:rgba(255,140,0,0.08); border-radius:10px"><div style="font-size:20px; margin-bottom:6px">💡</div><div style="font-size:11px; font-weight:800; color:var(--orange2)">SHIFT</div><div style="font-size:10px; color:var(--text2); margin-top:4px">Reframe — better way</div></div>
+      <div style="padding:12px; background:rgba(0,166,166,0.08); border-radius:10px"><div style="font-size:20px; margin-bottom:6px">🛸</div><div style="font-size:11px; font-weight:800; color:var(--teal2)">SHOW</div><div style="font-size:10px; color:var(--text2); margin-top:4px">4UPact system demo</div></div>
+      <div style="padding:12px; background:rgba(16,185,129,0.08); border-radius:10px"><div style="font-size:20px; margin-bottom:6px">🚀</div><div style="font-size:11px; font-weight:800; color:var(--green)">CTA</div><div style="font-size:10px; color:var(--text2); margin-top:4px">Audit / Launch / Call</div></div>
+    </div>
+  </div>
+  <div class="section-title">Social Proof</div>
+  <div class="grid-3 mb32">
+    <div class="card" style="border-color:rgba(59,130,246,0.3)"><p style="font-size:13px; font-style:italic; line-height:1.6; margin-bottom:12px">"Rodrigo brings Fortune 500 discipline to everything he does."</p><div style="font-size:12px; font-weight:700">Bryce Anderson</div><div style="font-size:11px; color:var(--text3)">Intel Corporation</div></div>
+    <div class="card" style="border-color:rgba(0,166,166,0.3)"><p style="font-size:13px; font-style:italic; line-height:1.6; margin-bottom:12px">"Our lead response went from hours to minutes. Conversion was immediate."</p><div style="font-size:12px; font-weight:700">Arthur D'Avila</div><div style="font-size:11px; color:var(--text3)">BEXSER</div></div>
+    <div class="card" style="border-color:rgba(255,140,0,0.3)"><p style="font-size:13px; font-style:italic; line-height:1.6; margin-bottom:12px">"They don't just consult — they build and they stay."</p><div style="font-size:12px; font-weight:700">Luis Picinini</div><div style="font-size:11px; color:var(--text3)">QLIK</div></div>
+  </div>
+  <div class="section-title">Brand Voice</div>
+  <div class="card mb32">
+    <div class="grid-2" style="gap:16px">
+      <div><h4 style="color:var(--teal2); margin-bottom:10px">Always Sound Like</h4><div style="font-size:12px; color:var(--text2); line-height:2">Direct, confident, data-backed · Systems thinker who speaks human · "You don't buy hours — you buy results" · Rodrigo's voice: warm but no-nonsense · Specific: name the stat, the tool, the client</div></div>
+      <div><h4 style="color:var(--red); margin-bottom:10px">Never Sound Like</h4><div style="font-size:12px; color:var(--text2); line-height:2">"Full-service digital agency" · Generic: "boost sales" / "grow brand" · Passive or uncertain · Buzzwords without substance · Vanity metrics: impressions, reach, followers</div></div>
+    </div>
+  </div>
+  <div class="section-title">Proprietary Terms Glossary</div>
+  <div class="grid-3 mb32">
+    <div class="card"><span class="tag tag-purple mb4">Invisible Engine</span><p>Automated backend (GHL/WhatsApp) running lead qualification 24/7.</p></div>
+    <div class="card"><span class="tag tag-purple mb4">AntiGravity</span><p>5-node orchestration layer: GHL + Meta + Reporting command center.</p></div>
+    <div class="card"><span class="tag tag-teal mb4">Comet Framework</span><p>AI-Assisted Execution: 14-day launch + 48h sprint playbooks.</p></div>
+    <div class="card"><span class="tag tag-teal mb4">Núcleo Operacional</span><p>CRM &amp; Automation — the always-on core of the Growth Engine.</p></div>
+    <div class="card"><span class="tag tag-orange mb4">Combustível do Sistema</span><p>Paid Media — traffic fuel feeding all leads into the Núcleo.</p></div>
+    <div class="card"><span class="tag tag-green mb4">Multiplicador de Receita</span><p>Loyalty programs — one-time buyers → recurring revenue.</p></div>
+    <div class="card"><span class="tag tag-blue mb4">Speed-to-Lead Audit</span><p>Lead magnet: Mystery Shopper + Leakage Calc + Strategy Call.</p></div>
+    <div class="card"><span class="tag tag-orange mb4">Loyalty Loop</span><p>Buy → Use → Benefit → Come back → Repurchase lifecycle.</p></div>
+    <div class="card"><span class="tag tag-gray mb4">Fundação Digital</span><p>WordPress + WooCommerce + WPML — multilingual digital base.</p></div>
+  </div>
+
+  <!-- Email Protocol -->
+  <div class="section-title">Email Protocol</div>
+  <div class="grid-2 mb32">
+    <div class="card" style="border-color:rgba(255,140,0,0.3)">
+      <h4 style="color:var(--orange2)">sales@4upact.com</h4>
+      <p>All web-facing CTAs, contact forms, blog post CTAs, landing pages, social bios, podcast show notes. This is the revenue inbox.</p>
+      <div class="mt8"><span class="tag tag-orange">Blog CTAs</span><span class="tag tag-orange">Landing Pages</span><span class="tag tag-orange">Social Bio</span><span class="tag tag-orange">Podcast Notes</span></div>
+    </div>
+    <div class="card" style="border-color:rgba(155,81,224,0.3)">
+      <h4 style="color:var(--purple2)">info@4upact.com</h4>
+      <p>All automated communications: email sequences, newsletter sender, reactivation campaigns, GHL automations, onboarding flows.</p>
+      <div class="mt8"><span class="tag tag-purple">GHL Automations</span><span class="tag tag-purple">Newsletters</span><span class="tag tag-purple">Reactivation</span><span class="tag tag-purple">Onboarding</span></div>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div class="section-title">Contact &amp; Links</div>
+  <div class="grid-4">
+    <div class="card card-sm" style="text-align:center; border-color:rgba(0,166,166,0.3)"><div style="font-size:18px;margin-bottom:6px">🌐</div><div style="font-size:12px; font-weight:700; color:var(--teal2)">4upact.com</div></div>
+    <div class="card card-sm" style="text-align:center"><div style="font-size:18px;margin-bottom:6px">📧</div><div style="font-size:11px; color:var(--orange2); font-weight:700">sales@4upact.com</div><div style="font-size:11px; color:var(--purple2); font-weight:700">info@4upact.com</div></div>
+    <div class="card card-sm" style="text-align:center"><div style="font-size:18px;margin-bottom:6px">💬</div><div style="font-size:11px; color:var(--text2)">WhatsApp Business</div><div style="font-size:11px; color:var(--text2)">+1 646 531 1313</div></div>
+    <div class="card card-sm" style="text-align:center; border-color:rgba(155,81,224,0.3)"><div style="font-size:18px;margin-bottom:6px">⚡</div><div style="font-size:12px; font-weight:700; color:var(--purple2)">"Execute with discipline.<br>Measure ruthlessly."</div></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

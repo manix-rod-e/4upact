@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <!-- Banana shape -->
+  <path d="M90,250 C60,200 50,150 70,100 C90,55 130,30 170,25 C190,22 210,30 220,45 C230,60 225,80 210,95 C195,110 175,115 160,130 C140,150 130,175 125,200 C120,225 110,245 90,250Z" fill="#FFE135"/>
+  <path d="M90,250 C80,240 75,225 78,210 C82,190 95,175 110,160 C125,145 140,130 155,115 C170,100 190,85 200,65 C205,55 200,45 190,40 C180,35 165,38 155,45 C135,60 120,80 105,105 C90,130 80,165 85,200 C87,220 88,240 90,250Z" fill="#F5D000" opacity="0.6"/>
+  <!-- Google G -->
+  <g transform="translate(120,120) scale(0.7)">
+    <path d="M70,50 C70,25 50,5 25,5 C10,5 0,15 0,25 C0,35 8,42 18,42 C28,42 35,35 38,28 L25,28 L25,22 L48,22 C48,24 49,26 49,28 C49,42 38,55 25,55 C10,55 -2,42 -2,25 C-2,10 10,-2 25,-2 C35,-2 43,3 48,10 L42,16 C38,10 32,6 25,6 C14,6 5,15 5,25 C5,38 14,48 25,48 C38,48 45,38 46,30 L25,30" fill="#4285F4"/>
+    <circle cx="25" cy="25" r="20" fill="none" stroke="#EA4335" stroke-width="4" stroke-dasharray="15 80" stroke-dashoffset="-15"/>
+    <circle cx="25" cy="25" r="20" fill="none" stroke="#FBBC05" stroke-width="4" stroke-dasharray="15 80" stroke-dashoffset="-35"/>
+    <circle cx="25" cy="25" r="20" fill="none" stroke="#34A853" stroke-width="4" stroke-dasharray="15 80" stroke-dashoffset="-55"/>
+    <circle cx="25" cy="25" r="20" fill="none" stroke="#4285F4" stroke-width="4" stroke-dasharray="15 80" stroke-dashoffset="-75"/>
+  </g>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 150" width="400" height="150">
+  <!-- Wings -->
+  <path d="M155,30 C140,50 120,70 100,85 C115,75 135,65 155,60 C150,50 150,40 155,30Z" fill="#1a3cb5"/>
+  <path d="M245,30 C260,50 280,70 300,85 C285,75 265,65 245,60 C250,50 250,40 245,30Z" fill="#1a3cb5"/>
+  <path d="M165,25 C155,45 140,65 125,78 C140,70 155,62 165,55 C162,45 163,35 165,25Z" fill="#1a3cb5"/>
+  <path d="M235,25 C245,45 260,65 275,78 C260,70 245,62 235,55 C238,45 237,35 235,25Z" fill="#1a3cb5"/>
+  <!-- ASAAS text -->
+  <text x="200" y="125" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="bold" fill="#1a3cb5" letter-spacing="8">ASAAS</text>
+</svg>

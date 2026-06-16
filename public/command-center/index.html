@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4UPact · Content Command Center v5</title>
+<style>
+  :root {
+    --bg: #0a0a0f; --bg2: #111118; --bg3: #1a1a24; --border: #2a2a3a;
+    --purple: #9B51E0; --purple2: #b97ef0; --purple3: #d4a8f8;
+    --teal: #00A6A6; --teal2: #14c8c8; --teal3: #5ddede;
+    --orange: #FF8C00; --orange2: #ffaa33; --orange3: #ffc266;
+    --green: #10b981; --red: #ef4444; --blue: #3b82f6;
+    --text: #e2e8f0; --text2: #94a3b8; --text3: #64748b;
+    --card: #16161f; --card2: #1e1e2d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; min-height: 100vh; }
+
+  /* ── Login Screen ── */
+  .login-overlay {
+    position: fixed; inset: 0; background: var(--bg);
+    display: flex; align-items: center; justify-content: center; z-index: 9999;
+  }
+  .login-overlay.hidden { display: none; }
+  .login-box {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 48px 40px; text-align: center; max-width: 400px; width: 90%;
+  }
+  .login-box .logo-icon {
+    width: 64px; height: 64px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--purple), var(--teal));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 900; color: white; margin: 0 auto 20px;
+  }
+  .login-box h2 { font-size: 22px; margin-bottom: 8px; }
+  .login-box p { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
+  .login-box input {
+    width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--bg2); color: var(--text); font-size: 14px; outline: none; margin-bottom: 16px;
+  }
+  .login-box input:focus { border-color: var(--purple); }
+  .login-box button {
+    width: 100%; padding: 12px; border-radius: 10px; border: none; cursor: pointer;
+    background: linear-gradient(135deg, var(--purple), var(--teal)); color: white;
+    font-size: 14px; font-weight: 600; transition: opacity 0.2s;
+  }
+  .login-box button:hover { opacity: 0.9; }
+  .login-error { color: var(--red); font-size: 12px; margin-top: 8px; display: none; }
+
+  /* ── Header ── */
+  .header {
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a0828 50%, #0d0d1a 100%);
+    border-bottom: 1px solid var(--border); padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-sm {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--purple), var(--teal));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 900; color: white;
+  }
+  .logo h1 { font-size: 16px; font-weight: 700; }
+  .logo h1 span { color: var(--teal2); }
+  .logo small { font-size: 10px; color: var(--text3); display: block; margin-top: 1px; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .header-right .badge {
+    padding: 3px 10px; border-radius: 20px; font-size: 9px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .badge-live { background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+  .btn-logout {
+    padding: 6px 14px; border-radius: 8px; border: 1px solid var(--border);
+    background: transparent; color: var(--text2); font-size: 11px; cursor: pointer;
+  }
+  .btn-logout:hover { border-color: var(--red); color: var(--red); }
+
+  /* ── Navigation ── */
+  .nav-tabs {
+    display: flex; gap: 0; border-bottom: 1px solid var(--border);
+    padding: 0 24px; background: var(--bg2); overflow-x: auto;
+  }
+  .tab {
+    padding: 12px 16px; font-size: 11px; font-weight: 500; color: var(--text2);
+    cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap;
+    transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--purple3); border-bottom-color: var(--purple); }
+
+  /* ── Main ── */
+  .main { padding: 24px; max-width: 1440px; margin: 0 auto; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── Utility ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+  .grid-6 { display: grid; grid-template-columns: repeat(6,1fr); gap: 10px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px; transition: border-color 0.2s;
+  }
+  .card:hover { border-color: #3a3a50; }
+  h3 { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+  .section-title {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text3); margin-bottom: 14px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  }
+  .mb8 { margin-bottom: 8px; } .mb16 { margin-bottom: 16px; } .mb24 { margin-bottom: 24px; }
+  .mt16 { margin-top: 16px; }
+  .flex-row { display: flex; align-items: center; gap: 8px; }
+  .flex-between { display: flex; align-items: center; justify-content: space-between; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .dot-green { background: var(--green); box-shadow: 0 0 6px rgba(16,185,129,0.5); }
+  .dot-red { background: var(--red); box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+  .dot-yellow { background: #eab308; box-shadow: 0 0 6px rgba(234,179,8,0.4); }
+  .tag {
+    display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px;
+    font-weight: 600; margin: 2px 2px 2px 0;
+  }
+  .tag-purple { background: rgba(155,81,224,0.18); color: var(--purple3); }
+  .tag-teal { background: rgba(0,166,166,0.15); color: var(--teal3); }
+  .tag-orange { background: rgba(255,140,0,0.18); color: var(--orange3); }
+  .tag-green { background: rgba(16,185,129,0.15); color: #34d399; }
+  .tag-blue { background: rgba(59,130,246,0.15); color: #93c5fd; }
+  .tag-red { background: rgba(239,68,68,0.15); color: #fca5a5; }
+  .tag-gray { background: rgba(255,255,255,0.07); color: var(--text2); }
+  .stat-block {
+    text-align: center; padding: 16px 10px; background: var(--card);
+    border: 1px solid var(--border); border-radius: 10px;
+  }
+  .stat-num { font-size: 28px; font-weight: 900; letter-spacing: -1px; line-height: 1; }
+  .stat-label { font-size: 10px; color: var(--text2); margin-top: 4px; }
+  .btn {
+    padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;
+    font-size: 12px; font-weight: 600; transition: all 0.2s;
+  }
+  .btn-primary { background: var(--purple); color: white; }
+  .btn-primary:hover { background: var(--purple2); }
+  .btn-teal { background: var(--teal); color: white; }
+  .btn-teal:hover { background: var(--teal2); }
+  .btn-orange { background: var(--orange); color: white; }
+  .btn-sm { padding: 5px 12px; font-size: 11px; }
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text2); }
+  .btn-outline:hover { border-color: var(--purple); color: var(--purple3); }
+  input, textarea, select {
+    width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg2); color: var(--text); font-size: 13px; outline: none;
+    font-family: inherit;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--purple); }
+  textarea { resize: vertical; min-height: 100px; }
+  label { font-size: 11px; color: var(--text2); margin-bottom: 4px; display: block; font-weight: 600; }
+
+  /* ── Post List ── */
+  .post-row {
+    display: grid; grid-template-columns: 1fr 100px 100px 80px 90px;
+    gap: 12px; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border);
+    font-size: 12px; transition: background 0.15s;
+  }
+  .post-row:hover { background: var(--bg3); }
+  .post-row .title { font-weight: 600; color: var(--text); cursor: pointer; }
+  .post-row .title:hover { color: var(--purple3); }
+  .post-header { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: 0.5px; text-transform: uppercase; }
+
+  /* ── Content Matrix ── */
+  .matrix-cell {
+    padding: 8px; border-radius: 6px; background: var(--card); border: 1px solid var(--border);
+    text-align: center; font-size: 9px; font-weight: 600; cursor: pointer; transition: all 0.15s;
+  }
+  .matrix-cell:hover { border-color: var(--purple); }
+  .matrix-cell.published { border-color: var(--green); background: rgba(16,185,129,0.08); }
+  .matrix-cell.draft { border-color: var(--orange); background: rgba(255,140,0,0.08); }
+  .matrix-cell.planned { border-color: var(--blue); background: rgba(59,130,246,0.06); }
+
+  /* ── Modal ── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200;
+    display: none; align-items: center; justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px; max-width: 640px; width: 95%; max-height: 85vh; overflow-y: auto;
+  }
+  .modal h3 { font-size: 18px; margin-bottom: 20px; }
+
+  /* ── LinkedIn / WhatsApp panels ── */
+  #linkedinCampaigns, #linkedinLeads, #whatsappMessages, #whatsappTemplates { min-height: 60px; }
+
+  /* ── Loading ── */
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--purple); border-radius: 50%; animation: spin 0.6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 12px; color: var(--text3); }
+
+  /* ── Connection Card ── */
+  .conn-card { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; transition: border-color 0.2s; position: relative; }
+  .conn-card:hover { border-color: var(--purple); }
+  .conn-card .conn-name { font-weight: 600; font-size: 13px; }
+  .conn-card .conn-detail { font-size: 11px; color: var(--text2); }
+  .conn-card .conn-debug { font-size: 10px; color: var(--text3); margin-top: 6px; padding: 6px 8px; background: var(--bg); border-radius: 6px; border: 1px solid var(--border); display: none; word-break: break-all; max-height: 80px; overflow-y: auto; }
+  .conn-card .conn-debug.show { display: block; }
+  .conn-card .expand-hint { font-size: 9px; color: var(--text3); position: absolute; bottom: 4px; right: 8px; opacity: 0; transition: opacity 0.2s; }
+  .conn-card:hover .expand-hint { opacity: 1; }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+    .grid-6 { grid-template-columns: repeat(3,1fr); }
+    .post-row { grid-template-columns: 1fr 80px 80px; }
+    .post-row > :nth-child(4), .post-row > :nth-child(5) { display: none; }
+  }
+  @media (max-width: 600px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .grid-6 { grid-template-columns: repeat(2,1fr); }
+    .header { flex-direction: column; gap: 10px; }
+    .nav-tabs { padding: 0 12px; }
+    .main { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <div class="logo-icon">4U</div>
+    <h2>Command Center</h2>
+    <p>Enter your password to access the dashboard</p>
+    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" />
+    <button onclick="doLogin()">Access Dashboard</button>
+    <div class="login-error" id="loginError">Invalid password</div>
+  </div>
+</div>
+
+<!-- ═══ APP SHELL ═══ -->
+<div id="appShell" style="display:none;">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <div class="logo-sm">4U</div>
+      <div>
+        <h1>Content <span>Command Center</span></h1>
+        <small>v5 · Full Publish Control</small>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="badge badge-live">● LIVE</span>
+      <span id="connSummary" style="font-size:10px;color:var(--text3);"></span>
+      <button class="btn-logout" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="nav-tabs">
+    <button class="tab active" data-tab="overview">Overview</button>
+    <button class="tab" data-tab="blog">Blog Manager</button>
+    <button class="tab" data-tab="social">Social</button>
+    <button class="tab" data-tab="matrix">Content Matrix</button>
+    <button class="tab" data-tab="google">Google Intel</button>
+    <button class="tab" data-tab="meta">Meta Ads</button>
+    <button class="tab" data-tab="linkedin">LinkedIn</button>
+    <button class="tab" data-tab="whatsapp">WhatsApp</button>
+    <button class="tab" data-tab="connections">Connections</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+
+    <!-- ═══ OVERVIEW ═══ -->
+    <div class="panel active" id="panel-overview">
+      <div class="section-title">Quick Stats</div>
+      <div class="grid-4 mb24" id="overviewStats">
+        <div class="stat-block"><div class="stat-num" style="color:var(--purple3);" id="statTotal">—</div><div class="stat-label">Total Posts</div></div>
+        <div class="stat-block"><div class="stat-num" style="color:var(--green);" id="statPublished">—</div><div class="stat-label">Published</div></div>
+        <div class="stat-block"><div class="stat-num" style="color:var(--orange3);" id="statDrafts">—</div><div class="stat-label">Drafts</div></div>
+        <div class="stat-block"><div class="stat-num" style="color:var(--teal3);" id="statScheduled">—</div><div class="stat-label">Scheduled</div></div>
+      </div>
+
+      <div class="section-title">Connection Health</div>
+      <div class="grid-3 mb24" id="overviewConnections">
+        <div class="card" style="text-align:center;padding:24px;"><div class="spinner"></div><div class="loading-text mt16">Checking connections...</div></div>
+      </div>
+
+      <div class="section-title">Recent Posts</div>
+      <div id="recentPosts" class="card" style="padding:0;overflow:hidden;">
+        <div class="post-row" style="border-bottom:1px solid var(--border);background:var(--bg3);">
+          <div class="post-header">Title</div><div class="post-header">Status</div><div class="post-header">Date</div>
+        </div>
+        <div id="recentPostsList" style="text-align:center;padding:20px;"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ BLOG MANAGER ═══ -->
+    <div class="panel" id="panel-blog">
+      <div class="flex-between mb16">
+        <div class="section-title" style="margin-bottom:0;border-bottom:none;padding-bottom:0;">Blog Posts</div>
+        <div class="flex-row">
+          <button class="btn btn-primary" onclick="openPostEditor()">+ New Post</button>
+          <button class="btn btn-outline btn-sm" onclick="loadPosts()"><span class="spinner" id="refreshSpin" style="display:none;"></span> Refresh</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="post-row" style="border-bottom:1px solid var(--border);background:var(--bg3);">
+          <div class="post-header">Title</div><div class="post-header">Status</div><div class="post-header">Date</div><div class="post-header">City</div><div class="post-header">Actions</div>
+        </div>
+        <div id="postsList"><div style="text-align:center;padding:24px;"><div class="spinner"></div></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ SOCIAL ═══ -->
+    <div class="panel" id="panel-social">
+      <div class="section-title">Social Post Generator</div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Generate from Blog Post</h3>
+          <label>Select a published post</label>
+          <select id="socialPostSelect" class="mb16"><option value="">Loading posts...</option></select>
+          <label>Channels</label>
+          <div class="flex-row mb16">
+            <label style="display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" checked value="facebook"> Facebook</label>
+            <label style="display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" checked value="instagram"> Instagram</label>
+            <label style="display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="checkbox" checked value="linkedin"> LinkedIn</label>
+          </div>
+          <button class="btn btn-teal" onclick="generateSocial()">Generate Social Posts</button>
+        </div>
+        <div class="card">
+          <h3>Preview</h3>
+          <div id="socialPreview" style="font-size:12px;color:var(--text2);">Select a post and generate to preview social content.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CONTENT MATRIX ═══ -->
+    <div class="panel" id="panel-matrix">
+      <div class="section-title">Content Matrix · 9 Cities × 6 Verticals = 54 Posts</div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:11px;">
+          <thead>
+            <tr style="background:var(--bg3);">
+              <th style="padding:10px;text-align:left;color:var(--text3);font-size:10px;letter-spacing:0.5px;">CITY</th>
+              <th style="padding:10px;text-align:center;color:var(--text3);font-size:10px;">Clinics</th>
+              <th style="padding:10px;text-align:center;color:var(--text3);font-size:10px;">Real Estate</th>
+              <th style="padding:10px;text-align:center;color:var(--text3);font-size:10px;">Tourism</th>
+              <th style="padding:10px;text-align:center;color:var(--text3);font-size:10px;">C-Level</th>
+              <th style="padding:10px;text-align:center;color:var(--text3);font-size:10px;">Lifestyle</th>
+              <th style="padding:10px;text-align:center;color:var(--text3);font-size:10px;">WhatsApp SMB</th>
+            </tr>
+          </thead>
+          <tbody id="matrixBody"></tbody>
+        </table>
+      </div>
+      <div class="flex-row mt16">
+        <span class="tag tag-green">● Published</span>
+        <span class="tag tag-orange">● Draft</span>
+        <span class="tag tag-blue">● Planned</span>
+        <span class="tag tag-gray">● Not Started</span>
+      </div>
+    </div>
+
+    <!-- ═══ GOOGLE INTEL ═══ -->
+    <div class="panel" id="panel-google">
+      <div class="section-title">Google Search Intelligence</div>
+      <div class="grid-2 mb24">
+        <div class="card">
+          <h3>Search Console — Top Queries (28 days)</h3>
+          <div id="googleSearchData" style="font-size:12px;color:var(--text2);">
+            <div class="spinner"></div> Loading...
+          </div>
+        </div>
+        <div class="card">
+          <h3>GA4 — Traffic Overview (28 days)</h3>
+          <div id="googleAnalyticsData" style="font-size:12px;color:var(--text2);">
+            <div class="spinner"></div> Loading...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ META ADS ═══ -->
+    <div class="panel" id="panel-meta">
+      <div class="section-title">Meta Ad Accounts</div>
+      <div class="card">
+        <h3>Campaigns Overview</h3>
+        <div id="metaAdsData" style="font-size:12px;color:var(--text2);">
+          <div class="spinner"></div> Loading...
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ LINKEDIN ═══ -->
+    <div class="panel" id="panel-linkedin">
+      <div class="section-title">LinkedIn Ads & Leads</div>
+      <div id="linkedinContent">
+        <div class="card" style="text-align:center;padding:40px;">
+          <div style="font-size:36px;margin-bottom:12px;">💼</div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:8px;">LinkedIn Integration</div>
+          <div style="color:var(--text2);font-size:13px;margin-bottom:20px;">
+            Track ad campaigns, leads, and company page analytics.<br>
+            Leads flow directly into GHL pipeline.
+          </div>
+          <div id="linkedinStatus" style="padding:8px 16px;border-radius:8px;display:inline-block;font-size:12px;background:var(--bg2);color:var(--text2);">
+            Checking connection...
+          </div>
+        </div>
+        <div class="grid-2 mt16" id="linkedinCards" style="display:none;">
+          <div class="card" style="padding:20px;">
+            <div style="font-size:12px;color:var(--text3);text-transform:uppercase;margin-bottom:8px;">Active Campaigns</div>
+            <div id="liCampaignCount" style="font-size:28px;font-weight:700;color:var(--blue);">—</div>
+          </div>
+          <div class="card" style="padding:20px;">
+            <div style="font-size:12px;color:var(--text3);text-transform:uppercase;margin-bottom:8px;">Leads → GHL</div>
+            <div id="liLeadCount" style="font-size:28px;font-weight:700;color:var(--green);">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ WHATSAPP ═══ -->
+    <div class="panel" id="panel-whatsapp">
+      <div class="section-title">WhatsApp Business</div>
+      <div id="whatsappContent">
+        <div class="card" style="text-align:center;padding:40px;">
+          <div style="font-size:36px;margin-bottom:12px;">📱</div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:8px;">WhatsApp Cloud API</div>
+          <div style="color:var(--text2);font-size:13px;margin-bottom:20px;">
+            Send template messages, track delivery/read rates, and manage conversations.<br>
+            The #1 channel for LATAM markets.
+          </div>
+          <div id="whatsappStatus" style="padding:8px 16px;border-radius:8px;display:inline-block;font-size:12px;background:var(--bg2);color:var(--text2);">
+            Checking connection...
+          </div>
+        </div>
+        <div class="grid-3 mt16" id="whatsappCards" style="display:none;">
+          <div class="card" style="padding:20px;">
+            <div style="font-size:12px;color:var(--text3);text-transform:uppercase;margin-bottom:8px;">Messages Sent (30d)</div>
+            <div id="waMsgSent" style="font-size:28px;font-weight:700;color:var(--green);">—</div>
+          </div>
+          <div class="card" style="padding:20px;">
+            <div style="font-size:12px;color:var(--text3);text-transform:uppercase;margin-bottom:8px;">Templates Active</div>
+            <div id="waTemplates" style="font-size:28px;font-weight:700;color:var(--blue);">—</div>
+          </div>
+          <div class="card" style="padding:20px;">
+            <div style="font-size:12px;color:var(--text3);text-transform:uppercase;margin-bottom:8px;">Delivery Rate</div>
+            <div id="waDelivery" style="font-size:28px;font-weight:700;color:var(--teal);">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CONNECTIONS ═══ -->
+    <div class="panel" id="panel-connections">
+      <div class="flex-between mb16">
+        <div class="section-title" style="margin-bottom:0;border-bottom:none;padding-bottom:0;">Service Connections</div>
+        <button class="btn btn-outline btn-sm" onclick="loadConnections()">Re-check All</button>
+      </div>
+      <div class="grid-3" id="connectionsGrid">
+        <div class="card" style="text-align:center;padding:24px;"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ POST EDITOR MODAL ═══ -->
+<div class="modal-overlay" id="postEditorModal">
+  <div class="modal">
+    <div class="flex-between mb16">
+      <h3 id="editorTitle">New Blog Post</h3>
+      <button class="btn btn-outline btn-sm" onclick="closePostEditor()">✕ Close</button>
+    </div>
+    <input type="hidden" id="editPostId" value="" />
+    <label>Title</label>
+    <input type="text" id="postTitle" placeholder="Post title..." class="mb8" />
+    <div class="grid-2 mb8">
+      <div><label>City</label><select id="postCity">
+        <option value="">— select —</option>
+        <option>Brasília</option><option>São Paulo</option><option>Miami</option><option>Tulum</option>
+        <option>Buenos Aires</option><option>Bogotá</option><option>CDMX</option><option>Santiago</option><option>Lima</option>
+      </select></div>
+      <div><label>Vertical</label><select id="postVertical">
+        <option value="">— select —</option>
+        <option>Clinics & Medical</option><option>Premium Real Estate</option><option>Luxury Tourism & Hospitality</option>
+        <option>C-Level Consulting</option><option>Lifestyle Brands & E-commerce</option><option>WhatsApp-First SMBs</option>
+      </select></div>
+    </div>
+    <div class="grid-2 mb8">
+      <div><label>Status</label><select id="postStatus">
+        <option value="draft">Draft</option><option value="publish">Publish Now</option><option value="future">Schedule</option>
+      </select></div>
+      <div><label>Publish Date</label><input type="datetime-local" id="postDate" /></div>
+    </div>
+    <label>SEO Keyword</label>
+    <input type="text" id="postKeyword" placeholder="e.g. digital marketing clinics brasilia" class="mb8" />
+    <label>Slug</label>
+    <input type="text" id="postSlug" placeholder="auto-generated-from-title" class="mb8" />
+    <label>Content (HTML)</label>
+    <textarea id="postContent" rows="10" placeholder="Write your post content here..."></textarea>
+    <div class="flex-row mt16">
+      <button class="btn btn-primary" onclick="savePost()">Save Post</button>
+      <button class="btn btn-teal" onclick="translatePost('pt')">Translate → PT</button>
+      <button class="btn btn-orange" onclick="translatePost('es')">Translate → ES</button>
+      <span id="editorStatus" style="font-size:11px;color:var(--text3);"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+// 4UPact Content Command Center v5 — Client Logic
+// ══════════════════════════════════════════════════════════════════
+
+const API = '/api';
+let authToken = sessionStorage.getItem('cc5_token') || '';
+let postsCache = [];
+
+// ── API Helpers ──────────────────────────────────────────────────
+async function api(path, opts = {}) {
+  const url = `${API}/${path}`;
+  const headers = { 'Content-Type': 'application/json', 'x-dashboard-token': authToken, ...opts.headers };
+  const res = await fetch(url, { ...opts, headers });
+  const data = await res.json();
+  if (!res.ok && res.status === 401) { doLogout(); throw new Error('Unauthorized'); }
+  return data;
+}
+
+// ── Auth ─────────────────────────────────────────────────────────
+async function doLogin() {
+  const pw = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  try {
+    const data = await fetch(`${API}/auth`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw }),
+    }).then(r => r.json());
+    if (data.error) { errEl.textContent = data.error; errEl.style.display = 'block'; return; }
+    authToken = data.token;
+    sessionStorage.setItem('cc5_token', authToken);
+    document.getElementById('loginOverlay').classList.add('hidden');
+    document.getElementById('appShell').style.display = 'block';
+    initDashboard();
+  } catch (e) {
+    errEl.textContent = 'Connection error'; errEl.style.display = 'block';
+  }
+}
+
+function doLogout() {
+  authToken = '';
+  sessionStorage.removeItem('cc5_token');
+  document.getElementById('loginOverlay').classList.remove('hidden');
+  document.getElementById('appShell').style.display = 'none';
+}
+
+document.getElementById('loginPassword').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+// ── Auto-login if token exists ───────────────────────────────────
+if (authToken) {
+  document.getElementById('loginOverlay').classList.add('hidden');
+  document.getElementById('appShell').style.display = 'block';
+  setTimeout(initDashboard, 100);
+}
+
+// ── Tab Navigation ───────────────────────────────────────────────
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    const panel = document.getElementById(`panel-${tab.dataset.tab}`);
+    if (panel) panel.classList.add('active');
+    // Lazy-load data per tab
+    const t = tab.dataset.tab;
+    if (t === 'google') loadGoogleData();
+    if (t === 'meta') loadMetaData();
+    if (t === 'linkedin') loadLinkedIn();
+    if (t === 'whatsapp') loadWhatsApp();
+  });
+});
+
+// ── Init Dashboard ───────────────────────────────────────────────
+async function initDashboard() {
+  loadConnections();
+  loadPosts();
+}
+
+// ── Connections ──────────────────────────────────────────────────
+async function loadConnections() {
+  try {
+    const data = await api('connections');
+    renderConnections(data.connections);
+    renderOverviewConnections(data.connections);
+  } catch (e) {
+    console.error('Connections error:', e);
+  }
+}
+
+function connDotClass(c) {
+  if (c.status === 'yellow') return 'dot-yellow';
+  return c.ok ? 'dot-green' : 'dot-red';
+}
+function connShortDetail(c) {
+  if (c.status === 'yellow') return c.detail.split('\u2014')[0].trim();
+  if (c.ok) return c.detail.length > 40 ? c.detail.slice(0, 40) + '\u2026' : c.detail;
+  const d = c.detail || '';
+  if (d.length > 45) return d.slice(0, 45) + '\u2026';
+  return d;
+}
+
+function renderConnections(conns) {
+  const grid = document.getElementById('connectionsGrid');
+  grid.innerHTML = conns.map((c, i) => `
+    <div class="card conn-card" onclick="toggleConnDebug(${i})">
+      <div class="dot ${connDotClass(c)}"></div>
+      <div style="flex:1;">
+        <div class="conn-name">${c.name}</div>
+        <div class="conn-detail">${connShortDetail(c)}</div>
+        <div class="conn-debug" id="connDebug${i}">${c.detail || 'No details'}</div>
+      </div>
+      <span class="expand-hint">click for details</span>
+    </div>
+  `).join('');
+  const ok = conns.filter(c => c.ok).length;
+  const yellow = conns.filter(c => c.status === 'yellow').length;
+  const summary = yellow ? `${ok}/${conns.length} connected \u00b7 ${yellow} via MCP` : `${ok}/${conns.length} connected`;
+  document.getElementById('connSummary').textContent = summary;
+}
+
+function toggleConnDebug(i) {
+  const el = document.getElementById('connDebug' + i);
+  if (el) el.classList.toggle('show');
+}
+
+function renderOverviewConnections(conns) {
+  const el = document.getElementById('overviewConnections');
+  el.innerHTML = conns.map(c => `
+    <div class="card conn-card" style="padding:12px 16px;cursor:default;">
+      <div class="dot ${connDotClass(c)}"></div>
+      <div>
+        <div style="font-size:12px;font-weight:600;">${c.name}</div>
+        <div style="font-size:10px;color:var(--text3);">${c.ok ? 'Connected' : c.status === 'yellow' ? 'MCP' : c.detail}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Posts ────────────────────────────────────────────────────────
+async function loadPosts() {
+  try {
+    const data = await api('wp-posts');
+    postsCache = Array.isArray(data) ? data : [];
+    renderPosts();
+    updateOverviewStats();
+    populateSocialSelect();
+  } catch (e) {
+    console.error('Posts error:', e);
+    document.getElementById('postsList').innerHTML = `<div style="padding:16px;color:var(--red);font-size:12px;">Error loading posts: ${e.message}</div>`;
+  }
+}
+
+function renderPosts() {
+  const el = document.getElementById('postsList');
+  if (!postsCache.length) {
+    el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text3);font-size:12px;">No posts found. Create your first post!</div>';
+    return;
+  }
+  el.innerHTML = postsCache.slice(0, 30).map(p => {
+    const status = p.status || 'draft';
+    const statusTag = status === 'publish' ? 'tag-green' : status === 'future' ? 'tag-blue' : 'tag-orange';
+    const date = p.date ? new Date(p.date).toLocaleDateString() : '—';
+    const title = p.title?.rendered || p.title || 'Untitled';
+    return `
+      <div class="post-row">
+        <div class="title" onclick="editPost(${p.id})">${title}</div>
+        <div><span class="tag ${statusTag}">${status}</span></div>
+        <div style="color:var(--text2);">${date}</div>
+        <div style="color:var(--text3);font-size:10px;">—</div>
+        <div>
+          <button class="btn btn-outline btn-sm" onclick="editPost(${p.id})">Edit</button>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Also update recent posts on overview
+  const recent = document.getElementById('recentPostsList');
+  recent.innerHTML = postsCache.slice(0, 5).map(p => {
+    const status = p.status || 'draft';
+    const statusTag = status === 'publish' ? 'tag-green' : status === 'future' ? 'tag-blue' : 'tag-orange';
+    const date = p.date ? new Date(p.date).toLocaleDateString() : '—';
+    const title = p.title?.rendered || p.title || 'Untitled';
+    return `<div class="post-row" style="grid-template-columns:1fr 80px 100px;">
+      <div class="title" onclick="editPost(${p.id})">${title}</div>
+      <div><span class="tag ${statusTag}">${status}</span></div>
+      <div style="color:var(--text2);font-size:11px;">${date}</div>
+    </div>`;
+  }).join('');
+}
+
+function updateOverviewStats() {
+  const total = postsCache.length;
+  const published = postsCache.filter(p => p.status === 'publish').length;
+  const drafts = postsCache.filter(p => p.status === 'draft').length;
+  const scheduled = postsCache.filter(p => p.status === 'future').length;
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statPublished').textContent = published;
+  document.getElementById('statDrafts').textContent = drafts;
+  document.getElementById('statScheduled').textContent = scheduled;
+}
+
+// ── Post Editor ─────────────────────────────────────────────────
+function openPostEditor(id) {
+  document.getElementById('editPostId').value = '';
+  document.getElementById('postTitle').value = '';
+  document.getElementById('postContent').value = '';
+  document.getElementById('postCity').value = '';
+  document.getElementById('postVertical').value = '';
+  document.getElementById('postStatus').value = 'draft';
+  document.getElementById('postDate').value = '';
+  document.getElementById('postKeyword').value = '';
+  document.getElementById('postSlug').value = '';
+  document.getElementById('editorTitle').textContent = 'New Blog Post';
+  document.getElementById('editorStatus').textContent = '';
+  document.getElementById('postEditorModal').classList.add('show');
+}
+
+function closePostEditor() {
+  document.getElementById('postEditorModal').classList.remove('show');
+}
+
+async function editPost(id) {
+  const statusEl = document.getElementById('editorStatus');
+  openPostEditor();
+  document.getElementById('editorTitle').textContent = 'Edit Post';
+  statusEl.textContent = 'Loading...';
+  try {
+    const post = await api(`wp-posts/${id}`);
+    document.getElementById('editPostId').value = id;
+    document.getElementById('postTitle').value = post.title?.rendered || post.title || '';
+    document.getElementById('postContent').value = post.content?.rendered || post.content || '';
+    document.getElementById('postStatus').value = post.status || 'draft';
+    document.getElementById('postSlug').value = post.slug || '';
+    if (post.date) {
+      document.getElementById('postDate').value = post.date.slice(0, 16);
+    }
+    statusEl.textContent = `Post #${id} loaded`;
+  } catch (e) {
+    statusEl.textContent = `Error: ${e.message}`;
+  }
+}
+
+async function savePost() {
+  const statusEl = document.getElementById('editorStatus');
+  const id = document.getElementById('editPostId').value;
+  const body = {
+    title: document.getElementById('postTitle').value,
+    content: document.getElementById('postContent').value,
+    status: document.getElementById('postStatus').value,
+    slug: document.getElementById('postSlug').value || undefined,
+  };
+  const dateVal = document.getElementById('postDate').value;
+  if (dateVal) body.date = new Date(dateVal).toISOString();
+
+  statusEl.textContent = 'Saving...';
+  try {
+    if (id) {
+      await api(`wp-posts/${id}`, { method: 'PATCH', body: JSON.stringify(body) });
+      statusEl.textContent = `Post #${id} updated!`;
+    } else {
+      const data = await api('wp-posts', { method: 'POST', body: JSON.stringify(body) });
+      document.getElementById('editPostId').value = data.id;
+      statusEl.textContent = `Post #${data.id} created!`;
+    }
+    loadPosts();
+  } catch (e) {
+    statusEl.textContent = `Error: ${e.message}`;
+  }
+}
+
+async function translatePost(lang) {
+  const statusEl = document.getElementById('editorStatus');
+  const text = document.getElementById('postContent').value;
+  if (!text) { statusEl.textContent = 'No content to translate'; return; }
+  statusEl.textContent = `Translating to ${lang === 'pt' ? 'Portuguese' : 'Spanish'}...`;
+  try {
+    const data = await api('translate', { method: 'POST', body: JSON.stringify({ text, targetLang: lang }) });
+    // Open new editor with translated content
+    const origTitle = document.getElementById('postTitle').value;
+    const suffix = lang === 'pt' ? ' [PT-BR]' : ' [ES-LA]';
+    document.getElementById('editPostId').value = '';
+    document.getElementById('postTitle').value = origTitle + suffix;
+    document.getElementById('postContent').value = data.translated;
+    document.getElementById('editorTitle').textContent = 'New Post (Translated)';
+    statusEl.textContent = `Translated! Edit and save as new post.`;
+  } catch (e) {
+    statusEl.textContent = `Translation error: ${e.message}`;
+  }
+}
+
+// ── Social Generator ─────────────────────────────────────────────
+function populateSocialSelect() {
+  const sel = document.getElementById('socialPostSelect');
+  const published = postsCache.filter(p => p.status === 'publish');
+  sel.innerHTML = '<option value="">— Select a post —</option>' +
+    published.map(p => `<option value="${p.id}">${p.title?.rendered || p.title || 'Untitled'}</option>`).join('');
+}
+
+async function generateSocial() {
+  const postId = document.getElementById('socialPostSelect').value;
+  const preview = document.getElementById('socialPreview');
+  if (!postId) { preview.textContent = 'Select a post first.'; return; }
+  const post = postsCache.find(p => p.id == postId);
+  if (!post) return;
+
+  const title = post.title?.rendered || post.title || '';
+  const excerpt = post.excerpt?.rendered?.replace(/<[^>]+>/g, '') || '';
+  const link = post.link || `https://4upact.com/${post.slug}`;
+
+  preview.innerHTML = `
+    <div class="mb16"><strong style="color:var(--blue);">📘 Facebook</strong><br/>
+    ${title}<br/><br/>${excerpt.slice(0, 200)}...<br/><br/>🔗 ${link}<br/>#4UPact #DigitalMarketing</div>
+    <div class="mb16"><strong style="color:var(--purple3);">📸 Instagram</strong><br/>
+    ${title}<br/><br/>${excerpt.slice(0, 150)}...<br/><br/>Link in bio 👆<br/>#4UPact #GrowthEngine #DigitalMarketing</div>
+    <div><strong style="color:var(--teal3);">💼 LinkedIn</strong><br/>
+    ${title}<br/><br/>${excerpt.slice(0, 250)}...<br/><br/>Read more: ${link}</div>
+    <div class="mt16"><button class="btn btn-teal btn-sm" onclick="pushToGHL()">Push to GHL Social Planner →</button></div>
+  `;
+}
+
+async function pushToGHL() {
+  const postId = document.getElementById('socialPostSelect').value;
+  const post = postsCache.find(p => p.id == postId);
+  if (!post) return;
+  const preview = document.getElementById('socialPreview');
+  try {
+    await api('ghl-social', { method: 'POST', body: JSON.stringify({
+      summary: post.title?.rendered || post.title || '',
+      og_meta_url: post.link || '',
+    })});
+    preview.innerHTML += '<div style="color:var(--green);margin-top:8px;font-size:11px;">✓ Pushed to GHL!</div>';
+  } catch (e) {
+    preview.innerHTML += `<div style="color:var(--red);margin-top:8px;font-size:11px;">Error: ${e.message}</div>`;
+  }
+}
+
+// ── Content Matrix ───────────────────────────────────────────────
+const CITIES = ['Brasília', 'São Paulo', 'Miami', 'Tulum', 'Buenos Aires', 'Bogotá', 'CDMX', 'Santiago', 'Lima'];
+const VERTICALS = ['Clinics & Medical', 'Premium Real Estate', 'Luxury Tourism & Hospitality', 'C-Level Consulting', 'Lifestyle Brands & E-commerce', 'WhatsApp-First SMBs'];
+
+function renderMatrix() {
+  const tbody = document.getElementById('matrixBody');
+  tbody.innerHTML = CITIES.map(city => {
+    const cells = VERTICALS.map(v => {
+      // Check if we have a matching post
+      const match = postsCache.find(p => {
+        const t = (p.title?.rendered || '').toLowerCase();
+        return t.includes(city.toLowerCase().split(' ')[0]) && t.includes(v.split(' ')[0].toLowerCase());
+      });
+      const cls = match ? (match.status === 'publish' ? 'published' : 'draft') : '';
+      const label = match ? (match.status === 'publish' ? '✓' : '✎') : '·';
+      return `<td style="padding:6px;"><div class="matrix-cell ${cls}" title="${city} × ${v}">${label}</div></td>`;
+    }).join('');
+    return `<tr><td style="padding:8px;font-weight:600;font-size:12px;white-space:nowrap;">${city}</td>${cells}</tr>`;
+  }).join('');
+}
+
+// ── Google Intel ─────────────────────────────────────────────────
+async function loadGoogleData() {
+  const scEl = document.getElementById('googleSearchData');
+  const gaEl = document.getElementById('googleAnalyticsData');
+
+  // Search Console
+  try {
+    const sc = await api('google-search');
+    if (sc.error) { scEl.innerHTML = `<span style="color:var(--orange3);">${sc.error}</span><br/><span style="font-size:11px;color:var(--text3);">Set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN, GOOGLE_SITE_URL in Netlify env vars.</span>`; }
+    else if (sc.searchConsole?.rows) {
+      scEl.innerHTML = `<table style="width:100%;font-size:11px;">
+        <tr style="color:var(--text3);"><th style="text-align:left;padding:4px;">Query</th><th>Clicks</th><th>Impressions</th><th>CTR</th></tr>
+        ${sc.searchConsole.rows.slice(0, 15).map(r => `<tr>
+          <td style="padding:4px;">${r.keys[0]}</td>
+          <td style="text-align:center;">${r.clicks}</td>
+          <td style="text-align:center;">${r.impressions}</td>
+          <td style="text-align:center;">${(r.ctr * 100).toFixed(1)}%</td>
+        </tr>`).join('')}
+      </table>`;
+    } else { scEl.innerHTML = '<span style="color:var(--text3);">No data yet.</span>'; }
+  } catch (e) { scEl.innerHTML = `<span style="color:var(--red);">${e.message}</span>`; }
+
+  // GA4
+  try {
+    const ga = await api('google-analytics');
+    if (ga.error) { gaEl.innerHTML = `<span style="color:var(--orange3);">${ga.error}</span><br/><span style="font-size:11px;color:var(--text3);">Set GA4_PROPERTY_ID in Netlify env vars.</span>`; }
+    else if (ga.analytics?.rows) {
+      const totals = ga.analytics.totals?.[0]?.metricValues || [];
+      gaEl.innerHTML = `<div class="grid-3 mb16">
+        <div class="stat-block"><div class="stat-num" style="font-size:20px;color:var(--teal3);">${totals[0]?.value || '—'}</div><div class="stat-label">Sessions</div></div>
+        <div class="stat-block"><div class="stat-num" style="font-size:20px;color:var(--purple3);">${totals[1]?.value || '—'}</div><div class="stat-label">Users</div></div>
+        <div class="stat-block"><div class="stat-num" style="font-size:20px;color:var(--orange3);">${totals[2]?.value || '—'}</div><div class="stat-label">Page Views</div></div>
+      </div>`;
+    } else { gaEl.innerHTML = '<span style="color:var(--text3);">No data yet.</span>'; }
+  } catch (e) { gaEl.innerHTML = `<span style="color:var(--red);">${e.message}</span>`; }
+}
+
+// ── Meta Ads ─────────────────────────────────────────────────────
+async function loadMetaData() {
+  const el = document.getElementById('metaAdsData');
+  try {
+    const data = await api('meta-ads');
+    if (data.error) {
+      el.innerHTML = `<span style="color:var(--orange3);">${data.error}</span><br/><span style="font-size:11px;color:var(--text3);">Set META_ACCESS_TOKEN and META_AD_ACCOUNT_ID in Netlify env vars.</span>`;
+      return;
+    }
+    if (data.data && data.data.length) {
+      el.innerHTML = `<table style="width:100%;font-size:11px;">
+        <tr style="color:var(--text3);"><th style="text-align:left;padding:4px;">Campaign</th><th>Status</th><th>Impressions</th><th>Clicks</th><th>Spend</th><th>CTR</th></tr>
+        ${data.data.map(c => {
+          const ins = c.insights?.data?.[0] || {};
+          return `<tr>
+            <td style="padding:4px;font-weight:600;">${c.name}</td>
+            <td><span class="tag ${c.status === 'ACTIVE' ? 'tag-green' : 'tag-gray'}">${c.status}</span></td>
+            <td style="text-align:center;">${ins.impressions || '—'}</td>
+            <td style="text-align:center;">${ins.clicks || '—'}</td>
+            <td style="text-align:center;">$${ins.spend || '—'}</td>
+            <td style="text-align:center;">${ins.ctr ? parseFloat(ins.ctr).toFixed(2) + '%' : '—'}</td>
+          </tr>`;
+        }).join('')}
+      </table>`;
+    } else { el.innerHTML = '<span style="color:var(--text3);">No campaigns found.</span>'; }
+  } catch (e) { el.innerHTML = `<span style="color:var(--red);">${e.message}</span>`; }
+}
+
+// ── LinkedIn ─────────────────────────────────────────────────────
+async function loadLinkedIn() {
+  const campEl = document.getElementById('linkedinCampaigns');
+  const leadEl = document.getElementById('linkedinLeads');
+  if (!campEl || !leadEl) return;
+  campEl.innerHTML = leadEl.innerHTML = '<span style="color:var(--text3);">Loading…</span>';
+  try {
+    const data = await api('linkedin/ads');
+    if (data.error) {
+      campEl.innerHTML = `<span style="color:var(--orange3);">${data.error}</span><br/><span style="font-size:11px;color:var(--text3);">Set LINKEDIN_ACCESS_TOKEN and LINKEDIN_AD_ACCOUNT_ID in Netlify env vars.</span>`;
+      leadEl.innerHTML = '';
+      return;
+    }
+    if (data.elements && data.elements.length) {
+      campEl.innerHTML = `<table style="width:100%;font-size:11px;">
+        <tr style="color:var(--text3);"><th style="text-align:left;padding:4px;">Campaign</th><th>Status</th><th>Budget</th></tr>
+        ${data.elements.slice(0, 10).map(c => `<tr>
+          <td style="padding:4px;font-weight:600;">${c.name || c.id}</td>
+          <td><span class="tag ${c.status === 'ACTIVE' ? 'tag-green' : 'tag-gray'}">${c.status}</span></td>
+          <td style="text-align:center;">$${c.dailyBudget?.amount || '—'}</td>
+        </tr>`).join('')}
+      </table>`;
+    } else { campEl.innerHTML = '<span style="color:var(--text3);">No campaigns found.</span>'; }
+    leadEl.innerHTML = `<div class="stat-block"><div class="stat-num" style="font-size:20px;color:var(--teal3);">${data.elements?.length || 0}</div><div class="stat-label">Active Campaigns</div></div>`;
+  } catch (e) {
+    campEl.innerHTML = `<span style="color:var(--red);">${e.message}</span>`;
+    leadEl.innerHTML = '';
+  }
+}
+
+// ── WhatsApp ─────────────────────────────────────────────────────
+async function loadWhatsApp() {
+  const msgEl = document.getElementById('whatsappMessages');
+  const tplEl = document.getElementById('whatsappTemplates');
+  if (!msgEl || !tplEl) return;
+  msgEl.innerHTML = tplEl.innerHTML = '<span style="color:var(--text3);">Loading…</span>';
+  try {
+    const data = await api('whatsapp/analytics');
+    if (data.error) {
+      msgEl.innerHTML = `<span style="color:var(--orange3);">${data.error}</span><br/><span style="font-size:11px;color:var(--text3);">Set WHATSAPP_PHONE_NUMBER_ID and WHATSAPP_BUSINESS_ACCOUNT_ID in Netlify env vars.</span>`;
+      tplEl.innerHTML = '';
+      return;
+    }
+    const stats = data.analytics?.data_points || [];
+    const sent = stats.reduce((a, d) => a + (d.sent || 0), 0);
+    const delivered = stats.reduce((a, d) => a + (d.delivered || 0), 0);
+    const rate = sent > 0 ? ((delivered / sent) * 100).toFixed(1) : '—';
+    msgEl.innerHTML = `<div class="grid-3">
+      <div class="stat-block"><div class="stat-num" style="font-size:20px;color:var(--teal3);">${sent}</div><div class="stat-label">Sent</div></div>
+      <div class="stat-block"><div class="stat-num" style="font-size:20px;color:var(--purple3);">${delivered}</div><div class="stat-label">Delivered</div></div>
+      <div class="stat-block"><div class="stat-num" style="font-size:20px;color:var(--orange3);">${rate}%</div><div class="stat-label">Delivery Rate</div></div>
+    </div>`;
+    const tpls = data.templates || [];
+    if (tpls.length) {
+      tplEl.innerHTML = `<table style="width:100%;font-size:11px;">
+        <tr style="color:var(--text3);"><th style="text-align:left;padding:4px;">Template</th><th>Status</th><th>Language</th></tr>
+        ${tpls.slice(0, 8).map(t => `<tr>
+          <td style="padding:4px;font-weight:600;">${t.name}</td>
+          <td><span class="tag ${t.status === 'APPROVED' ? 'tag-green' : 'tag-gray'}">${t.status}</span></td>
+          <td style="text-align:center;">${t.language || '—'}</td>
+        </tr>`).join('')}
+      </table>`;
+    } else { tplEl.innerHTML = '<span style="color:var(--text3);">No templates found.</span>'; }
+  } catch (e) {
+    msgEl.innerHTML = `<span style="color:var(--red);">${e.message}</span>`;
+    tplEl.innerHTML = '';
+  }
+}
+
+// ── Init matrix on post load ─────────────────────────────────────
+const origLoadPosts = loadPosts;
+const _loadPosts = loadPosts;
+// Render matrix after posts load
+const _origRender = renderPosts;
+const __renderPosts = renderPosts;
+window.addEventListener('DOMContentLoaded', () => {
+  // Patch renderPosts to also render matrix
+  const origRender = renderPosts;
+});
+
+// Override to chain matrix render
+const _realRenderPosts = renderPosts;
+window.renderPosts = function() {
+  _realRenderPosts();
+  renderMatrix();
+};
+
+// Initial matrix render
+renderMatrix();
+
+</script>
+</body>
+</html>

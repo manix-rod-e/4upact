@@ -1,0 +1,139 @@
+{
+  "project": "4U Pact",
+  "version_date": "2026-02-04",
+  "brand_direction": {
+    "positioning": "CRM-first growth agency focused on measurable conversion + automation systems (not just creatives).",
+    "core_stack_bias": {
+      "primary": "GoHighLevel (Agency account + sub-accounts per client) for funnels, pipelines, automation, reporting, attribution.",
+      "supporting": "Kommo for WhatsApp-centric sales pipelines + chatbot ops when needed; Zapier/Make for integrations; WordPress + Elementor for SEO authority site; WooCommerce when e-commerce is part of the offer."
+    },
+    "tone": {
+      "voice": "confident, practical, conversion-led, premium, direct",
+      "promise": "systems that create revenue + retention, not one-off campaigns"
+    },
+    "primary_targets": [
+      "high-ticket services (clinics/surgeons, premium real estate, luxury tourism/hospitality, C-level consultants)",
+      "aspirational lifestyle brands with repeat purchase potential",
+      "SMB owners who depend on WhatsApp speed-to-lead"
+    ],
+    "offer_structure": "Productized tiers (Good/Better/Best) with clear deliverables, SLAs, and onboarding checklist."
+  },
+  "marketing_strategy_summary": {
+    "north_star": "Build a compounding owned database (CRM) while driving short-term bookings/sales.",
+    "core_loop": [
+      "Traffic (ads + organic) → lead capture (GHL) → instant follow-up (WhatsApp/SMS/email) → pipeline (GHL) → appointment/checkout → post-sale automation → referral + upsell → reactivation"
+    ],
+    "differentiators_to_repeat": [
+      "speed-to-lead + automation (immediate replies, routing, qualification)",
+      "single source of truth in CRM + attribution (UTMs, pipeline value, close rates)",
+      "repeatable onboarding + dashboards (client always sees progress)"
+    ]
+  },
+  "crm_first_principles": {
+    "rule_1": "If it's not captured in the CRM, it didn't happen.",
+    "rule_2": "Every campaign must create an asset: a tagged contact + a conversation + a pipeline stage.",
+    "rule_3": "Design the pipeline before the ad: stages, qualification, objections, follow-ups, owner.",
+    "rule_4": "Automate the first 80%: speed-to-lead, qualification, reminders, review requests, reactivation.",
+    "rule_5": "Track revenue, not vanity: pipeline value, show rate, close rate, CAC, LTV, time-to-first-response."
+  },
+  "ghl_first_playbook": {
+    "account_architecture": {
+      "agency_level": [
+        "global snapshot templates per niche (real estate, clinic, tourism)",
+        "global dashboards + reporting templates",
+        "global UTM taxonomy + naming conventions"
+      ],
+      "subaccount_per_client": [
+        "pipeline + stages + opportunity fields",
+        "forms/surveys + calendars + automations",
+        "call tracking (when applicable)",
+        "email/SMS/WhatsApp routing + tags"
+      ]
+    },
+    "minimum_viable_automation_set": [
+      "new lead: instant response + qualification questions + route to correct pipeline",
+      "missed call text-back + callback task",
+      "appointment: confirm + reminders + reschedule + no-show recovery",
+      "post-sale: onboarding + NPS/review request + upsell/cross-sell",
+      "reactivation: 30/60/90 day sequences + seasonal promos",
+      "lead source integrity: UTM capture + contact tagging + attribution to opportunity"
+    ]
+  },
+  "website_strategy_to_capture_customers_ASAP": {
+    "goal": "Make the website a conversion machine, not a brochure.",
+    "structure": {
+      "home": "clear promise + niches served + proof + CTA to audit/booking",
+      "service_landing_pages": [
+        "CRM & Automations (hero offer)",
+        "Paid Ads (only as part of CRM-enabled system)",
+        "Web/SEO (authority + trust + lead capture)",
+        "Loyalty/Retention (upsell add-on)"
+      ],
+      "niche_pages_fast_wins": [
+        "Real Estate CRM",
+        "Clinic/Surgery CRM",
+        "Luxury Tourism CRM"
+      ],
+      "conversion_assets": [
+        "Lead magnet: 'Speed-to-Lead Audit' (form + calendar)",
+        "Case-study page template",
+        "Pricing/tiers page (Good/Better/Best)",
+        "Comparison page vs. 'traditional agencies'"
+      ]
+    },
+    "execution_bias": {
+      "ASAP_mode": "Run ads to GHL landing pages first (fast iteration), then mirror best performers into WordPress for SEO compounding.",
+      "evergreen_mode": "WordPress becomes the authority hub; GHL pages remain campaign-specific."
+    }
+  },
+  "ads_strategy_to_capture_customers_ASAP": {
+    "priority_channels": [
+      "Meta (FB/IG) lead + WhatsApp click-to-message",
+      "Google Search (high intent: 'CRM for clinic', 'GHL agency', 'automation for [niche]')",
+      "YouTube retargeting (optional once traffic exists)"
+    ],
+    "funnel_blueprint": {
+      "top_of_funnel": [
+        "short video + carousel: problem/solution (speed-to-lead, WhatsApp, missed leads)",
+        "offer: free audit + quick wins checklist"
+      ],
+      "mid_funnel": [
+        "retargeting: proof + before/after metrics + client stories",
+        "CTA: book a call"
+      ],
+      "bottom_funnel": [
+        "search ads to niche landing pages",
+        "remarketing to 'pricing/tiers' + 'case study' visitors"
+      ]
+    },
+    "ads_to_crm_requirements": [
+      "every ad must include UTMs",
+      "every form must create a contact + apply tags + create opportunity",
+      "every lead must get a <2 min auto-response + routing"
+    ],
+    "fastest_offer_to_sell": "CRM + WhatsApp speed-to-lead system for high-ticket niches (clinics/real estate), because ROI is obvious and close cycles shorten."
+  },
+  "biggest_geo_opportunity_map": {
+    "brazil_top_15_cities_to_target": [
+      "São Paulo", "Rio de Janeiro", "Brasília", "Fortaleza", "Salvador",
+      "Belo Horizonte", "Manaus", "Curitiba", "Recife", "Goiânia",
+      "Belém", "Porto Alegre", "Guarulhos", "Campinas", "São Luís"
+    ],
+    "us_direct_flight_hubs_from_brazil_to_prioritize": [
+      "Miami", "Orlando", "New York (JFK) + Newark (EWR)", "Boston",
+      "Houston", "Dallas", "Atlanta", "Chicago", "Washington DC"
+    ],
+    "canada_direct_flight_hubs_from_brazil_to_prioritize": ["Toronto", "Montreal"],
+    "argentina_focus": ["Buenos Aires", "Bariloche"],
+    "top_4_latin_american_capitals_to_include_in_expansion": [
+      "Mexico City", "Buenos Aires", "Lima", "Bogotá"
+    ]
+  },
+  "recommended_next_actions_ordered_by_ROI": [
+    "1) Publish 3 niche landing pages (Clinic, Real Estate, Luxury Tourism) in GHL with calendar + audit offer.",
+    "2) Turn on UTMs + pipeline + auto-response routing (GHL) so every lead becomes an opportunity.",
+    "3) Launch Meta click-to-WhatsApp + Lead Form campaigns to the 15 BR cities; retarget visitors in 7 days.",
+    "4) Launch Google Search campaigns for niche keywords to those same pages.",
+    "5) Move winning pages into WordPress for SEO compounding + build 5 case-study style articles per niche."
+  ]
+}

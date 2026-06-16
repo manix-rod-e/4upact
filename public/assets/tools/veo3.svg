@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <!-- Swirl icon -->
+  <path d="M150,60 C190,60 220,85 225,120 C230,155 210,180 180,185 C150,190 130,170 130,145 C130,125 145,115 160,118 C175,121 180,135 172,145"
+        fill="none" stroke="#5B9BD5" stroke-width="18" stroke-linecap="round"/>
+  <!-- Veo 3 text -->
+  <text x="150" y="265" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="56" font-weight="400" fill="#5B9BD5" letter-spacing="3">Veo 3</text>
+</svg>

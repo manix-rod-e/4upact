@@ -1,0 +1,24 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+
+# API routes → Netlify Functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+# Command Center — serve directly (not SPA)
+[[redirects]]
+  from = "/command-center"
+  to = "/command-center/index.html"
+  status = 200
+
+# SPA fallback for React app (everything else)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
