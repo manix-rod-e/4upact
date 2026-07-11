@@ -103,8 +103,9 @@ public/
 | Tier | USD | BRL |
 |------|-----|-----|
 | Diagnostic | Free | Gratuito |
-| Velocity Engine | $2,900/mo | R$ 4.900/mês |
-| 4U Pact Intelligence | $5,900/mo | R$ 9.900/mês |
+| Starter CRM | $197/mo | R$ 990/mês |
+| Velocity Engine | $997/mo | R$ 5.090/mês |
+| 4U Pact Intelligence | $1,997/mo | R$ 10.190/mês |
 | Enterprise DNA | Custom | Sob Consulta |
 
 ---

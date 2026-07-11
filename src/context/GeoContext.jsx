@@ -63,20 +63,20 @@ export const GeoProvider = ({ children }) => {
             priceValue: 0,
         },
         starter: {
-            price: isBRL ? 'R$ 590' : '$197',
-            priceValue: isBRL ? 590 : 197,
+            price: isBRL ? 'R$ 990' : '$197',
+            priceValue: isBRL ? 990 : 197,
             period: isBRL ? '/mês' : '/mo',
             popular: false,
         },
         velocity: {
-            price: isBRL ? 'R$ 4.900' : '$997',
-            priceValue: isBRL ? 4900 : 997,
+            price: isBRL ? 'R$ 5.090' : '$997',
+            priceValue: isBRL ? 5090 : 997,
             period: isBRL ? '/mês' : '/mo',
             popular: true,
         },
         pact: {
-            price: isBRL ? 'R$ 9.900' : '$1,997',
-            priceValue: isBRL ? 9900 : 1997,
+            price: isBRL ? 'R$ 10.190' : '$1,997',
+            priceValue: isBRL ? 10190 : 1997,
             period: isBRL ? '/mês' : '/mo',
         },
         enterprise: {

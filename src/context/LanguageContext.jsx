@@ -43,9 +43,47 @@ export const translations = {
             }
         },
         services: {
-            badge: 'Engineering Stack',
-            title: 'Construímos para Impacto Real.',
-            subtitle: 'Unimos a melhor tecnologia global com a estratégia russa e o momentum brasileiro.'
+            metaTitle: 'Método imPACT | Serviços 4U Pact',
+            metaDescription: 'Posicionamento, captação inteligente e sistemas comerciais integrados para transformar marketing em receita.',
+            badge: 'Método imPACT',
+            title: 'Três pilares.',
+            titleAccent: 'Um motor de receita.',
+            subtitle: 'Três pilares. Um motor de receita. Resultados em 90 dias.',
+            pillars: [
+                {
+                    id: 'positioning',
+                    number: '01',
+                    title: 'Posicionamento e Autoridade',
+                    headline: 'Domine seu mercado antes de entrar nele.',
+                    body: 'Clarificamos categoria, oferta, provas e narrativa comercial para que o mercado entenda seu valor antes da primeira conversa de vendas.',
+                    outcomes: ['Posicionamento de mercado', 'Arquitetura da oferta', 'Ativos de autoridade']
+                },
+                {
+                    id: 'capture',
+                    number: '02',
+                    title: 'Captação Inteligente',
+                    headline: 'Cada lead captado, qualificado e nutrido automaticamente.',
+                    body: 'Conectamos formulários, CRM, WhatsApp, e-mail e lógica de follow-up para transformar interesse em pipeline, sem perder oportunidades em caixas de entrada e planilhas.',
+                    outcomes: ['Captação de leads', 'Lógica de qualificação', 'Nutrição automatizada']
+                },
+                {
+                    id: 'system',
+                    number: '03',
+                    title: 'Sistema Comercial Integrado',
+                    headline: 'Seu CRM, conteúdo e equipe finalmente operam como um motor.',
+                    body: 'Alinhamos etapas de vendas, conteúdo de campanha, passagens operacionais e dashboards em um sistema medido por avanço no pipeline e negócios fechados.',
+                    outcomes: ['Integração de CRM', 'Fluxo da equipe', 'Dashboard de receita']
+                }
+            ],
+            clientStory: {
+                badge: 'História de Cliente',
+                title: 'SOLENIEVE: da inspiração de viagem ao acompanhamento comercial.',
+                body: 'A 4U Pact conectou uma jornada multilíngue de descoberta e consultoria para experiências selecionadas de cruzeiros e resorts, reunindo conteúdo, captação de interesse e follow-up em um único fluxo operacional.',
+                outcomes: ['Conteúdo multilíngue', 'Captação de interesse', 'Follow-up conectado']
+            },
+            resultsBadge: 'Resultados em 90 Dias',
+            resultsTitle: 'Para fundadores que não aceitam mais ações de marketing desconectadas.',
+            cta: 'Receber Auditoria Gratuita'
         },
         industries: {
             badge: 'Engineering by Vertical',
@@ -109,9 +147,47 @@ export const translations = {
             }
         },
         services: {
-            badge: 'Engineering Stack',
-            title: 'Built for Real Impact.',
-            subtitle: 'We combine the best global technology with high-end strategy and Brazilian momentum.'
+            metaTitle: 'The imPACT Method | 4U Pact Services',
+            metaDescription: 'Positioning, intelligent capture, and integrated commercial systems that turn marketing into revenue.',
+            badge: 'The imPACT Method',
+            title: 'Three pillars.',
+            titleAccent: 'One revenue engine.',
+            subtitle: 'Three pillars. One revenue engine. Results in 90 days.',
+            pillars: [
+                {
+                    id: 'positioning',
+                    number: '01',
+                    title: 'Positioning & Authority',
+                    headline: 'Own your market before you enter it.',
+                    body: 'We clarify the category, offer, proof, and commercial story so your market understands why you matter before the first sales conversation.',
+                    outcomes: ['Market position', 'Offer architecture', 'Authority assets']
+                },
+                {
+                    id: 'capture',
+                    number: '02',
+                    title: 'Intelligent Capture',
+                    headline: 'Every lead captured, qualified, and nurtured automatically.',
+                    body: 'We connect forms, CRM, WhatsApp, email, and follow-up logic so interest becomes pipeline instead of disappearing into inboxes and spreadsheets.',
+                    outcomes: ['Lead capture', 'Qualification logic', 'Automated nurture']
+                },
+                {
+                    id: 'system',
+                    number: '03',
+                    title: 'Integrated Commercial System',
+                    headline: 'Your CRM, content, and team finally become one engine.',
+                    body: 'We align sales stages, campaign content, operational handoffs, and dashboards around one revenue system measured by movement and closed deals.',
+                    outcomes: ['CRM integration', 'Team workflow', 'Revenue dashboard']
+                }
+            ],
+            clientStory: {
+                badge: 'Client Story',
+                title: 'SOLENIEVE: from travel inspiration to commercial follow-up.',
+                body: '4U Pact connected a multilingual discovery and consultation journey for curated cruise and resort experiences, bringing content, interest capture, and follow-up into one operating flow.',
+                outcomes: ['Multilingual content', 'Interest capture', 'Connected follow-up']
+            },
+            resultsBadge: 'Results in 90 Days',
+            resultsTitle: 'Built for founders who are done with disconnected marketing activity.',
+            cta: 'Book Free Audit'
         },
         industries: {
             badge: 'Engineering by Vertical',
@@ -175,9 +251,47 @@ export const translations = {
             }
         },
         services: {
-            badge: 'Pila de Ingeniería',
-            title: 'Construimos para Impacto Real.',
-            subtitle: 'Unimos la mejor tecnología global con la estrategia de alto nivel y el momentum brasileño.'
+            metaTitle: 'El Método imPACT | Servicios 4U Pact',
+            metaDescription: 'Posicionamiento, captación inteligente y sistemas comerciales integrados que convierten marketing en ingresos.',
+            badge: 'El Método imPACT',
+            title: 'Tres pilares.',
+            titleAccent: 'Un motor de ingresos.',
+            subtitle: 'Tres pilares. Un motor de ingresos. Resultados en 90 días.',
+            pillars: [
+                {
+                    id: 'positioning',
+                    number: '01',
+                    title: 'Posicionamiento y Autoridad',
+                    headline: 'Domina tu mercado antes de entrar en él.',
+                    body: 'Aclaramos la categoría, la oferta, las pruebas y la narrativa comercial para que el mercado entienda tu valor antes de la primera conversación de ventas.',
+                    outcomes: ['Posición de mercado', 'Arquitectura de oferta', 'Activos de autoridad']
+                },
+                {
+                    id: 'capture',
+                    number: '02',
+                    title: 'Captación Inteligente',
+                    headline: 'Cada lead captado, calificado y nutrido automáticamente.',
+                    body: 'Conectamos formularios, CRM, WhatsApp, correo y lógica de seguimiento para convertir el interés en pipeline, sin perder oportunidades en bandejas de entrada y hojas de cálculo.',
+                    outcomes: ['Captación de leads', 'Lógica de calificación', 'Nutrición automatizada']
+                },
+                {
+                    id: 'system',
+                    number: '03',
+                    title: 'Sistema Comercial Integrado',
+                    headline: 'Tu CRM, contenido y equipo finalmente funcionan como un motor.',
+                    body: 'Alineamos etapas de ventas, contenido de campaña, entregas operativas y dashboards en un sistema medido por movimiento del pipeline y negocios cerrados.',
+                    outcomes: ['Integración de CRM', 'Flujo del equipo', 'Dashboard de ingresos']
+                }
+            ],
+            clientStory: {
+                badge: 'Historia de Cliente',
+                title: 'SOLENIEVE: de la inspiración de viaje al seguimiento comercial.',
+                body: '4U Pact conectó una experiencia multilingüe de descubrimiento y consultoría para cruceros y resorts seleccionados, reuniendo contenido, captación de interés y seguimiento en un solo flujo operativo.',
+                outcomes: ['Contenido multilingüe', 'Captación de interés', 'Seguimiento conectado']
+            },
+            resultsBadge: 'Resultados en 90 Días',
+            resultsTitle: 'Para fundadores que ya no aceptan acciones de marketing desconectadas.',
+            cta: 'Recibir Auditoría Gratuita'
         },
         industries: {
             badge: 'Ingeniería por Vertical',
