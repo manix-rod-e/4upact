@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 
 const Layout = ({ children }) => {
   return (
@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
       
       {/* Background Brand Color Containers / Geometric Shapes */}
       {/* Deep Purple Circle */}
-      <motion.div 
+      <Motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.5, ease: "easeOut" }}
@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
       />
       
       {/* Teal Rectangle/Blob */}
-      <motion.div 
+      <Motion.div
         initial={{ opacity: 0, x: 100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
       />
       
       {/* Orange Accent */}
-      <motion.div 
+      <Motion.div
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, delay: 0.4, ease: "easeOut" }}

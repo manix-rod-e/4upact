@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { Linkedin, Zap, Target, Star, ShieldCheck, Heart, Users, Handshake, Brain, ArrowRight, TrendingUp, Sparkles, Quote, Palette } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -65,7 +65,7 @@ const About = () => {
             <section className="pt-48 pb-32 bg-white overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid lg:grid-cols-2 gap-24 items-center">
-                        <motion.div
+                        <Motion.div
                             initial={{ opacity: 0, x: -30 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.8 }}
@@ -83,7 +83,7 @@ const About = () => {
                                         : '"Arquitetura é a diferença entre uma marca que sobrevive e um negócio que escala."'}
                                 </p>
                             </div>
-                        </motion.div>
+                        </Motion.div>
 
                         <div>
                             <h1 className="text-sm font-black text-primary uppercase tracking-[0.4em] mb-6 italic">{language === 'en' ? aboutHero.badge : t.about.founder_badge}</h1>
@@ -329,7 +329,7 @@ const About = () => {
                     </div>
 
                     <div className="grid lg:grid-cols-2 gap-16 items-center">
-                        <motion.div
+                        <Motion.div
                             initial={{ opacity: 0, x: -30 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
@@ -361,9 +361,9 @@ const About = () => {
                                 </p>
                                 <p className="text-xs font-black text-primary mt-2 uppercase tracking-widest">— Rod Ezquerra</p>
                             </div>
-                        </motion.div>
+                        </Motion.div>
 
-                        <motion.div
+                        <Motion.div
                             initial={{ opacity: 0, x: 30 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
@@ -411,7 +411,7 @@ const About = () => {
                                             : 'Respeito e Humildade — Abraçando ganhos marginais com cuidado.',
                                     },
                                 ].map((item, i) => (
-                                    <motion.div
+                                    <Motion.div
                                         key={i}
                                         initial={{ opacity: 0, y: 15 }}
                                         whileInView={{ opacity: 1, y: 0 }}
@@ -424,10 +424,10 @@ const About = () => {
                                             <div className="text-xs font-black uppercase tracking-widest text-slate-900">{item.name}</div>
                                             <div className="text-sm text-slate-500 mt-0.5">{item.values}</div>
                                         </div>
-                                    </motion.div>
+                                    </Motion.div>
                                 ))}
                             </div>
-                        </motion.div>
+                        </Motion.div>
                     </div>
                 </div>
             </section>
@@ -456,7 +456,7 @@ const About = () => {
                             { name: 'Michael de la Cruz', role: 'Microsoft · Google · Intel', text: 'Rodrigo is a fantastic marketing professional. He is creative, data-driven and has a deep understanding of the Latin American market. A pleasure to work with.', color: 'border-orange' },
                             { name: 'Paulo de Tarso M Gomes', role: 'Dell · IBM', text: 'Rodrigo is an outstanding professional — strategic, creative, and relentlessly focused on results. His energy and marketing acumen make him an exceptional partner for any business challenge.', color: 'border-primary' }
                         ].map((t, i) => (
-                            <motion.div
+                            <Motion.div
                                 key={i}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -468,7 +468,7 @@ const About = () => {
                                     <p className="font-black text-slate-900 text-sm uppercase tracking-wider">{t.name}</p>
                                     {t.role && <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">{t.role}</p>}
                                 </div>
-                            </motion.div>
+                            </Motion.div>
                         ))}
                     </div>
 
@@ -487,7 +487,7 @@ const About = () => {
                     <div className="grid lg:grid-cols-2 gap-24 items-start">
 
                         {/* Languages Column */}
-                        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+                        <Motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
                             <h2 className="text-sm font-black text-primary uppercase tracking-[0.4em] mb-4">
                                 {language === 'en' ? 'Languages' : language === 'es' ? 'Idiomas' : 'Idiomas'}
                             </h2>
@@ -523,10 +523,10 @@ const About = () => {
                                     ? '"Hablar el idioma de alguien es la forma más rápida de ganarse su confianza." Rodrigo lleva esta creencia a cada relación con el cliente — y cada mercado.'
                                     : '"Falar o idioma de alguém é a forma mais rápida de conquistar sua confiança." Rodrigo leva essa crença para cada relacionamento com o cliente — e cada mercado.'}
                             </p>
-                        </motion.div>
+                        </Motion.div>
 
                         {/* Sports Column */}
-                        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15 }} className="space-y-8">
+                        <Motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15 }} className="space-y-8">
                             <div>
                                 <h2 className="text-sm font-black text-orange uppercase tracking-[0.4em] mb-4">
                                     {language === 'en' ? 'The Human Behind the Strategy' : language === 'es' ? 'El Humano Detrás de la Estrategia' : 'O Humano Por Trás da Estratégia'}
@@ -574,7 +574,7 @@ const About = () => {
                                     <span className="text-orange text-[10px] font-black uppercase tracking-widest">🥇 Dad: Argentine Champion</span>
                                 </div>
                             </div>
-                        </motion.div>
+                        </Motion.div>
                     </div>
                 </div>
             </section>
@@ -608,7 +608,7 @@ const About = () => {
                                 { flag: '🇲🇽', place: 'Tulum, Mexico', detail: language === 'en' ? 'CMO at Azulik — delivering 15X ROI and building luxury hospitality marketing from the ground up.' : language === 'es' ? 'CMO en Azulik — logrando 15X ROI y construyendo marketing de hospitalidad de lujo desde cero.' : 'CMO na Azulik — entregando 15X ROI e construindo marketing de hospitalidade de luxo do zero.', accent: 'bg-orange' },
                                 { flag: '🇧🇷', place: language === 'en' ? 'Brasília, Brazil' : language === 'es' ? 'Brasília, Brasil' : 'Brasília, Brasil', detail: language === 'en' ? 'Settled with wife Raquel Ferreira and dedicated full focus to building 4U Pact — the synthesis of 20+ years of Fortune 500 precision and founder energy.' : language === 'es' ? 'Se estableció con su esposa Raquel Ferreira y dedicó todo su enfoque a construir 4U Pact — la síntesis de 20+ años de precisión Fortune 500 y energía de fundador.' : 'Estabeleceu-se com sua esposa Raquel Ferreira e dedicou foco total à construção da 4U Pact — a síntese de 20+ anos de precisão Fortune 500 e energia de fundador.', accent: 'bg-primary' },
                             ].map((stop, i) => (
-                                <motion.div
+                                <Motion.div
                                     key={i}
                                     initial={{ opacity: 0, x: -20 }}
                                     whileInView={{ opacity: 1, x: 0 }}
@@ -623,7 +623,7 @@ const About = () => {
                                             <p className="text-slate-500 font-bold italic leading-relaxed mt-1">{stop.detail}</p>
                                         </div>
                                     </div>
-                                </motion.div>
+                                </Motion.div>
                             ))}
                         </div>
 

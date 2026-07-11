@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { Shield, Mail, Globe, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -235,7 +235,7 @@ const Privacy = () => {
             {/* Hero */}
             <section className="pt-40 pb-20 bg-slate-950">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <motion.div
+                    <Motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
@@ -248,7 +248,7 @@ const Privacy = () => {
                             {c.title}
                         </h1>
                         <p className="text-slate-500 text-sm font-mono">{c.updated}</p>
-                    </motion.div>
+                    </Motion.div>
                 </div>
             </section>
 
@@ -263,7 +263,7 @@ const Privacy = () => {
             <section className="py-20 bg-white">
                 <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
                     {c.sections.map((section, i) => (
-                        <motion.div
+                        <Motion.div
                             key={i}
                             initial={{ opacity: 0, y: 16 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -277,7 +277,7 @@ const Privacy = () => {
                             <div className="text-slate-600 leading-relaxed whitespace-pre-line text-sm">
                                 {section.body}
                             </div>
-                        </motion.div>
+                        </Motion.div>
                     ))}
                 </div>
             </section>

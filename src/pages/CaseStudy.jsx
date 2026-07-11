@@ -2,12 +2,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Share2, AlertCircle, CheckCircle2, Zap, Calendar, TrendingUp, X as LucideX, ExternalLink } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 // --- PHOTO CAROUSEL ---
-const PhotoCarousel = ({ images, title }) => {
+const PhotoCarousel = ({ images }) => {
     const [current, setCurrent] = useState(0);
     const [direction, setDirection] = useState(1);
 
@@ -35,7 +35,7 @@ const PhotoCarousel = ({ images, title }) => {
         <div className="mb-20 max-w-4xl mx-auto px-6">
             <div className="relative rounded-[3rem] overflow-hidden aspect-[16/9] bg-slate-900 shadow-2xl shadow-primary/10">
                 <AnimatePresence custom={direction} mode="popLayout">
-                    <motion.img
+                    <Motion.img
                         key={current}
                         src={images[current].src}
                         alt={images[current].caption}
@@ -859,7 +859,7 @@ const CaseStudy = () => {
                         </div>
                         <div className="flex items-end justify-between h-64 gap-4">
                             {[20, 35, 45, 60, 80, 100].map((h, i) => (
-                                <motion.div
+                                <Motion.div
                                     key={i}
                                     initial={{ height: 0 }}
                                     whileInView={{ height: `${h}%` }}

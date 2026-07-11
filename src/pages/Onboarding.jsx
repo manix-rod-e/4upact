@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { Check, ChevronRight, ArrowRight } from 'lucide-react';
 import { audioCues } from '../lib/audio';
 
 const TOTAL_STEPS = 5;
 
 const Onboarding = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0); 
   const [answers, setAnswers] = useState({});
   const [contactInfo, setContactInfo] = useState({ firstName: '', lastName: '', company: '', whatsapp: '', email: '' });
@@ -33,19 +33,19 @@ const Onboarding = () => {
 
   if (submitted) {
     return (
-      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10">
+      <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-10">
         <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-teal/10 border border-teal/20 mb-8 mx-auto">
           <Check className="w-12 h-12 text-teal" />
         </div>
         <h3 className="text-4xl font-black text-slate-800 mb-4 tracking-tighter">Onboarding Complete</h3>
         <p className="text-slate-500 text-lg">Your data has been securely synced. Welcome to 4UPact.</p>
-      </motion.div>
+      </Motion.div>
     );
   }
 
   if (currentStep === 0) {
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-10 flex flex-col items-center">
+      <Motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-10 flex flex-col items-center">
         <h2 className="text-3xl font-black text-slate-800 tracking-tight mb-8">Ready to systematize your growth?</h2>
         <button
           onClick={() => { audioCues.playZenClick(); setCurrentStep(1); }}
@@ -54,7 +54,7 @@ const Onboarding = () => {
           {t('cta_start')}
           <ChevronRight className="w-5 h-5" />
         </button>
-      </motion.div>
+      </Motion.div>
     );
   }
 
@@ -78,7 +78,7 @@ const Onboarding = () => {
           </span>
         </div>
         <div className="h-2 bg-slate-200/50 rounded-full overflow-hidden">
-          <motion.div
+          <Motion.div
             className="h-full bg-gradient-to-r from-teal to-orange rounded-full"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
@@ -89,7 +89,7 @@ const Onboarding = () => {
 
       <AnimatePresence mode="wait">
         {currentStep >= 1 && currentStep <= 4 && (
-          <motion.div
+          <Motion.div
             key={`step-${currentStep}`}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -114,11 +114,11 @@ const Onboarding = () => {
                 </button>
               ))}
             </div>
-          </motion.div>
+          </Motion.div>
         )}
 
         {currentStep === 5 && (
-          <motion.div
+          <Motion.div
             key="step-5"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -179,7 +179,7 @@ const Onboarding = () => {
                 <ArrowRight className="w-5 h-5" />
               </button>
             </form>
-          </motion.div>
+          </Motion.div>
         )}
       </AnimatePresence>
     </div>

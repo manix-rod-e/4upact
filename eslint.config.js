@@ -26,4 +26,11 @@ export default defineConfig([
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
+  {
+    files: ['src/context/*Context.jsx'],
+    rules: {
+      // Context modules intentionally co-locate providers, hooks, and constants.
+      'react-refresh/only-export-components': 'off',
+    },
+  },
 ])

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { Fingerprint, ArrowRight, Loader2 } from 'lucide-react';
 import { audioCues } from '../lib/audio';
 // import { auth } from '../lib/firebase'; // Uncomment when Firebase is configured
@@ -33,7 +33,7 @@ const Login = () => {
   };
 
   return (
-    <motion.div 
+    <Motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -65,7 +65,7 @@ const Login = () => {
           </div>
         </div>
       ) : (
-        <motion.form 
+        <Motion.form
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           onSubmit={handlePasswordLogin}
@@ -98,7 +98,7 @@ const Login = () => {
               Back to Passkey
             </button>
           </div>
-        </motion.form>
+        </Motion.form>
       )}
 
       {/* Language Toggle */}
@@ -113,7 +113,7 @@ const Login = () => {
             </button>
         ))}
       </div>
-    </motion.div>
+    </Motion.div>
   );
 };
 

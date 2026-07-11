@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { ArrowRight, Plane } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -44,7 +44,7 @@ const Marketplace = () => {
           </h3>
         </div>
 
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -65,7 +65,7 @@ const Marketplace = () => {
           >
             {t.cta} <ArrowRight size={16} />
           </a>
-        </motion.div>
+        </Motion.div>
       </div>
     </section>
   );

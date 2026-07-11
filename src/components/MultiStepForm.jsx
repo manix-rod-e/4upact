@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Check, ChevronRight, Gauge, Loader2 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -259,7 +259,7 @@ const MultiStepForm = () => {
 
   if (submitted) {
     return (
-      <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-16">
+      <Motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-16">
         <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-teal/20 border border-teal/30 mb-8">
           <Check className="w-10 h-10 text-teal" />
         </div>
@@ -269,13 +269,13 @@ const MultiStepForm = () => {
           {content.book}
           <ArrowRight className="w-4 h-4" />
         </a>
-      </motion.div>
+      </Motion.div>
     );
   }
 
   if (currentStep === 0) {
     return (
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
+      <Motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
         <div className="mx-auto mb-8 flex w-36 h-36 items-center justify-center rounded-full bg-white/10 border border-white/10 overflow-hidden">
           <img src="/assets/bip-robot.png" alt="BIP" className="w-full h-full object-cover" />
         </div>
@@ -283,7 +283,7 @@ const MultiStepForm = () => {
           {content.start}
           <ChevronRight className="w-5 h-5" />
         </button>
-      </motion.div>
+      </Motion.div>
     );
   }
 
@@ -295,7 +295,7 @@ const MultiStepForm = () => {
           <span className="text-[10px] font-black uppercase tracking-widest text-teal">{score}%</span>
         </div>
         <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
-          <motion.div className="h-full bg-gradient-to-r from-teal via-orange to-red-500 rounded-full" animate={{ width: `${Math.max(score, progress / 2)}%` }} transition={{ duration: 0.45, ease: 'easeOut' }} />
+          <Motion.div className="h-full bg-gradient-to-r from-teal via-orange to-red-500 rounded-full" animate={{ width: `${Math.max(score, progress / 2)}%` }} transition={{ duration: 0.45, ease: 'easeOut' }} />
         </div>
       </div>
 
@@ -311,7 +311,7 @@ const MultiStepForm = () => {
 
         <AnimatePresence mode="wait">
           {currentStep >= 1 && currentStep <= ANSWER_STEPS && (
-            <motion.div key={`step-${currentStep}`} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.25 }}>
+            <Motion.div key={`step-${currentStep}`} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.25 }}>
               <h3 className="text-2xl md:text-3xl font-black text-white mb-8 tracking-tighter">{content.steps[currentStep - 1].label}</h3>
               <div className="grid gap-3">
                 {content.steps[currentStep - 1].options.map((option) => (
@@ -320,11 +320,11 @@ const MultiStepForm = () => {
                   </button>
                 ))}
               </div>
-            </motion.div>
+            </Motion.div>
           )}
 
           {currentStep === 5 && (
-            <motion.div key="score" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.25 }}>
+            <Motion.div key="score" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.25 }}>
               <p className="text-[10px] font-black uppercase tracking-[0.35em] text-orange mb-4">{score}% leak score</p>
               <h3 className="text-3xl md:text-5xl font-black text-white mb-4 tracking-tighter">{result.title}</h3>
               <p className="text-slate-300 text-lg font-bold leading-relaxed mb-4">{result.recommendation}</p>
@@ -333,11 +333,11 @@ const MultiStepForm = () => {
                 {content.next}
                 <ArrowRight className="w-4 h-4" />
               </button>
-            </motion.div>
+            </Motion.div>
           )}
 
           {currentStep === CONTACT_STEP && (
-            <motion.div key="contact" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.25 }}>
+            <Motion.div key="contact" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.25 }}>
               <h3 className="text-2xl md:text-3xl font-black text-white mb-8 tracking-tighter">{content.contact_title}</h3>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
@@ -352,7 +352,7 @@ const MultiStepForm = () => {
                   {content.submit}
                 </button>
               </form>
-            </motion.div>
+            </Motion.div>
           )}
         </AnimatePresence>
       </div>

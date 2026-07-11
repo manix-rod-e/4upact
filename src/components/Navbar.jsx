@@ -61,22 +61,19 @@ const ARFlag = () => (
 );
 
 const Navbar = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [menuOpenedAt, setMenuOpenedAt] = useState(null);
     const [scrolled, setScrolled] = useState(false);
     const { language, t } = useLanguage();
     const navigate = useNavigate();
     const location = useLocation();
+    const isMenuOpen = menuOpenedAt === location.pathname;
+    const setIsMenuOpen = (open) => setMenuOpenedAt(open ? location.pathname : null);
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
-
-    // Close menu on route change
-    useEffect(() => {
-        setIsMenuOpen(false);
-    }, [location.pathname]);
 
     const links = [
         { path: `/${language}/services`, label: t.nav.services },

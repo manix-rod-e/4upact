@@ -1,7 +1,7 @@
 
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { ArrowRight, Target, Layout, BarChart3, Quote, Briefcase, Star, Heart, Sparkles, Palette } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -44,7 +44,7 @@ const experience = [
 ];
 
 const Home = () => {
-    const { t, language } = useLanguage();
+    const { language } = useLanguage();
 
     // ─── Trilingual content ──────────────────────────────────────────────────
     const hero = {
@@ -188,7 +188,7 @@ const Home = () => {
                             { icon: Layout, num: p.p2_num, title: p.p2_title, desc: p.p2_desc },
                             { icon: BarChart3, num: p.p3_num, title: p.p3_title, desc: p.p3_desc },
                         ].map((item, i) => (
-                            <motion.div
+                            <Motion.div
                                 key={i}
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -205,7 +205,7 @@ const Home = () => {
                                 </div>
                                 <h4 className="text-xl lg:text-2xl font-black text-slate-900 mb-4 tracking-tighter leading-tight">{item.title}</h4>
                                 <p className="text-slate-500 leading-relaxed">{item.desc}</p>
-                            </motion.div>
+                            </Motion.div>
                         ))}
                     </div>
                 </div>
@@ -224,7 +224,7 @@ const Home = () => {
                     </div>
                     <div className="grid md:grid-cols-3 gap-8">
                         {testimonials.map((item, i) => (
-                            <motion.div
+                            <Motion.div
                                 key={i}
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -243,7 +243,7 @@ const Home = () => {
                                         <div className="text-[11px] font-bold text-slate-400">{item.role}</div>
                                     </div>
                                 </div>
-                            </motion.div>
+                            </Motion.div>
                         ))}
                     </div>
                     <div className="text-center mt-12">
@@ -293,7 +293,7 @@ const Home = () => {
                     </div>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {experience.map((exp, i) => (
-                            <motion.div
+                            <Motion.div
                                 key={i}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -310,7 +310,7 @@ const Home = () => {
                                 )}
                                 <div className="text-sm font-bold text-slate-600 mb-1">{exp.role}</div>
                                 <div className="text-[10px] font-black uppercase tracking-widest text-teal">{exp.years}</div>
-                            </motion.div>
+                            </Motion.div>
                         ))}
                     </div>
                 </div>
