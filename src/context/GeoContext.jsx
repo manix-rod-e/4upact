@@ -49,7 +49,10 @@ export const GeoProvider = ({ children }) => {
 
     // Currency: geo-detected by default; user can override via toggle
     const [currencyOverride, setCurrencyOverride] = useState(null); // null = use geo
-    const isBRL = currencyOverride !== null ? currencyOverride === 'BRL' : geo.isBrazil;
+    const pathLocale = window.location.pathname.split('/')[1];
+    const isBRL = currencyOverride !== null
+        ? currencyOverride === 'BRL'
+        : pathLocale === 'pt' || geo.isBrazil;
     const activeCurrency = isBRL ? 'BRL' : 'USD';
 
     /* ══════════════════════════════════════════════════════════════════════════
