@@ -216,21 +216,19 @@ const AccessibilityToolbar = () => {
     const c = copy[language] || copy.en;
 
     const [open, setOpen] = useState(false);
-    const [settings, setSettings] = useState(defaults);
+    const [settings, setSettings] = useState(readStored);
 
     useEffect(() => {
-        const stored = readStored();
-        setSettings(stored);
-        applySettings(stored);
-    }, []);
+        applySettings(settings);
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+        } catch {
+            // Storage can be unavailable in privacy-restricted browsers.
+        }
+    }, [settings]);
 
     const update = useCallback((patch) => {
-        setSettings(prev => {
-            const next = { ...prev, ...patch };
-            applySettings(next);
-            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {}
-            return next;
-        });
+        setSettings(prev => ({ ...prev, ...patch }));
     }, []);
 
     const reset = () => update({ ...defaults });

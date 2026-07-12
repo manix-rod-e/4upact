@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion as Motion, useScroll, useTransform } from 'framer-motion';
 
 const TOTAL_FRAMES = 111;
 const IDLE_FRAMES = 20;   // first 20 frames loop gently when page is idle
@@ -119,12 +119,12 @@ const ScrollyHero = ({ h }) => {
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 w-full items-center">
 
             {/* ── LEFT: copy ─────────────────────────────────── */}
-            <motion.div className="max-w-xl" style={{ y: textY }}>
+            <Motion.div className="max-w-xl" style={{ y: textY }}>
               <p className="text-[11px] font-black uppercase tracking-[0.35em] text-primary mb-5 pt-20 lg:pt-0">
                 {badge}
               </p>
 
-              <motion.h1
+              <Motion.h1
                 className="font-display text-5xl sm:text-6xl lg:text-7xl xl:text-[88px] leading-[0.95] font-black tracking-tighter"
                 initial="hidden"
                 animate="visible"
@@ -132,20 +132,20 @@ const ScrollyHero = ({ h }) => {
               >
                 <div className="text-slate-950">
                   {line1.split(' ').map((w, i) => (
-                    <motion.span key={i} variants={wordAnim} className="inline-block mr-[0.2em]" style={{ transformOrigin: 'bottom' }}>{w}</motion.span>
+                    <Motion.span key={i} variants={wordAnim} className="inline-block mr-[0.2em]" style={{ transformOrigin: 'bottom' }}>{w}</Motion.span>
                   ))}
                 </div>
                 <div className="text-primary italic">
                   {line2.split(' ').map((w, i) => (
-                    <motion.span key={i} variants={wordAnim} className="inline-block mr-[0.2em]" style={{ transformOrigin: 'bottom' }}>{w}</motion.span>
+                    <Motion.span key={i} variants={wordAnim} className="inline-block mr-[0.2em]" style={{ transformOrigin: 'bottom' }}>{w}</Motion.span>
                   ))}
                 </div>
                 <div className="text-teal italic">
                   {line3.split(' ').map((w, i) => (
-                    <motion.span key={i} variants={wordAnim} className="inline-block mr-[0.2em]" style={{ transformOrigin: 'bottom' }}>{w}</motion.span>
+                    <Motion.span key={i} variants={wordAnim} className="inline-block mr-[0.2em]" style={{ transformOrigin: 'bottom' }}>{w}</Motion.span>
                   ))}
                 </div>
-              </motion.h1>
+              </Motion.h1>
 
               <p className="mt-7 text-lg text-slate-600 font-bold leading-relaxed">
                 {subtitle}
@@ -159,7 +159,7 @@ const ScrollyHero = ({ h }) => {
                   {cta}
                 </a>
               </div>
-            </motion.div>
+            </Motion.div>
 
             {/* ── RIGHT: canvas ────────────────────────────────── */}
             <div className="flex justify-center lg:justify-end items-center">

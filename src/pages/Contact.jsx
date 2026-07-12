@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { MessageCircle, Mail, Calendar, ArrowRight, Clock, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -143,7 +143,7 @@ const Contact = () => {
                     <div className="grid lg:grid-cols-2 gap-16 items-start">
 
                         {/* Left Column — Contact Info */}
-                        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
+                        <Motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
                             <span className="inline-block text-[10px] font-black uppercase tracking-[0.4em] text-teal mb-6">
                                 {c.badge}
                             </span>
@@ -207,10 +207,10 @@ const Contact = () => {
                                     <div className="text-[9px] font-black uppercase tracking-widest text-slate-500">{c.stat2_label}</div>
                                 </div>
                             </div>
-                        </motion.div>
+                        </Motion.div>
 
                         {/* Right Column — Calendar (dark glass-panel) */}
-                        <motion.div
+                        <Motion.div
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.6, delay: 0.2 }}
@@ -305,7 +305,7 @@ const Contact = () => {
                                     </label>
                                 </div>
                             </div>
-                        </motion.div>
+                        </Motion.div>
                     </div>
                 </div>
             </section>

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { Home as HomeIcon, Briefcase, GraduationCap, Users, ArrowRight, TrendingUp, Target, Stethoscope, Palmtree, ShoppingBag, Smartphone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -144,7 +144,7 @@ const Industries = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
                         {industries.map((item, idx) => (
-                            <motion.div
+                            <Motion.div
                                 key={idx}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -195,7 +195,7 @@ const Industries = () => {
                                 <Link to={`/${language}/contact`} className="btn-cta w-full text-center text-xs py-4">
                                     {language === 'en' ? 'Build My Architecture' : language === 'pt' ? 'Construir Minha Arquitetura' : 'Construir Mi Arquitectura'} <ArrowRight size={14} />
                                 </Link>
-                            </motion.div>
+                            </Motion.div>
                         ))}
                     </div>
 

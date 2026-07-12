@@ -17,14 +17,6 @@ import { useLanguage } from '../context/LanguageContext';
 const CONSENT_KEY = '4upact_cookie_consent';
 const CONSENT_EXPIRY_DAYS = 365;
 
-const defaultConsent = {
-    necessary: true,       // always true — cannot be declined
-    analytics: false,
-    marketing: false,
-    timestamp: null,
-    version: '1.0',
-};
-
 // Read stored consent; return null if absent or expired
 const readStoredConsent = () => {
     try {
@@ -141,13 +133,11 @@ const CookieConsentBanner = () => {
     const [visible, setVisible] = useState(false);
     const [expanded, setExpanded] = useState(false);
     const [prefs, setPrefs] = useState({ analytics: false, marketing: false });
-    const [mounted, setMounted] = useState(false);
 
     // Derive current lang from URL for Privacy link
     const lang = location.pathname.split('/')[1] || 'pt';
 
     useEffect(() => {
-        setMounted(true);
         const stored = readStoredConsent();
         if (!stored) {
             // Small delay so page renders first
@@ -171,7 +161,7 @@ const CookieConsentBanner = () => {
         setVisible(false);
     };
 
-    if (!mounted || !visible) return null;
+    if (!visible) return null;
 
     return (
         <>

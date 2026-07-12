@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { Database, TrendingUp, Zap, Workflow, Layers, CheckCircle2, Bot, Target, Smartphone, BarChart3, ChevronRight, Share2, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -56,7 +56,7 @@ const CRMOffer = () => {
                 <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[160px] -z-0" />
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="grid lg:grid-cols-2 gap-20 items-center">
-                        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+                        <Motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
                             <h1 className="text-sm font-black text-teal uppercase tracking-[0.4em] mb-6 italic">{t.crm.badge}</h1>
                             <h2 className="font-display text-6xl md:text-[100px] font-black tracking-tighter leading-[0.85] mb-10">
                                 {t.crm.title.split(' ')[0]} <br /> <span className="text-primary italic">{t.crm.title.split(' ')[1]}</span> <br /> {t.crm.title.split(' ')[2]}
@@ -67,10 +67,10 @@ const CRMOffer = () => {
                             <Link to={`/${language}/contact`} className="btn-cta bg-orange text-slate-950">
                                 {t.crm.cta} <Zap size={16} fill="white" />
                             </Link>
-                        </motion.div>
+                        </Motion.div>
 
                         <div className="relative">
-                            <motion.div
+                            <Motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 className="bg-slate-900/50 backdrop-blur-3xl border border-white/10 rounded-[3rem] p-12 shadow-3xl overflow-hidden"
@@ -95,7 +95,7 @@ const CRMOffer = () => {
                                                 <span className="text-white">{stat.val}</span>
                                             </div>
                                             <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
-                                                <motion.div
+                                                <Motion.div
                                                     initial={{ width: 0 }}
                                                     whileInView={{ width: stat.w }}
                                                     transition={{ delay: 0.5 + i * 0.1, duration: 1.5 }}
@@ -105,7 +105,7 @@ const CRMOffer = () => {
                                         </div>
                                     ))}
                                 </div>
-                            </motion.div>
+                            </Motion.div>
                         </div>
                     </div>
                 </div>
@@ -121,7 +121,7 @@ const CRMOffer = () => {
 
                     <div className="grid md:grid-cols-2 gap-10">
                         {verticalSnapshots.map((item, i) => (
-                            <motion.div
+                            <Motion.div
                                 key={i}
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -159,7 +159,7 @@ const CRMOffer = () => {
                                 <p className="text-sm font-black uppercase tracking-widest text-primary group-hover:text-orange transition-colors">
                                     Impact: {item.impact}
                                 </p>
-                            </motion.div>
+                            </Motion.div>
                         ))}
                     </div>
                 </div>

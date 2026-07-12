@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { Star, ArrowRight, TrendingUp, ExternalLink, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
@@ -16,7 +16,7 @@ const AzulikSlideshow = ({ images }) => {
     return (
         <div className="w-full h-full relative">
             <AnimatePresence mode="wait">
-                <motion.img
+                <Motion.img
                     key={current}
                     src={images[current]}
                     alt="Azulik Tulum"
@@ -81,14 +81,6 @@ const Portfolio = () => {
         'from-[#1c1c1c] via-[#2d2d2d]/70 to-[#F7941D]',    // Apartments — dark/orange
         'from-[#1a0a2a] via-[#5E3B6F]/70 to-[#F7941D]',    // emdrc — purple/orange
     ];
-
-    const azulikSlides = [
-        '/assets/azulik/aerial-nest.jpg',
-        '/assets/azulik/rooftop-sunset.jpg',
-        '/assets/azulik/night-jungle.jpg',
-        '/assets/azulik/interior-suite.jpg',
-    ];
-
 
     const projects = [
         {
@@ -282,7 +274,7 @@ const Portfolio = () => {
 
                     <div className="grid lg:grid-cols-2 gap-20">
                         {projects.map((project, idx) => (
-                            <motion.div
+                            <Motion.div
                                 key={project.id}
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -359,7 +351,7 @@ const Portfolio = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </motion.div>
+                            </Motion.div>
                         ))}
                     </div>
                 </div>

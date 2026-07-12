@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import {
     Check, X, ArrowRight, Shield, Zap, Star, Crown, Building2,
     ChevronDown, ChevronUp,
@@ -470,7 +470,7 @@ const FaqItem = ({ q, a, isOpen, onToggle }) => (
         </button>
         <AnimatePresence>
             {isOpen && (
-                <motion.div
+                <Motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
@@ -478,7 +478,7 @@ const FaqItem = ({ q, a, isOpen, onToggle }) => (
                     className="overflow-hidden"
                 >
                     <p className="px-6 pb-5 text-sm text-slate-400 font-bold leading-relaxed">{a}</p>
-                </motion.div>
+                </Motion.div>
             )}
         </AnimatePresence>
     </div>
@@ -612,7 +612,7 @@ const Pricing = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
                     {/* ── Header ──────────────────────────────────────────────── */}
-                    <motion.div
+                    <Motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="text-center mb-16"
@@ -629,7 +629,7 @@ const Pricing = () => {
                         <p className="text-lg text-slate-400 font-bold max-w-2xl mx-auto">
                             {c.subtitle}
                         </p>
-                    </motion.div>
+                    </Motion.div>
 
                     {/* ── Pricing Cards Grid ───────────────────────────────────── */}
                     <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-5 mb-16">
@@ -637,7 +637,7 @@ const Pricing = () => {
                             const Icon = tier.style.icon;
                             const isVelocity = tier.style.elevated;
                             return (
-                                <motion.div
+                                <Motion.div
                                     key={tier.key}
                                     initial={{ opacity: 0, y: 30 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -735,7 +735,7 @@ const Pricing = () => {
                                         {tier.cta}
                                         <ArrowRight size={13} />
                                     </a>
-                                </motion.div>
+                                </Motion.div>
                             );
                         })}
                     </div>
@@ -754,7 +754,7 @@ const Pricing = () => {
                     {/* ── Comparison Table ──────────────────────────────────────── */}
                     <AnimatePresence>
                         {showComparison && (
-                            <motion.div
+                            <Motion.div
                                 initial={{ height: 0, opacity: 0 }}
                                 animate={{ height: 'auto', opacity: 1 }}
                                 exit={{ height: 0, opacity: 0 }}
@@ -801,12 +801,12 @@ const Pricing = () => {
                                         </tbody>
                                     </table>
                                 </div>
-                            </motion.div>
+                            </Motion.div>
                         )}
                     </AnimatePresence>
 
                     {/* ── Guarantee ─────────────────────────────────────────────── */}
-                    <motion.div
+                    <Motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -823,7 +823,7 @@ const Pricing = () => {
                                 {c.guaranteeDesc}
                             </p>
                         </div>
-                    </motion.div>
+                    </Motion.div>
 
                     {/* ── FAQ ───────────────────────────────────────────────────── */}
                     <div className="max-w-3xl mx-auto mb-10">
