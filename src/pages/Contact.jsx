@@ -5,17 +5,17 @@ import { motion as Motion } from 'framer-motion';
 import { MessageCircle, Mail, Calendar, ArrowRight, Clock, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import { ELLEN_WHATSAPP_E164 } from '../config/contact';
 
 // ─── WhatsApp Tracking Link Builder ───────────────────────────────────────────
 const buildWhatsAppLink = (language, source = 'CONTACT') => {
-    const phone = '16465311313';
     const messages = {
         en: `[EN][${source}] Hi 4UPact! I found you on your website and I'd like to book a free strategy call. English speaker here. 🚀`,
         pt: `[PT][${source}] Olá 4UPact! Encontrei vocês no site e gostaria de agendar uma call de estratégia gratuita. 🚀`,
         es: `[ES][${source}] ¡Hola 4UPact! Los encontré en su sitio web y me gustaría agendar una call de estrategia gratuita. 🚀`,
     };
     const text = encodeURIComponent(messages[language] || messages.en);
-    return `https://wa.me/${phone}?text=${text}`;
+    return `https://wa.me/${ELLEN_WHATSAPP_E164}?text=${text}`;
 };
 
 const GHL_CALENDAR_ID = 'RlsPDFRRKlSKcmJtRvZw_1771879473718';

@@ -3,6 +3,7 @@ import React from 'react';
 import { Linkedin, MessageCircle, Mail, Youtube } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import { ELLEN_WHATSAPP_DISPLAY, ELLEN_WHATSAPP_E164 } from '../config/contact';
 
 // --- Meta (Instagram/Facebook) Icon ---
 const MetaIcon = () => (
@@ -46,7 +47,7 @@ const Footer = () => {
     };
 
     const socialLinks = [
-        { icon: WhatsAppIcon, label: 'WhatsApp', href: 'https://wa.me/16465311313' },
+        { icon: WhatsAppIcon, label: 'WhatsApp', href: `https://wa.me/${ELLEN_WHATSAPP_E164}` },
         { icon: Mail, label: 'Messages', href: 'mailto:sales@4upact.com' },
         { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/company/4upact' },
         { icon: MetaIcon, label: 'Meta (IG/FB)', href: 'https://instagram.com/4upact' },
@@ -131,10 +132,10 @@ const Footer = () => {
                             <a
                                 href={
                                     language === 'pt'
-                                        ? 'https://wa.me/16465311313?text=Ol%C3%A1%204U%20Pact!%20Gostaria%20de%20saber%20mais%20sobre%20os%20servi%C3%A7os%20de%20automa%C3%A7%C3%A3o%20e%20CRM.'
+                                        ? `https://wa.me/${ELLEN_WHATSAPP_E164}?text=Ol%C3%A1%204U%20Pact!%20Gostaria%20de%20saber%20mais%20sobre%20os%20servi%C3%A7os%20de%20automa%C3%A7%C3%A3o%20e%20CRM.`
                                         : language === 'es'
-                                            ? 'https://wa.me/16465311313?text=Hola%204U%20Pact!%20Me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20sus%20servicios%20de%20automatizaci%C3%B3n%20y%20CRM.'
-                                            : 'https://wa.me/16465311313?text=Hi%204U%20Pact!%20I%27d%20like%20to%20learn%20more%20about%20your%20automation%20and%20CRM%20services.'
+                                            ? `https://wa.me/${ELLEN_WHATSAPP_E164}?text=Hola%204U%20Pact!%20Me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20sus%20servicios%20de%20automatizaci%C3%B3n%20y%20CRM.`
+                                            : `https://wa.me/${ELLEN_WHATSAPP_E164}?text=Hi%204U%20Pact!%20I%27d%20like%20to%20learn%20more%20about%20your%20automation%20and%20CRM%20services.`
                                 }
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -150,10 +151,10 @@ const Footer = () => {
                             <a
                                 href={
                                     language === 'pt'
-                                        ? 'sms:+16465311313?body=Ol%C3%A1%204U%20Pact!%20Gostaria%20de%20saber%20mais%20sobre%20automa%C3%A7%C3%A3o%20e%20CRM.'
+                                        ? `sms:+${ELLEN_WHATSAPP_E164}?body=Ol%C3%A1%204U%20Pact!%20Gostaria%20de%20saber%20mais%20sobre%20automa%C3%A7%C3%A3o%20e%20CRM.`
                                         : language === 'es'
-                                            ? 'sms:+16465311313?body=Hola%204U%20Pact!%20Quiero%20saber%20m%C3%A1s%20sobre%20automatizaci%C3%B3n%20y%20CRM.'
-                                            : 'sms:+16465311313?body=Hi%204U%20Pact!%20I%27d%20like%20to%20learn%20more%20about%20your%20CRM%20services.'
+                                            ? `sms:+${ELLEN_WHATSAPP_E164}?body=Hola%204U%20Pact!%20Quiero%20saber%20m%C3%A1s%20sobre%20automatizaci%C3%B3n%20y%20CRM.`
+                                            : `sms:+${ELLEN_WHATSAPP_E164}?body=Hi%204U%20Pact!%20I%27d%20like%20to%20learn%20more%20about%20your%20CRM%20services.`
                                 }
                                 className="flex items-center gap-3 text-sm font-black text-white hover:text-teal transition-all group"
                             >
@@ -201,7 +202,7 @@ const Footer = () => {
 
                 {/* Line 1 — Copyright + Legal identity (Marco Civil da Internet) */}
                 <div className="mb-2 text-[8px] font-mono text-slate-600 text-right truncate">
-                    © 2026 4U Pact Ltda&nbsp;-&nbsp;CNPJ&nbsp;51.336.978/0001-60&nbsp;·&nbsp;Rua Itapiru 572, São Paulo, SP, 04143-010, Brazil&nbsp;·&nbsp;<a href="tel:+16465311313" className="hover:text-teal transition-colors">+1 (646) 531-1313</a>
+                    © 2026 4U Pact Ltda&nbsp;-&nbsp;CNPJ&nbsp;51.336.978/0001-60&nbsp;·&nbsp;Rua Itapiru 572, São Paulo, SP, 04143-010, Brazil&nbsp;·&nbsp;<a href={`tel:+${ELLEN_WHATSAPP_E164}`} className="hover:text-teal transition-colors">{ELLEN_WHATSAPP_DISPLAY}</a>
                 </div>
 
                 {/* Line 2 — Condensed legal links */}

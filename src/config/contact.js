@@ -1,0 +1,2 @@
+export const ELLEN_WHATSAPP_E164 = '15559261279';
+export const ELLEN_WHATSAPP_DISPLAY = '+1 (555) 926-1279';
