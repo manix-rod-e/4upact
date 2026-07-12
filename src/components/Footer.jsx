@@ -3,7 +3,7 @@ import React from 'react';
 import { Linkedin, MessageCircle, Mail, Youtube } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { ELLEN_WHATSAPP_DISPLAY, ELLEN_WHATSAPP_E164 } from '../config/contact';
+import { ELLEN_WHATSAPP_E164, ROD_ESCALATION_DISPLAY, ROD_ESCALATION_E164 } from '../config/contact';
 
 // --- Meta (Instagram/Facebook) Icon ---
 const MetaIcon = () => (
@@ -202,7 +202,7 @@ const Footer = () => {
 
                 {/* Line 1 — Copyright + Legal identity (Marco Civil da Internet) */}
                 <div className="mb-2 text-[8px] font-mono text-slate-600 text-right truncate">
-                    © 2026 4U Pact Ltda&nbsp;-&nbsp;CNPJ&nbsp;51.336.978/0001-60&nbsp;·&nbsp;Rua Itapiru 572, São Paulo, SP, 04143-010, Brazil&nbsp;·&nbsp;<a href={`tel:+${ELLEN_WHATSAPP_E164}`} className="hover:text-teal transition-colors">{ELLEN_WHATSAPP_DISPLAY}</a>
+                    © 2026 4U Pact Ltda&nbsp;-&nbsp;CNPJ&nbsp;51.336.978/0001-60&nbsp;·&nbsp;Rua Itapiru 572, São Paulo, SP, 04143-010, Brazil&nbsp;·&nbsp;{language === 'en' ? 'Direct escalation' : language === 'pt' ? 'Escalação direta' : 'Escalación directa'}:&nbsp;<a href={`tel:+${ROD_ESCALATION_E164}`} className="hover:text-teal transition-colors">{ROD_ESCALATION_DISPLAY}</a>
                 </div>
 
                 {/* Line 2 — Condensed legal links */}

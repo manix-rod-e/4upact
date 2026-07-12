@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion as Motion } from 'framer-motion';
-import { MessageCircle, Mail, Calendar, ArrowRight, Clock, Users } from 'lucide-react';
+import { MessageCircle, Mail, Phone, Calendar, ArrowRight, Clock, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { ELLEN_WHATSAPP_E164 } from '../config/contact';
+import { ELLEN_WHATSAPP_E164, ROD_ESCALATION_DISPLAY, ROD_ESCALATION_E164 } from '../config/contact';
 
 // ─── WhatsApp Tracking Link Builder ───────────────────────────────────────────
 const buildWhatsAppLink = (language, source = 'CONTACT') => {
@@ -29,6 +29,8 @@ const contactContent = {
         subtitle: '30-minute audit. No pitch. Just answers about your revenue system.',
         wa_label: 'Fastest Response',
         wa_title: 'WhatsApp VIP Support',
+        direct_label: 'Direct Escalation',
+        direct_title: `Call Rod · ${ROD_ESCALATION_DISPLAY}`,
         email_label: 'Detailed Inquiry',
         email_title: 'info@4upact.com',
         stat1_value: '15 min',
@@ -54,6 +56,8 @@ const contactContent = {
         subtitle: 'Escolha o canal de preferência. Nossa equipe executiva responde em menos de 15 minutos (horário comercial).',
         wa_label: 'Resposta Mais Rápida',
         wa_title: 'WhatsApp VIP Support',
+        direct_label: 'Escalação Direta',
+        direct_title: `Ligue para Rod · ${ROD_ESCALATION_DISPLAY}`,
         email_label: 'Consulta Detalhada',
         email_title: 'sales@4upact.com',
         stat1_value: '15 min',
@@ -79,6 +83,8 @@ const contactContent = {
         subtitle: 'Elija el canal de su preferencia. Nuestro equipo ejecutivo responde en menos de 15 minutos (horario comercial).',
         wa_label: 'Respuesta Más Rápida',
         wa_title: 'WhatsApp VIP Support',
+        direct_label: 'Escalación Directa',
+        direct_title: `Llama a Rod · ${ROD_ESCALATION_DISPLAY}`,
         email_label: 'Consulta Detallada',
         email_title: 'sales@4upact.com',
         stat1_value: '15 min',
@@ -173,6 +179,20 @@ const Contact = () => {
                                         <div className="text-xl font-black text-white tracking-tight">{c.wa_title}</div>
                                     </div>
                                     <ArrowRight className="text-slate-600 group-hover:text-emerald-400 transition-colors" />
+                                </a>
+
+                                <a
+                                    href={`tel:+${ROD_ESCALATION_E164}`}
+                                    className="flex items-center gap-6 p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-teal/10 hover:border-teal/30 transition-all group"
+                                >
+                                    <div className="w-14 h-14 bg-teal rounded-2xl flex items-center justify-center text-slate-950 shadow-lg shadow-teal/20 group-hover:scale-110 transition-transform">
+                                        <Phone size={28} />
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">{c.direct_label}</div>
+                                        <div className="text-xl font-black text-white tracking-tight">{c.direct_title}</div>
+                                    </div>
+                                    <ArrowRight className="text-slate-600 group-hover:text-teal transition-colors" />
                                 </a>
 
                                 <a
