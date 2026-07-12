@@ -33,3 +33,7 @@ dist
 .DS_Store
 .vercel
 .netlify
+.env.netlify
+rod.env
+deploy-*.zip
+dist*
