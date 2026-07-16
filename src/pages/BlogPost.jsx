@@ -1,17 +1,20 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useLanguage } from '../context/LanguageContext';
-import { ArrowLeft, Clock, Calendar, Loader2 } from 'lucide-react';
-
-const WP_API = 'https://public-api.wordpress.com/wp/v2/sites/4upact.wordpress.com';
+import { ArrowLeft, Clock, Calendar } from 'lucide-react';
+import posts from '../data/blogPosts.json';
 
 const postText = {
-    pt: { back: 'Voltar ao Blog', loading: 'Carregando...', error: 'Artigo não encontrado.', minRead: 'min de leitura' },
-    en: { back: 'Back to Blog', loading: 'Loading...', error: 'Article not found.', minRead: 'min read' },
-    es: { back: 'Volver al Blog', loading: 'Cargando...', error: 'Artículo no encontrado.', minRead: 'min de lectura' },
+    pt: { back: 'Voltar ao Blog', error: 'Artigo não encontrado.', minRead: 'min de leitura' },
+    en: { back: 'Back to Blog', error: 'Article not found.', minRead: 'min read' },
+    es: { back: 'Volver al Blog', error: 'Artículo no encontrado.', minRead: 'min de lectura' },
 };
+
+// Pull a localized field with a safe fallback to English (covers any post
+// that briefly lacks a translation, e.g. mid-migration or a pipeline hiccup).
+const t = (field, language) => field?.[language] || field?.en || '';
 
 const getReadingTime = (html) => {
     const text = html?.replace(/<[^>]*>/g, '') || '';
@@ -30,42 +33,9 @@ const BlogPost = () => {
     const { slug } = useParams();
     const { language } = useLanguage();
     const text = postText[language] || postText.en;
-    const [post, setPost] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const post = posts.find((p) => p.slug === slug);
 
-    useEffect(() => {
-        const fetchPost = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const res = await fetch(`${WP_API}/posts?slug=${slug}&_embed=true`);
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const data = await res.json();
-                if (data.length === 0) throw new Error('Not found');
-                setPost(data[0]);
-            } catch (err) {
-                console.error('BlogPost fetch error:', err);
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchPost();
-    }, [slug]);
-
-    if (loading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-white">
-                <div className="flex flex-col items-center">
-                    <Loader2 size={40} className="text-teal animate-spin mb-4" />
-                    <p className="text-slate-400">{text.loading}</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (error || !post) {
+    if (!post) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-white">
                 <div className="text-center">
@@ -78,19 +48,20 @@ const BlogPost = () => {
         );
     }
 
-    const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url;
-    const readTime = getReadingTime(post.content?.rendered);
-    const plainTitle = post.title.rendered.replace(/<[^>]*>/g, '');
-    const plainExcerpt = (post.excerpt?.rendered || '').replace(/<[^>]*>/g, '').substring(0, 160);
+    const title = t(post.title, language);
+    const metaTitle = t(post.metaTitle, language) || title;
+    const metaDescription = t(post.metaDescription, language) || t(post.excerpt, language);
+    const content = t(post.content, language);
+    const readTime = getReadingTime(content);
 
     return (
         <>
             <Helmet>
-                <title>{plainTitle} | 4U Pact Blog</title>
-                <meta name="description" content={plainExcerpt} />
-                <meta property="og:title" content={plainTitle} />
-                <meta property="og:description" content={plainExcerpt} />
-                {featuredImage && <meta property="og:image" content={featuredImage} />}
+                <title>{metaTitle} | 4U Pact Blog</title>
+                <meta name="description" content={metaDescription} />
+                <meta property="og:title" content={metaTitle} />
+                <meta property="og:description" content={metaDescription} />
+                {post.image && <meta property="og:image" content={post.image} />}
                 <meta property="og:type" content="article" />
             </Helmet>
 
@@ -122,17 +93,18 @@ const BlogPost = () => {
                     <h1
                         className="text-3xl md:text-5xl font-black text-white leading-tight"
                         style={{ fontFamily: '"Roboto Condensed", sans-serif' }}
-                        dangerouslySetInnerHTML={{ __html: post.title.rendered }}
-                    />
+                    >
+                        {title}
+                    </h1>
                 </div>
             </section>
 
             {/* Featured Image */}
-            {featuredImage && (
+            {post.image && (
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
                     <img
-                        src={featuredImage}
-                        alt={plainTitle}
+                        src={post.image}
+                        alt={title}
                         className="w-full rounded-3xl shadow-2xl"
                     />
                 </div>
@@ -148,7 +120,7 @@ const BlogPost = () => {
                         prose-blockquote:border-l-teal prose-blockquote:bg-teal/5 prose-blockquote:rounded-r-2xl prose-blockquote:py-1 prose-blockquote:px-6
                         prose-code:bg-slate-100 prose-code:px-2 prose-code:py-0.5 prose-code:rounded-lg prose-code:text-primary
                         prose-strong:text-slate-900"
-                    dangerouslySetInnerHTML={{ __html: post.content.rendered }}
+                    dangerouslySetInnerHTML={{ __html: content }}
                 />
             </article>
 

@@ -1,11 +1,10 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useLanguage } from '../context/LanguageContext';
-import { Clock, ArrowRight, Search, Loader2 } from 'lucide-react';
-
-const WP_API = 'https://public-api.wordpress.com/wp/v2/sites/4upact.wordpress.com';
+import { Clock, ArrowRight, Search } from 'lucide-react';
+import posts from '../data/blogPosts.json';
 
 const blogText = {
     pt: {
@@ -14,9 +13,7 @@ const blogText = {
         subtitle: 'Estratégias, cases e inteligência de growth direto do motor.',
         search: 'Buscar artigos...',
         readMore: 'Ler Artigo',
-        loading: 'Carregando artigos...',
         noResults: 'Nenhum artigo encontrado.',
-        error: 'Erro ao carregar artigos. Tente novamente.',
         minRead: 'min de leitura',
     },
     en: {
@@ -25,9 +22,7 @@ const blogText = {
         subtitle: 'Strategies, cases, and growth intelligence straight from the engine.',
         search: 'Search articles...',
         readMore: 'Read Article',
-        loading: 'Loading articles...',
         noResults: 'No articles found.',
-        error: 'Error loading articles. Please try again.',
         minRead: 'min read',
     },
     es: {
@@ -36,27 +31,21 @@ const blogText = {
         subtitle: 'Estrategias, casos e inteligencia de crecimiento directo del motor.',
         search: 'Buscar artículos...',
         readMore: 'Leer Artículo',
-        loading: 'Cargando artículos...',
         noResults: 'Ningún artículo encontrado.',
-        error: 'Error al cargar artículos. Intente de nuevo.',
         minRead: 'min de lectura',
     },
 };
 
-// Estimate reading time from HTML content
+// Pull a localized field with a safe fallback to English (covers any post
+// that briefly lacks a translation, e.g. mid-migration or a pipeline hiccup).
+const t = (field, language) => field?.[language] || field?.en || '';
+
 const getReadingTime = (html) => {
     const text = html?.replace(/<[^>]*>/g, '') || '';
     const words = text.split(/\s+/).length;
     return Math.max(1, Math.ceil(words / 200));
 };
 
-// Strip HTML tags for excerpt
-const stripHtml = (html) => {
-    const text = html?.replace(/<[^>]*>/g, '') || '';
-    return text.length > 180 ? text.substring(0, 180) + '...' : text;
-};
-
-// Format date
 const formatDate = (dateStr, lang) => {
     const date = new Date(dateStr);
     const localeMap = { pt: 'pt-BR', en: 'en-US', es: 'es-ES' };
@@ -68,8 +57,9 @@ const formatDate = (dateStr, lang) => {
 };
 
 const BlogCard = ({ post, language, text }) => {
-    const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url;
-    const readTime = getReadingTime(post.content?.rendered);
+    const title = t(post.title, language);
+    const excerpt = t(post.excerpt, language);
+    const readTime = getReadingTime(t(post.content, language));
 
     return (
         <Link
@@ -78,10 +68,10 @@ const BlogCard = ({ post, language, text }) => {
         >
             {/* Image */}
             <div className="aspect-[16/9] overflow-hidden bg-gradient-to-br from-primary/10 to-teal/10">
-                {featuredImage ? (
+                {post.image ? (
                     <img
-                        src={featuredImage}
-                        alt={post.title.rendered}
+                        src={post.image}
+                        alt={title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                         loading="lazy"
                     />
@@ -104,14 +94,13 @@ const BlogCard = ({ post, language, text }) => {
                 </div>
 
                 {/* Title */}
-                <h3
-                    className="text-lg font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors line-clamp-2"
-                    dangerouslySetInnerHTML={{ __html: post.title.rendered }}
-                />
+                <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                    {title}
+                </h3>
 
                 {/* Excerpt */}
                 <p className="text-sm text-slate-500 mb-6 line-clamp-3">
-                    {stripHtml(post.excerpt?.rendered)}
+                    {excerpt}
                 </p>
 
                 {/* CTA */}
@@ -127,40 +116,18 @@ const BlogCard = ({ post, language, text }) => {
 const Blog = () => {
     const { language } = useLanguage();
     const text = blogText[language] || blogText.en;
-    const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const params = new URLSearchParams({
-                    per_page: '20',
-                    orderby: 'date',
-                    order: 'desc',
-                    _embed: 'true',
-                });
-                if (search.trim()) {
-                    params.set('search', search.trim());
-                }
-                const res = await fetch(`${WP_API}/posts?${params}`);
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const data = await res.json();
-                setPosts(data);
-            } catch (err) {
-                console.error('Blog fetch error:', err);
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        const debounce = setTimeout(fetchPosts, search ? 400 : 0);
-        return () => clearTimeout(debounce);
-    }, [search]);
+    const filteredPosts = useMemo(() => {
+        const sorted = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date));
+        if (!search.trim()) return sorted;
+        const q = search.trim().toLowerCase();
+        return sorted.filter((p) => {
+            const title = t(p.title, language).toLowerCase();
+            const excerpt = t(p.excerpt, language).toLowerCase();
+            return title.includes(q) || excerpt.includes(q);
+        });
+    }, [search, language]);
 
     return (
         <>
@@ -204,24 +171,14 @@ const Blog = () => {
             {/* Posts Grid */}
             <section className="py-20 bg-slate-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    {loading ? (
-                        <div className="flex flex-col items-center justify-center py-20">
-                            <Loader2 size={40} className="text-teal animate-spin mb-4" />
-                            <p className="text-slate-400">{text.loading}</p>
-                        </div>
-                    ) : error ? (
-                        <div className="text-center py-20">
-                            <p className="text-red-400 mb-2">{text.error}</p>
-                            <p className="text-xs text-slate-400">{error}</p>
-                        </div>
-                    ) : posts.length === 0 ? (
+                    {filteredPosts.length === 0 ? (
                         <div className="text-center py-20">
                             <p className="text-slate-400">{text.noResults}</p>
                         </div>
                     ) : (
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {posts.map((post) => (
-                                <BlogCard key={post.id} post={post} language={language} text={text} />
+                            {filteredPosts.map((post) => (
+                                <BlogCard key={post.slug} post={post} language={language} text={text} />
                             ))}
                         </div>
                     )}
